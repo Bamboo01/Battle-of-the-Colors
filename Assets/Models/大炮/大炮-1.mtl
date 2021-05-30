@@ -1,0 +1,27 @@
+# Blender MTL File: 'U-Rifle_Final_3_Sketchfab_Slitij.blend'
+# Material Count: 2
+
+newmtl Floor.001
+Ns 81.000006
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.030332 0.041143
+Ks 0.091000 0.091000 0.091000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\Administrator\\Desktop\\sence-model\\大炮---\\textures\\collection_base_color.png
+
+newmtl 材质.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump C:\\Users\\Administrator\\Desktop\\sence-model\\大炮---\\textures\\sphere_normal_tangent.png
+map_Kd C:\\Users\\Administrator\\Desktop\\sence-model\\大炮---\\textures\\sphere_base_color.png
+map_Ns C:\\Users\\Administrator\\Desktop\\sence-model\\大炮---\\textures\\sphere_roughness.png
+refl C:\\Users\\Administrator\\Desktop\\sence-model\\大炮---\\textures\\sphere_metallic.png

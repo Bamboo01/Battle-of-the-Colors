@@ -28,15 +28,15 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - skill
+  - Backdrop
+  - Cloud
+  - GUN
+  - Level
+  - Brush
+  - canvas
+  - world
+  - TItan-post
   m_SortingLayers:
   - name: Default
     uniqueID: 0

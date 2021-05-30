@@ -1,0 +1,26 @@
+# Blender MTL File: 'None'
+# Material Count: 2
+
+newmtl AVazquez_TrimSheet
+Ns 56.806129
+Ka 0.500000 0.500000 0.500000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump C:\\Users\\Administrator\\gd55aldo\\Desktop\\Environment & Lighting\\Assignment 1\\MayaProject\\Textures\\AVazquez_TrimSheet_Normal.png
+map_Kd C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\AVazquez_TrimSheet_BaseColor.png
+map_Ns C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\AVazquez_TrimSheet_Roughness.png
+refl C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\AVazquez_TrimSheet_Metallic.png
+
+newmtl JChen_TrimSheet
+Ns 56.806129
+Ka 0.500000 0.500000 0.500000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 3

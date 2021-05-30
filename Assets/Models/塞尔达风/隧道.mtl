@@ -1,0 +1,44 @@
+# Blender MTL File: 'None'
+# Material Count: 3
+
+newmtl Default_Material
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\Default_Material_normal.png
+map_Kd C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\Default_Material_albedo.jpeg
+map_Ns C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\Default_Material_roughness.jpeg
+refl C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\Default_Material_metallic.jpeg
+
+newmtl Pipes
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.211200 1.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\Pipes_normal.png
+map_Kd C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\Pipes_albedo.jpeg
+map_Ns C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\Pipes_roughness.jpeg
+refl C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\Pipes_metallic.jpeg
+
+newmtl Walls
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.000000 0.117400
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\Default_Material_normal.png
+map_Kd C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\Default_Material_albedo.jpeg
+map_Ns C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\Default_Material_roughness.jpeg
+refl C:\\Users\\Administrator\\Desktop\\sence-model\\textures\\Default_Material_metallic.jpeg

@@ -1,0 +1,27 @@
+# Blender MTL File: 'bac5e9d315034b228a67c883b3e5ddbb.blend'
+# Material Count: 2
+
+newmtl Sails_mat
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\Administrator\\Desktop\\sence-model\\ghost\\textures\\Sails_diff.jpg
+map_d C:\\Users\\Administrator\\Desktop\\sence-model\\ghost\\textures\\Sails_alpha.jpg
+
+newmtl Ship_mat
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump C:\\Users\\Administrator\\Desktop\\sence-model\\ghost\\textures\\Ship_norm.jpg
+map_Kd C:\\Users\\Administrator\\Desktop\\sence-model\\ghost\\textures\\Ship_diff.jpg
+map_Ks C:\\Users\\Administrator\\Desktop\\sence-model\\ghost\\textures\\Ship_spec.jpg
