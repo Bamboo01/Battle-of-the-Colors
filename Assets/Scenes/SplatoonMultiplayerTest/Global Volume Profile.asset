@@ -22,7 +22,7 @@ MonoBehaviour:
     m_Value: 2
   intensity:
     m_OverrideState: 1
-    m_Value: 0.216
+    m_Value: 0.28
     min: 0
     max: 1
   clamp:
@@ -85,11 +85,11 @@ MonoBehaviour:
     min: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.2
+    m_Value: 0.02
     min: 0
   scatter:
     m_OverrideState: 1
-    m_Value: 0.437
+    m_Value: 0.95
     min: 0
     max: 1
   clamp:
@@ -152,16 +152,16 @@ MonoBehaviour:
     m_Value: 0
   focusDistance:
     m_OverrideState: 1
-    m_Value: 12.46
+    m_Value: 11.77
     min: 0.1
   aperture:
     m_OverrideState: 1
-    m_Value: 4.6
+    m_Value: 4.3
     min: 1
     max: 32
   focalLength:
     m_OverrideState: 1
-    m_Value: 99
+    m_Value: 62
     min: 1
     max: 300
   bladeCount:
@@ -213,19 +213,19 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.24
-          value: 0.22676063
-          inSlope: 1.3211492
-          outSlope: 1.3211492
+          time: 0.34632415
+          value: 0.37058812
+          inSlope: 0.82472116
+          outSlope: 0.82472116
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.67934424
-          value: 0.8112676
-          inSlope: 0.45079112
-          outSlope: 0.45079112
+          time: 0.6873339
+          value: 0.89019597
+          inSlope: 0.7748045
+          outSlope: 0.7748045
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
@@ -233,8 +233,8 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 1
           value: 1
-          inSlope: 1
-          outSlope: 0
+          inSlope: -0
+          outSlope: -0
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
