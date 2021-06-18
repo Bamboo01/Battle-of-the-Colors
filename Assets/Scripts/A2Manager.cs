@@ -40,7 +40,5 @@ public class A2Manager : MonoBehaviour
             Skill.SetActive(true);
             Ani.SetTrigger("turnSkill");
         }
-      
-       
     }
 }

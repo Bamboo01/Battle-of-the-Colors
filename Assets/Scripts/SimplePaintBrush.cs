@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class SimplePaintBrush
+namespace SplatoonPainter
 {
-    public Color color;
-    public Vector3 position;
-    public float radius;
-
-    public SimplePaintBrush()
+    [System.Serializable]
+    public class SimplePaintBrush
     {
-        color = Color.white;
-        position = Vector3.zero;
-        radius = 1;
+        public Color color;
+        public Vector3 position;
+        public float radius;
+
+        public SimplePaintBrush()
+        {
+            color = Color.white;
+            position = Vector3.zero;
+            radius = 1;
+        }
     }
 }
+
