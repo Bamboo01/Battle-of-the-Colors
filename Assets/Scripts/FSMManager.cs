@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class FSMManager 
 {
-    //״̬�б�
+    //状态列表
     public List<FSMState> stateList = new List<FSMState>();
-    //��ǰ״̬
+    //当前状态
     public int CurrentIndex = -1;
-    //�ı�״̬
+    //改变状态
     public void ChangeState(int StateID)
     {
         CurrentIndex = StateID;

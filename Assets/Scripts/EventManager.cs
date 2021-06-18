@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,7 +8,7 @@ public class EventChannel : UnityEvent<IEventRequestInfo> { }
 public class EventManager : MonoBehaviour
 {
     // Singleton
-    // 单例模式
+    // 鍗曚緥妯″紡
     static public EventManager Instance
     {
         get;
@@ -29,11 +29,11 @@ public class EventManager : MonoBehaviour
     }
 
     // Stores all the events
-    // 一个数据字典，用来保存事件
+    // 涓€涓暟鎹瓧鍏革紝鐢ㄦ潵淇濆瓨浜嬩欢
     Dictionary<string, EventChannel> EventDictionary = new Dictionary<string, EventChannel>();
 
     // Function to allow an object to listen to a channel, and call a function(s) when a request to said channel is made
-    // 让一个物件收消息的函数。当物件收到消息，会调用函数。
+    // 璁╀竴涓墿浠舵敹娑堟伅鐨勫嚱鏁般€傚綋鐗╀欢鏀跺埌娑堟伅锛屼細璋冪敤鍑芥暟銆?
     public void Listen(string channelname, UnityAction<IEventRequestInfo> action)
     {
         if (!EventDictionary.ContainsKey(channelname))
@@ -45,7 +45,7 @@ public class EventManager : MonoBehaviour
     }
 
     // Allows an object to publish info to all listeners of a channel. Can send custom datatypes over.
-    // 让一个物件发消息的函数。会把自订资料发给一个频道。
+    // 璁╀竴涓墿浠跺彂娑堟伅鐨勫嚱鏁般€備細鎶婅嚜璁㈣祫鏂欏彂缁欎竴涓閬撱€?
     public void Publish<T>(string channelname, object sender, T body)
     {
         EventChannel channel;
@@ -60,7 +60,7 @@ public class EventManager : MonoBehaviour
     }
 
     // Allows an object to stop listening to a channel
-    // 让一个物件停止收消息的函数
+    // 璁╀竴涓墿浠跺仠姝㈡敹娑堟伅鐨勫嚱鏁?
     public void Close(string channelname, UnityAction<IEventRequestInfo> action)
     {
         EventChannel channel;

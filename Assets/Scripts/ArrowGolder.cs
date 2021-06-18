@@ -26,13 +26,13 @@ public class ArrowGolder : MonoBehaviour
     public bool isFrist2 = true;
     public  bool isFinish2;
     public bool SkillOK;
-    //Éú³É
+    //ç”Ÿæˆ
    
     public void CreateWave(int Length)
     {
 
         isFrist  = true;
-         //Çå¿Õ¶ÓÁĞ
+         //æ¸…ç©ºé˜Ÿåˆ—
          arrows = new Queue<Arrow>();
         isFinish = false;
         for (int i = 0; i < Length; i++)
@@ -152,7 +152,7 @@ public class ArrowGolder : MonoBehaviour
         if (!isFrist && !isFrist1 && !isFrist2)
             GameManager.S.FailWave();
     }
-   //ÇåÀí
+   //æ¸…ç†
     public  void ClearWave()
     {
         //SkillCD1.CD1 = SkillCD1.CD2 = SkillCD1.CD3 = 0f;
@@ -174,7 +174,7 @@ public class ArrowGolder : MonoBehaviour
             Destroy(arrow2.gameObject);
         }
     }
-    //½«ÊäÈë°´¼ü×ª»»³ÉÊıÖµ·½±ãÅĞ¶ÏÊäÈë
+    //å°†è¾“å…¥æŒ‰é”®è½¬æ¢æˆæ•°å€¼æ–¹ä¾¿åˆ¤æ–­è¾“å…¥
     int ConvertKeyCodeToInt(KeyCode key)
     {
         int result = 0;

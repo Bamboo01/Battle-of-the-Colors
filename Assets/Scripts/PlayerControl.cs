@@ -15,9 +15,9 @@ public class PlayerControl : MonoBehaviour
     }
     private FSMManager fsmManager;
     public GameObject Target;
-    //¿ª»ğµã
+    //å¼€ç«ç‚¹
     public Transform FirPoint;
-    //¿ª»ğĞ§¹û
+    //å¼€ç«æ•ˆæœ
     public GameObject FireEffect;
     public GameObject bullet;
     float bulletCD;
@@ -31,7 +31,7 @@ public class PlayerControl : MonoBehaviour
     private float horizontal;
     public Vector3 dir;
 
-    //ÅÊÅÀ
+    //æ”€çˆ¬
     public float wallRayLength = 1f;
     public bool onWall, isClimbing;
     public float walloffset = 0.5f;
@@ -79,7 +79,7 @@ public class PlayerControl : MonoBehaviour
         dir = new Vector3(horizontal, 0, vertical).normalized;
         controller.SimpleMove(Physics.gravity);
 
-        //ÉäÏß
+        //å°„çº¿
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         bool res = Physics.Raycast(ray,out hit);
@@ -87,21 +87,21 @@ public class PlayerControl : MonoBehaviour
         if (res)
         {
 
-            //Ç¹ÓĞÃé×¼µÄÎïÌå;
+            //æªæœ‰ç„å‡†çš„ç‰©ä½“;
             Target.transform.position = hit.point;
             //aimIK.enabled = true;
 
         }
         else
         {
-            //Ãé×¼µÄÊÇÌì¿Õ
+            //ç„å‡†çš„æ˜¯å¤©ç©º
             //aimIK.enabled = false;
         }
         fsmManager.Update();
         //CheckClimb();
         ShootCD();
        
-        //¼àÌı¹¥»÷×´Ì¬
+        //ç›‘å¬æ”»å‡»çŠ¶æ€
         if (Input.GetMouseButtonDown(0)&& isbulletOK)
         {
             transform.rotation = cam.rotation;

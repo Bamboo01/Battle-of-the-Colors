@@ -78,9 +78,9 @@ public class PlayerCharacterScript : MonoBehaviour
             }
         }
 
-        //Ǳ��
+        //娼滈敓鏂ゆ嫹
         stealth();
-        //����
+        //閿熸枻鎷烽敓鏂ゆ嫹
         controller.SimpleMove(Physics.gravity);
         dir = Vector3.zero;
     }

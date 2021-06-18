@@ -12,7 +12,7 @@ public class IdleState : FSMState
     public override void OnUpdate()
     {
 
-        //¼àÌıÅÜ²½×´Ì¬ÇĞ»»
+        //ç›‘å¬è·‘æ­¥çŠ¶æ€åˆ‡æ¢
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
         Vector3 dir = new Vector3(horizontal, 0, vertical);

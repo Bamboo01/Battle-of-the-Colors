@@ -1,16 +1,16 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EControl : MonoBehaviour
 {
-    public GameObject E, cam, 角色, PlayerParent, 机甲;
+    public GameObject E, cam, 瑙掕壊, PlayerParent, 鏈虹敳;
     public Collider collider;
     bool isPlayer;
     public static bool swit;
     private void Awake()
     {
-        GameObject go = Instantiate(角色);
+        GameObject go = Instantiate(瑙掕壊);
         go.transform.parent = PlayerParent.transform;
     }
     // Start is called before the first frame update
@@ -45,7 +45,7 @@ public class EControl : MonoBehaviour
                 cam.SetActive(false);
                 GameObject.Find("GameObject (1)").GetComponent<TankCam>().enabled = false;
                 GameObject.Find("GameObject (1)").GetComponent<tankecontrol>().enabled = false;
-                GameObject go = Instantiate(角色, transform.position + new Vector3(10, 0, 10), transform.rotation);
+                GameObject go = Instantiate(瑙掕壊, transform.position + new Vector3(10, 0, 10), transform.rotation);
                 go.transform.parent = PlayerParent.transform;
 
                 isPlayer = true;

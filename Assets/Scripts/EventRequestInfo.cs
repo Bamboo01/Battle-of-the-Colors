@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,15 +12,15 @@ public interface IEventRequestInfo
 public class EventRequestInfo<T> : IEventRequestInfo
 {
     // Event Channel Name
-    // 频道的名词
+    // 棰戦亾鐨勫悕璇?
     public string path { get; private set; }
 
     // Event Request Sender (Can be typecasted)
-    // 消息的发件人 （能被类型转换）
+    // 娑堟伅鐨勫彂浠朵汉 锛堣兘琚被鍨嬭浆鎹級
     public object sender { get; private set; }
 
     // Contains the custom data of the info
-    // 自订资料
+    // 鑷璧勬枡
     public T body;
 
     public EventRequestInfo(string channelpath,  object senderobject, T requestbody)

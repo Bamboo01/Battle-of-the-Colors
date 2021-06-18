@@ -12,11 +12,11 @@ public enum PlayerState
 }
 public abstract class FSMState 
 {
-    //µ±Ç°×´Ì¬ID
+    //å½“å‰çŠ¶æ€ID
     public int StateID;
-    //×´Ì¬ÓµÓĞÕß
+    //çŠ¶æ€æ‹¥æœ‰è€…
     public MonoBehaviour mono;
-    //×´Ì¬ËùÊô¹ÜÀíÆ÷
+    //çŠ¶æ€æ‰€å±ç®¡ç†å™¨
     public FSMManager fsmManager;
     public FSMState(int stateID,MonoBehaviour mono,FSMManager manager)
     {
