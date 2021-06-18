@@ -7,6 +7,7 @@ public class bullut : MonoBehaviour
     public float speed;
     bool istrigger;
     float destryCD;
+    public GameObject boom;
     // Start is called before the first frame update
     private void Start()
     {
@@ -35,7 +36,8 @@ public class bullut : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         istrigger = true;
-       
+       GameObject go=  Instantiate(boom, transform.position, transform.rotation);
+        Destroy(go, 2f);
     }
     
 }

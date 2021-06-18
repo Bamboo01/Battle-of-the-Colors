@@ -5,18 +5,21 @@ using UnityEngine;
 public class TankCam : MonoBehaviour
 {
     public float speed = 20f;
-    float mx, my;
+    public static float mx, my;
     public float minLimity=10f,maxLimity=-5f;
     public GameObject fire1, fire2,mrotation,bullet;
     public Transform fire1Point, fire2Point;
     bool isShoot1OK, isShoot2OK;
     public float shoot1CD=0, shoot2CD=0;
     float fireCD1, fireCD2;
+    
+   
     //public GameObject cam, robte;
-    public GameObject fire;
+   // public GameObject fireEffect;
     // Start is called before the first frame update
     void Start()
     {
+        
         
     }
 
@@ -33,8 +36,8 @@ public class TankCam : MonoBehaviour
         
        mrotation.transform.localEulerAngles = new Vector3(mrotation.transform.rotation.x-mx, mrotation.transform.rotation.y,  0);
        
-        fire1.transform.localRotation = Quaternion.Euler(new Vector3(-90,0,180+my-20));
-        fire2.transform.localRotation = Quaternion.Euler(new Vector3(90,180,-my+20));
+        fire1.transform.localRotation = Quaternion.Euler(new Vector3(-90,0,180+my-10));
+        fire2.transform.localRotation = Quaternion.Euler(new Vector3(90,180,-my+10));
         ShootCD();
         shoot();
     }
@@ -50,15 +53,15 @@ public class TankCam : MonoBehaviour
            GameObject Bullet= Instantiate(bullet,fire1Point.transform.position,fire1Point.transform.rotation);
             isShoot1OK = false;
             fireCD1 = 0f;
-            GameObject go= Instantiate(fire, fire1Point.transform.position, fire1Point.transform.rotation);
-            Destroy(go, 0.2f);
+            //GameObject go= Instantiate(fireEffect, fire1Point.transform.position, fire1Point.transform.rotation);
+            //Destroy(go, 0.2f);
         }
         if (Input.GetMouseButtonDown(1)&&isShoot2OK){
             GameObject Bullet= Instantiate(bullet,fire2Point.transform.position, fire2Point.transform.rotation);
             isShoot2OK = false;
             fireCD2 = 0f;
-            GameObject go= Instantiate(fire, fire2Point.transform.position,fire2Point.transform.rotation);
-            Destroy(go, 0.2f);
+           // GameObject go= Instantiate(fireEffect, fire2Point.transform.position,fire2Point.transform.rotation);
+            //Destroy(go, 0.2f);
         }
     }
     public void ShootCD()
@@ -82,4 +85,5 @@ public class TankCam : MonoBehaviour
             isShoot2OK = true;
         }
     }
+   
 }
