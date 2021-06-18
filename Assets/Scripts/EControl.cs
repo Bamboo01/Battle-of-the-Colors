@@ -1,16 +1,16 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EControl : MonoBehaviour
 {
-    public GameObject E,cam,½ÇÉ«,PlayerParent,»ú¼×;
+    public GameObject E, cam, è§’è‰², PlayerParent, æœºç”²;
     public Collider collider;
     bool isPlayer;
     public static bool swit;
     private void Awake()
     {
-        GameObject go= Instantiate(½ÇÉ«);
+        GameObject go = Instantiate(è§’è‰²);
         go.transform.parent = PlayerParent.transform;
     }
     // Start is called before the first frame update
@@ -20,7 +20,7 @@ public class EControl : MonoBehaviour
         collider = GetComponent<Collider>();
         E.SetActive(false);
         isPlayer = true;
-        
+
     }
 
     // Update is called once per frame
@@ -38,20 +38,20 @@ public class EControl : MonoBehaviour
     private void LateUpdate()
     {
         if (!isPlayer)
-       {
+        {
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 swit = false;
                 cam.SetActive(false);
                 GameObject.Find("GameObject (1)").GetComponent<TankCam>().enabled = false;
                 GameObject.Find("GameObject (1)").GetComponent<tankecontrol>().enabled = false;
-                GameObject go = Instantiate(½ÇÉ«,transform.position+new Vector3(10,0,10),transform.rotation);
+                GameObject go = Instantiate(è§’è‰², transform.position + new Vector3(10, 0, 10), transform.rotation);
                 go.transform.parent = PlayerParent.transform;
-                
+
                 isPlayer = true;
             }
-           
-       }
+
+        }
     }
     void panduan()
     {
@@ -60,9 +60,9 @@ public class EControl : MonoBehaviour
         GameObject.Find("GameObject (1)").GetComponent<TankCam>().enabled = true;
         GameObject.Find("GameObject (1)").GetComponent<tankecontrol>().enabled = true;
         E.SetActive(false);
-        swit = false;     
+        swit = false;
         Destroy(PlayerParent.transform.GetChild(0).gameObject);
-        
+
     }
     private void OnTriggerStay(Collider other)
     {
