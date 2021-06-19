@@ -15,7 +15,6 @@ public class A2ShieldCollisionScript : MonoBehaviour
             Vector3 shieldDir = transform.forward;
             Vector3 rPos = controller.gameObject.transform.position - transform.position;
             float velDotShield = Vector3.Dot(controller.velocity, shieldDir);
-            float rposDotShield = Vector3.Dot(rPos, shieldDir);
             if (velDotShield > 0)
             {
                 Physics.IgnoreCollision(controller, collider, true);
