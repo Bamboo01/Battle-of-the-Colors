@@ -6,8 +6,8 @@ public enum PlayerState
 {
     idle,
     run,
-    attack,
     climb,
+    attack,
    
 }
 public abstract class FSMState 

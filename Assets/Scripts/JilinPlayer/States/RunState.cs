@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class RunState : FSMState
 {
-     float turnSmoothTime = 0.1f;
+    float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
     float speed = 10f;
     public RunState(int stateID, MonoBehaviour mono, FSMManager manager) : base(stateID, mono, manager) { }

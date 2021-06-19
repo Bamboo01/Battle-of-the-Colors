@@ -60,8 +60,6 @@ public class PlayerControl : MonoBehaviour
         fsmManager.stateList.Add(climb);
         //fsmManager.stateList.Add(stealth);
         fsmManager.ChangeState((int)PlayerState.idle);
-        
-
     }
 
     
@@ -98,14 +96,13 @@ public class PlayerControl : MonoBehaviour
             //aimIK.enabled = false;
         }
         fsmManager.Update();
-        //CheckClimb();
+        CheckClimb();
         ShootCD();
        
         //监听攻击状态
         if (Input.GetMouseButtonDown(0)&& isbulletOK)
         {
             transform.rotation = cam.rotation;
-
         }
     }
     public bool CheckClimb()
@@ -122,7 +119,8 @@ public class PlayerControl : MonoBehaviour
         }
         else
         {
-            fsmManager.ChangeState((int)PlayerState.idle);
+            Debug.Log("Not climbing");
+            //fsmManager.ChangeState((int)PlayerState.idle);
             isClimbing = false;
             return false;
 
@@ -139,7 +137,7 @@ public class PlayerControl : MonoBehaviour
     }
     public void InitClimb(RaycastHit hit)
     {
-       
+        Debug.Log("I am climbing");
         isClimbing = true;
         onWall = false;
         targetPos = hit.point + hit.normal * walloffset;
@@ -169,8 +167,6 @@ public class PlayerControl : MonoBehaviour
             Destroy(go, 0.2f);
             isbulletOK = false;
             bulletCD = 0f;
-           
-
         }
     }
 
