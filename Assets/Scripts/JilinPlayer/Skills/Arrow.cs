@@ -37,9 +37,6 @@ public class Arrow : MonoBehaviour
     }
     public  void SetStart()
     {
-        image.color = startColor;
-        
+        image.color = startColor;   
     }
-
-
 }

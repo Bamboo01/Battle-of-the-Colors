@@ -3,25 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-// CSZZ - 褰╄壊鎴樹簤
 namespace CSZZGame.Networking
 {
-    public partial class NetworkPlayerScript : NetworkBehaviour
+    [AddComponentMenu("")]
+    public class NetworkPlayerScript : NetworkBehaviour
     {
-        CharacterController controller;
-        private void Awake()
+        NetworkIdentity identity;
+        NetworkServer server;
+
+        public void Awake()
         {
-            controller = GetComponent<CharacterController>();
+            identity = GetComponent<NetworkIdentity>();
         }
 
-        private void Start()
+        public override void OnStartServer()
         {
-            if (!isLocalPlayer) return;
+            server = gameObject.AddComponent<NetworkServer>();
         }
 
-        private void Update()
+        public void Start()
         {
-            if (!isLocalPlayer) return;
+            CreatePlayerCharacter(identity.connectionToClient);
+        }
+
+        [Command]
+        public void CreatePlayerCharacter(NetworkConnectionToClient sender)
+        {
+            server.spawnCharacter(sender);
         }
     }
 }
+

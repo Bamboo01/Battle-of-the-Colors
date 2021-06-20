@@ -9,6 +9,6 @@ namespace CSZZGame.Networking
     [AddComponentMenu("")]
     public class NetworkRoomManagerScript : NetworkRoomManager
     {
-
+        public GameObject playerCharacterPrefab;
     }
 }

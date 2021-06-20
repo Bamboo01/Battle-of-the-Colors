@@ -25,7 +25,5 @@ public class IdleState : FSMState
         {
             fsmManager.ChangeState((int)PlayerState.climb);
         }
-        
-      
     }
 }

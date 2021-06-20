@@ -712,18 +712,20 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 5003436747152537795, guid: 7e3941cf56df0f445a7266a5b5527e4e, type: 3}
+  playerPrefab: {fileID: 7388052575403985058, guid: e3baa4c4c6ecf1c48af94a6e2e5c8409, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 6184638618461802932, guid: b440426bbc137cf42aad9eb39cc78869, type: 3}
   showRoomGUI: 1
   minPlayers: 1
-  roomPlayerPrefab: {fileID: -7185082740407754354, guid: b2a648dabee74ee4dbbe56ef4d0b8463, type: 3}
+  roomPlayerPrefab: {fileID: -7185082740407754354, guid: 0b5629bb4faee4d42ae650c882c75f5c, type: 3}
   RoomScene: Assets/Scenes/PlaceholderRoomMenu.unity
-  GameplayScene: Assets/Scenes/SplatoonMultiplayerTest.unity
+  GameplayScene: Assets/Scenes/MultiplayerTestScene.unity
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
+  playerCharacterPrefab: {fileID: 6184638618461802932, guid: b440426bbc137cf42aad9eb39cc78869, type: 3}
 --- !u!4 &2143497710
 Transform:
   m_ObjectHideFlags: 0
