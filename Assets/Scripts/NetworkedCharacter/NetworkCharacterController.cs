@@ -33,7 +33,7 @@ public class NetworkCharacterController : MonoBehaviour
 
         // Setting up of event listeners
         EventManager.Instance.Listen(EventChannels.OnInputEvent, OnInputEvent);
-        EventManager.Instance.Listen("TestChannel", TestResponse);
+        //EventManager.Instance.Listen("TestChannel", TestResponse);
     }
 
     void Update()
@@ -86,7 +86,7 @@ public class NetworkCharacterController : MonoBehaviour
                     break;
                 case InputCommand.FIRE:
                     networkCharacter.CmdFireBullet();
-                    CSZZNetwork.Instance.SendNetworkEvent("TestChannel", new string[2] {"cheese", "chocolate" });
+                    //CSZZNetwork.Instance.SendNetworkEvent("TestChannel", new string[2] {"cheese", "chocolate" });
                     break;
             }
         }
@@ -120,13 +120,13 @@ public class NetworkCharacterController : MonoBehaviour
         CommandQueue.Enqueue(info.body);
     }
 
-    void TestResponse(IEventRequestInfo eventRequestInfo)
-    {
-        EventRequestInfo<byte[]> info = (EventRequestInfo<byte[]>)eventRequestInfo;
-        string[] message = CSZZNetwork.DeserializeEventData<string[]>(info.body);
-        for (int i = 0; i < message.Length; i++)
-        {
-            Debug.Log("Test" + message[i]);
-        }
-    }
+    //void TestResponse(IEventRequestInfo eventRequestInfo)
+    //{
+    //    EventRequestInfo<byte[]> info = (EventRequestInfo<byte[]>)eventRequestInfo;
+    //    string[] message = CSZZNetwork.DeserializeEventData<string[]>(info.body);
+    //    for (int i = 0; i < message.Length; i++)
+    //    {
+    //        Debug.Log("Test" + message[i]);
+    //    }
+    //}
 }
