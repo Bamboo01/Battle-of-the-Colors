@@ -67,6 +67,7 @@ public class NetworkCharacter : NetworkBehaviour
     {
         if (characterData.WeaponTimer <= 0)
         {
+            isShooting = true;
             characterData.weaponFired();
             CSZZNetworkServer.Instance.spawnBullet(firePoint);
         }

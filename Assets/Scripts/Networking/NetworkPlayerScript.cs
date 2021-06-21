@@ -11,7 +11,6 @@ namespace CSZZGame.Networking
         [SyncVar] int clientTick;
 
         NetworkIdentity identity;
-        CSZZNetworkServer server;
 
         public void Awake()
         {
@@ -20,10 +19,15 @@ namespace CSZZGame.Networking
 
         public override void OnStartServer()
         {
-            server = gameObject.AddComponent<CSZZNetworkServer>();
+            if (!isLocalPlayer)
+            {
+                return;
+            }    
+            base.OnStartServer();
+            gameObject.AddComponent<CSZZNetworkServer>();
         }
 
-        public void Start()
+        public override void OnStartAuthority()
         {
             CreatePlayerCharacter(identity.connectionToClient);
         }
@@ -31,7 +35,7 @@ namespace CSZZGame.Networking
         [Command]
         public void CreatePlayerCharacter(NetworkConnectionToClient sender)
         {
-            server.spawnCharacter(sender);
+            CSZZNetworkServer.Instance.spawnCharacter(sender);
         }
     }
 }

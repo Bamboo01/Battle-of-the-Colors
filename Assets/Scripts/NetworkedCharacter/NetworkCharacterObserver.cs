@@ -6,7 +6,7 @@ using Refactor;
 public class NetworkCharacterObserver : MonoBehaviour
 {
     public NetworkCharacter networkCharacter;
-    public Animator animator;
+    [HideInInspector] public Animator animator;
 
     FSMStateManager stateManager = new FSMStateManager();
     Vector3 lastPosition;
@@ -65,8 +65,6 @@ public class NetworkCharacterObserver : MonoBehaviour
                 stateManager.UpdateState(idleState);
                 break;
         }
-
-        
         stateManager.Update();
     }
 }

@@ -95,7 +95,10 @@ public class FSMShootState : IFSMStateBase
 
     public void OnUpdate()
     {
-        animator.SetBool("isShooting", false);
+        if (!updatedOnce)
+        {
+            animator.SetBool("isShooting", false);
+        }
     }
 }
 

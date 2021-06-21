@@ -59,6 +59,12 @@ public class NetworkCharacterController : MonoBehaviour
         Vector3 rightDir = target.transform.right;
         rightDir = new Vector3(rightDir.x, 0, rightDir.z).normalized;
 
+
+        if (!networkCharacter.isShooting == false)
+        {
+            networkCharacter.isShooting = false;
+        }
+
         while (CommandQueue.Count != 0)
         {
             var command = CommandQueue.Dequeue();

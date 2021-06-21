@@ -6,33 +6,48 @@ using Mirror;
 public class NetworkedPaintBullet : NetworkBehaviour
 {
     [SerializeField] public float bulletSpeed = 10.0f;
-
+    [SerializeField] Renderer renderer;
+    [SerializeField] Collider collider;
+    [SerializeField] Rigidbody rb;
     public ParticlePainterProperties properties;
     public GameObject paintParticlesPrefab;
-    Rigidbody rb;
+    public float masDistanceTravelled = 300.0f;
+
+    private Vector3 lastPosition;
 
     [ClientRpc]
-    void SpawnParticlesRPC()
+    void SpawnParticlesRPC(Vector3 contactPoint)
     {
-        GameObject go = Instantiate(paintParticlesPrefab, transform.position, transform.rotation);
+        Debug.Log("Particles spawned");
+        GameObject go = Instantiate(paintParticlesPrefab, contactPoint, transform.rotation);
         Destroy(go, 2.0f);
+        Destroy(gameObject);
     }
 
-    [ServerCallback]
     void Start()
     {
         if (!isServer)
         {
-            Destroy(GetComponent<Rigidbody>());
+            Destroy(collider);
+            Destroy(rb);
         }
-        rb = GetComponent<Rigidbody>();
+        lastPosition = transform.position;
         rb.velocity = transform.forward * bulletSpeed;
     }
 
-    [ServerCallback]
+    [Server]
+    void Update()
+    {
+        masDistanceTravelled += (lastPosition - transform.position).magnitude;
+        lastPosition = transform.position;
+    }
+
+    [Server]
     void OnCollisionEnter(Collision collision)
     {
-        SpawnParticlesRPC();
-        Destroy(gameObject);
+        renderer.enabled = false;
+        Destroy(collider);
+        Destroy(rb);
+        SpawnParticlesRPC(transform.position);
     }
 }
