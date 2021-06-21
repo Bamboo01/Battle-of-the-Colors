@@ -2,21 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using Bamboo.Events;
 
+// Network interface for the player
 namespace CSZZGame.Networking
 {
     [AddComponentMenu("")]
     public class NetworkPlayerScript : NetworkBehaviour
     {
-        [SyncVar] int clientTick;
-
-        NetworkIdentity identity;
-
-        public void Awake()
-        {
-            identity = GetComponent<NetworkIdentity>();
-        }
-
+        private CSZZNetworkServer cszzNetworkServer;
+        private CSZZNetwork cszzNetwork;
         public override void OnStartServer()
         {
             if (!isLocalPlayer)
@@ -24,18 +19,41 @@ namespace CSZZGame.Networking
                 return;
             }    
             base.OnStartServer();
-            gameObject.AddComponent<CSZZNetworkServer>();
+            cszzNetworkServer = gameObject.AddComponent<CSZZNetworkServer>();
+        }
+
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            if (!isLocalPlayer)
+            {
+                return;
+            }
+            cszzNetwork = gameObject.AddComponent<CSZZNetwork>();
+            cszzNetwork.SetupClient(this);
         }
 
         public override void OnStartAuthority()
         {
-            CreatePlayerCharacter(identity.connectionToClient);
+            CmdCreatePlayerCharacter();
         }
 
         [Command]
-        public void CreatePlayerCharacter(NetworkConnectionToClient sender)
+        public void CmdCreatePlayerCharacter(NetworkConnectionToClient sender = null)
         {
-            CSZZNetworkServer.Instance.spawnCharacter(sender);
+            cszzNetworkServer.spawnCharacter(sender);
+        }
+
+        [Command]
+        public void CmdRaiseEvent(string eventChannel, byte[] data)
+        {
+            OnEventRaised(eventChannel, data);
+        }
+
+        [ClientRpc]
+        public void OnEventRaised(string eventChannel, byte[] data)
+        {
+            EventManager.Instance.Publish(eventChannel, null, data);
         }
     }
 }

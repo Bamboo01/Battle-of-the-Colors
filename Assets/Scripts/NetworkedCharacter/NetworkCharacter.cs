@@ -33,11 +33,12 @@ public class NetworkCharacter : NetworkBehaviour
     [SerializeField] NetworkCharacterController controller;
     [SerializeField] Transform firePoint;
 
-    ServerCharacterData characterData;
+    ServerCharacterData serverCharacterData;
+    CSZZNetworkServer server;
 
     public override void OnStartServer()
     {
-        characterData = gameObject.AddComponent<ServerCharacterData>();
+        serverCharacterData = gameObject.AddComponent<ServerCharacterData>();
     }
 
     void Start()
@@ -52,24 +53,30 @@ public class NetworkCharacter : NetworkBehaviour
         controller.enabled = true;
     }
 
-    [ServerCallback]
+    [Server]
+    public void SetupServer(CSZZNetworkServer s)
+    {
+        server = s;
+    }
+
+    [Server]
     void Update()
     {
-        ClientHP = characterData.HP;
-        ClientSkill1Cooldown = characterData.Skill1Timer;
-        ClientSkill2Cooldown = characterData.Skill2Timer;
-        ClientSkill3Cooldown = characterData.Skill3Timer;
-        ClientSpeed = characterData.Speed;
+        ClientHP = serverCharacterData.HP;
+        ClientSkill1Cooldown = serverCharacterData.Skill1Timer;
+        ClientSkill2Cooldown = serverCharacterData.Skill2Timer;
+        ClientSkill3Cooldown = serverCharacterData.Skill3Timer;
+        ClientSpeed = serverCharacterData.Speed;
     }
 
     [Command]
     public void CmdFireBullet()
     {
-        if (characterData.WeaponTimer <= 0)
+        if (serverCharacterData.WeaponTimer <= 0)
         {
             isShooting = true;
-            characterData.weaponFired();
-            CSZZNetworkServer.Instance.spawnBullet(firePoint);
+            serverCharacterData.weaponFired();
+            server.spawnBullet(firePoint);
         }
     }
 
@@ -80,13 +87,5 @@ public class NetworkCharacter : NetworkBehaviour
         {
             return;
         }
-    }
-
-
-    // Debug
-    [ClientRpc]
-    public void DebugStringRPC(string str)
-    {
-        Debug.Log(str);
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Bamboo.Events;
+using CSZZGame.Networking;
 using Refactor;
 
 public class NetworkCharacterController : MonoBehaviour
@@ -32,6 +33,7 @@ public class NetworkCharacterController : MonoBehaviour
 
         // Setting up of event listeners
         EventManager.Instance.Listen(EventChannels.OnInputEvent, OnInputEvent);
+        //EventManager.Instance.Listen("TestChannel", TestResponse);
     }
 
     void Update()
@@ -84,6 +86,7 @@ public class NetworkCharacterController : MonoBehaviour
                     break;
                 case InputCommand.FIRE:
                     networkCharacter.CmdFireBullet();
+                    //CSZZNetwork.Instance.SendNetworkEvent("TestChannel", "Bruh");
                     break;
             }
         }
@@ -115,5 +118,12 @@ public class NetworkCharacterController : MonoBehaviour
     {
         EventRequestInfo<InputCommand> info = (EventRequestInfo<InputCommand>)eventRequestInfo;
         CommandQueue.Enqueue(info.body);
+    }
+
+    void TestResponse(IEventRequestInfo eventRequestInfo)
+    {
+        EventRequestInfo<byte[]> info = (EventRequestInfo<byte[]>)eventRequestInfo;
+        string message = CSZZNetwork.DeserializeEventData<string>(info.body);
+        Debug.Log("Test" + message);
     }
 }

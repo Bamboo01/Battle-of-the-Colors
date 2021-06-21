@@ -4,29 +4,19 @@ using UnityEngine;
 using Mirror;
 using Bamboo.Utility;
 
+// Handles calls from a client on the server side.
 namespace CSZZGame.Networking
 {
-    public class CSZZNetworkServer : Singleton<CSZZNetworkServer>
+    public class CSZZNetworkServer : MonoBehaviour
     {
-        List<NetworkConnectionToClient> clientConnections = new List<NetworkConnectionToClient>();
-        NetworkRoomManagerScript networkManager;
-        GameObject playerCharacterPrefab;
-        protected override void OnAwake()
-        {
-            _persistent = false;
-        }
+        private List<NetworkConnectionToClient> clientConnections = new List<NetworkConnectionToClient>();
+        private NetworkRoomManagerScript networkManager;
 
         void Awake()
         {
             networkManager = (NetworkRoomManagerScript)NetworkManager.singleton;
         }
 
-        void Start()
-        {
-
-        }
-
-        // Spawn
         public void spawnBullet(Transform transform)
         {
             GameObject bullet = Instantiate(networkManager.bulletPrefab);
@@ -44,6 +34,7 @@ namespace CSZZGame.Networking
             }
             clientConnections.Add(sender);
             GameObject playerCharacter = Instantiate(networkManager.playerCharacterPrefab);
+            playerCharacter.GetComponent<NetworkCharacter>().SetupServer(this);
             NetworkServer.Spawn(playerCharacter, sender);
         }
     }
