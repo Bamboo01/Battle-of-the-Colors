@@ -8,8 +8,10 @@ namespace CSZZGame.Networking
     [AddComponentMenu("")]
     public class NetworkPlayerScript : NetworkBehaviour
     {
+        [SyncVar] int clientTick;
+
         NetworkIdentity identity;
-        NetworkServer server;
+        CSZZNetworkServer server;
 
         public void Awake()
         {
@@ -18,7 +20,7 @@ namespace CSZZGame.Networking
 
         public override void OnStartServer()
         {
-            server = gameObject.AddComponent<NetworkServer>();
+            server = gameObject.AddComponent<CSZZNetworkServer>();
         }
 
         public void Start()

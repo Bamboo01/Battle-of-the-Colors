@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4891439359341481755
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9077345702537557434}
+  m_Layer: 0
+  m_Name: BulletSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9077345702537557434
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4891439359341481755}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.669, z: 2.63}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6184638618461802931}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6184638617201110859
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,7 +550,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6184638618104681651}
   m_LocalRotation: {x: -0.50000036, y: 0.49999964, z: 0.4999997, w: 0.5000003}
-  m_LocalPosition: {x: -0.01096914, y: 1.3534417, z: -0.35235596}
+  m_LocalPosition: {x: 0, y: 1.3534417, z: 0}
   m_LocalScale: {x: 2.54, y: 2.54, z: 2.54}
   m_Children:
   - {fileID: 6184638617633309903}
@@ -726,6 +756,7 @@ Transform:
   - {fileID: 6184638618104681650}
   - {fileID: 6184638618556216452}
   - {fileID: 6184638618913295940}
+  - {fileID: 9077345702537557434}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -746,7 +777,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 2.1, z: -0.3}
+  m_Center: {x: 0, y: 2.1, z: 0}
 --- !u!114 &6184638618461802929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -780,9 +811,15 @@ MonoBehaviour:
   syncInterval: 0.1
   isShooting: 0
   isThrowing: 0
+  ClientHP: 0
+  ClientSpeed: 0
+  ClientSkill1Cooldown: 0
+  ClientSkill2Cooldown: 0
+  ClientSkill3Cooldown: 0
   animator: {fileID: 6184638618461802935}
   observer: {fileID: 2835421215631110964}
   controller: {fileID: 7495637079963509014}
+  firePoint: {fileID: 9077345702537557434}
 --- !u!114 &7495637079963509014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -846,10 +883,10 @@ Animator:
   m_GameObject: {fileID: 6184638618461802932}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 52ea8afcf5ae7bc42bbc4f290d2ed249, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6f3343e579a963f4293e1cb81b22d7b6, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_UpdateMode: 1
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1

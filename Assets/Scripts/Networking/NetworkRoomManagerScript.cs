@@ -10,5 +10,6 @@ namespace CSZZGame.Networking
     public class NetworkRoomManagerScript : NetworkRoomManager
     {
         public GameObject playerCharacterPrefab;
+        public GameObject bulletPrefab;
     }
 }

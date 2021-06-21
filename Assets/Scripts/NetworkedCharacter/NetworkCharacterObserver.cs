@@ -38,12 +38,6 @@ public class NetworkCharacterObserver : MonoBehaviour
 
     void Update()
     {
-        if (networkCharacter.hasAuthority)
-        {
-            this.enabled = false;
-            return;
-        }
-
         isThrowing = networkCharacter.isThrowing;
         isShooting = networkCharacter.isShooting;
         if (lastPosition - transform.position == Vector3.zero)

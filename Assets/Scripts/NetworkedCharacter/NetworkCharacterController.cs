@@ -76,6 +76,9 @@ public class NetworkCharacterController : MonoBehaviour
                 case InputCommand.STRAFE_RIGHT:
                     resultantDirection += rightDir;
                     break;
+                case InputCommand.FIRE:
+                    networkCharacter.CmdFireBullet();
+                    break;
             }
         }
 
@@ -94,9 +97,12 @@ public class NetworkCharacterController : MonoBehaviour
         // Debug
         // Get direction of player to character
         Vector3 cameraDirection = (transform.position - CameraManager.Instance.GetCameraTransform().position).normalized;
-        Vector3 resultantPosition = transform.position + cameraDirection;
-        resultantPosition.y = transform.position.y;
-        transform.LookAt(resultantPosition);
+        cameraDirection.y = transform.position.y;
+        Vector3 finalRotation = Quaternion.LookRotation(cameraDirection, Vector3.up).eulerAngles;
+        finalRotation.x = 0;
+        finalRotation.z = 0;
+        // Why da otter be rotatin :(
+        transform.rotation = Quaternion.Euler(finalRotation);
     }
 
     void OnInputEvent(IEventRequestInfo eventRequestInfo)

@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1872442486, guid: 45a7b30a913887f428b0955eea454ccc, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1872442487, guid: 45a7b30a913887f428b0955eea454ccc, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.29
@@ -102,6 +106,10 @@ PrefabInstance:
     - target: {fileID: 4182300405211523376, guid: 45a7b30a913887f428b0955eea454ccc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4669744218298953602, guid: 45a7b30a913887f428b0955eea454ccc, type: 3}
+      propertyPath: EmissionModule.rateOverDistance.scalar
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6577227079768856675, guid: 45a7b30a913887f428b0955eea454ccc, type: 3}
       propertyPath: m_Name

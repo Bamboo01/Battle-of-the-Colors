@@ -90,16 +90,12 @@ public class FSMShootState : IFSMStateBase
 
     public void OnExit()
     {
-        updatedOnce = false;
+        
     }
 
     public void OnUpdate()
     {
-        if (!updatedOnce)
-        {
-            animator.SetBool("isShooting", false);
-            updatedOnce = true;
-        }
+        animator.SetBool("isShooting", false);
     }
 }
 

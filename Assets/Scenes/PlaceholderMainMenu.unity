@@ -717,6 +717,7 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 6184638618461802932, guid: b440426bbc137cf42aad9eb39cc78869, type: 3}
+  - {fileID: 2421208305232949714, guid: 6ef108828aea6b54595cc5052957cb5c, type: 3}
   showRoomGUI: 1
   minPlayers: 1
   roomPlayerPrefab: {fileID: -7185082740407754354, guid: 0b5629bb4faee4d42ae650c882c75f5c, type: 3}
@@ -726,6 +727,7 @@ MonoBehaviour:
   roomSlots: []
   clientIndex: 0
   playerCharacterPrefab: {fileID: 6184638618461802932, guid: b440426bbc137cf42aad9eb39cc78869, type: 3}
+  bulletPrefab: {fileID: 2421208305232949714, guid: 6ef108828aea6b54595cc5052957cb5c, type: 3}
 --- !u!4 &2143497710
 Transform:
   m_ObjectHideFlags: 0

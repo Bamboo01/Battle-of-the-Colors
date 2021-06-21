@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 1671659381186472928}
   - component: {fileID: 1671659381186472931}
   m_Layer: 0
-  m_Name: CameraManager
+  m_Name: FreelookCameraManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1671659381186472929}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f2a1f2b05e91ff4d9736cb9b27f3ef4, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ce346c63e91bf74e80d1e2960c8881c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _persistent: 0
