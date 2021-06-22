@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 385bda933f60b3e43bc04b3195943e74, type: 3}
-  m_Name: ParticlePainterProperty-green
+  m_Script: {fileID: 11500000, guid: d333bbd2e860cca4284da6be58ab5e57, type: 3}
+  m_Name: ParticlePainterProperty
   m_EditorClassIdentifier: 
-  color: {r: 0.114142045, g: 0.8962264, b: 0.87479246, a: 1}
-  minRadius: 1.7
-  maxRadius: 2.3
-  particleGravity: 10
-  particleMinStartSpeed: 20
-  particleMaxStartSpeed: 25
+  color: {r: 1, g: 0, b: 0, a: 1}
+  minRadius: 0.8
+  maxRadius: 1.2
+  particleGravity: 0.5
+  particleMinStartSpeed: 3
+  particleMaxStartSpeed: 3
   particleColliderRadius: 0.15

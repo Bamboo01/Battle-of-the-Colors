@@ -133,8 +133,11 @@ MonoBehaviour:
   renderer: {fileID: 5326794019105611365}
   collider: {fileID: 5021754394663767950}
   rb: {fileID: -7886281163730077900}
-  properties: {fileID: 11400000, guid: 4ec55f483f9f452469b63faba32abff1, type: 2}
-  paintParticlesPrefab: {fileID: 149746214766597947, guid: 7309afde09d839e4fb500042cdd69ced, type: 3}
+  properties: {fileID: 11400000, guid: 567575fd005af5e46aa9c2af1f10be17, type: 2}
+  color: {r: 0, g: 0, b: 0, a: 0}
+  paintParticlesPrefab: {fileID: 494746822174059343, guid: 7309afde09d839e4fb500042cdd69ced, type: 3}
+  brushParticlesPrefab: {fileID: 1454805509270251551, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+  masDistanceTravelled: 300
 --- !u!114 &8677805889824669449
 MonoBehaviour:
   m_ObjectHideFlags: 0

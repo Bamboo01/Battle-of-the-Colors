@@ -157,9 +157,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3893fe3400e6d7498fab3d25c841c51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _persistent: 1
-  TextureUnwrapper: {fileID: 4800000, guid: c4b6862b0635ada41afcf6df1d942ac4, type: 3}
-  TexturePainter: {fileID: 7200000, guid: d49748bf4da5e634b821b78ae2b47bd8, type: 3}
 --- !u!4 &254946578
 Transform:
   m_ObjectHideFlags: 0
@@ -751,48 +748,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b15be6ec407ce4fbf4cf228fc51e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureSize: 1024
-  normalizedScale: {x: 0.1, y: 0.1, z: 0.1}
-  sceneMesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
-  scalingMatrix:
-    e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  inversescalingMatrix:
-    e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  renderer: {fileID: 0}
-  uvposTexture: {fileID: 0}
-  maskTexture: {fileID: 0}
-  rawmaskcolorTexture: {fileID: 0}
-  rawcolorTextureMipMap: []
 --- !u!4 &108875248138211493
 Transform:
   m_ObjectHideFlags: 0
@@ -1192,6 +1147,63 @@ Transform:
   m_Father: {fileID: 543450652003165854}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &843037162411042399
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 928300323496589251, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 928300323496589251, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928300323496589251, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928300323496589251, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928300323496589251, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 928300323496589251, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928300323496589251, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928300323496589251, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928300323496589251, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928300323496589251, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 928300323496589251, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1454805509270251551, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
+      propertyPath: m_Name
+      value: BrushParticles
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
 --- !u!4 &908276782836267494
 Transform:
   m_ObjectHideFlags: 0
@@ -8724,7 +8736,7 @@ MonoBehaviour:
   bulletGravity: 9.8
   rb: {fileID: 7439221971043404062}
   properties: {fileID: 11400000, guid: 4ec55f483f9f452469b63faba32abff1, type: 2}
-  paintParticlesPrefab: {fileID: 149746214766597947, guid: 7309afde09d839e4fb500042cdd69ced, type: 3}
+  paintParticlesPrefab: {fileID: 494746822174059343, guid: 7309afde09d839e4fb500042cdd69ced, type: 3}
 --- !u!54 &7439221971043404062
 Rigidbody:
   m_ObjectHideFlags: 0

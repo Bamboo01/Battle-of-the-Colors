@@ -34,7 +34,7 @@ public class NetworkCharacter : NetworkBehaviour
     [SerializeField] Transform firePoint;
 
     ServerCharacterData serverCharacterData;
-    CSZZNetworkServer server;
+    CSZZServerHandler server;
 
     public override void OnStartServer()
     {
@@ -54,19 +54,27 @@ public class NetworkCharacter : NetworkBehaviour
     }
 
     [Server]
-    public void SetupServer(CSZZNetworkServer s)
+    public void SetupServerHandler(CSZZServerHandler s)
     {
         server = s;
     }
 
     [Server]
-    void Update()
+    public void ServerUpdate()
     {
         ClientHP = serverCharacterData.HP;
         ClientSkill1Cooldown = serverCharacterData.Skill1Timer;
         ClientSkill2Cooldown = serverCharacterData.Skill2Timer;
         ClientSkill3Cooldown = serverCharacterData.Skill3Timer;
         ClientSpeed = serverCharacterData.Speed;
+    }
+
+    void Update()
+    {
+        if (isServer)
+        {
+            ServerUpdate();
+        }
     }
 
     [Command]
@@ -76,7 +84,7 @@ public class NetworkCharacter : NetworkBehaviour
         {
             isShooting = true;
             serverCharacterData.weaponFired();
-            server.spawnBullet(firePoint);
+            server.spawnBullet(firePoint, serverCharacterData);
         }
     }
 

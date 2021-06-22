@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Bamboo.Utility;
+using Bamboo.Events;
+using CSZZGame.Refactor;
+using CSZZGame.Networking;
+
 public class NetworkPainterManager : Singleton<NetworkPainterManager>
 {
     private int brushcolorID = Shader.PropertyToID("cBrushColor");
@@ -23,14 +27,35 @@ public class NetworkPainterManager : Singleton<NetworkPainterManager>
     //Shaders
     [SerializeField] Shader TextureUnwrapper;
     [SerializeField] ComputeShader TexturePainter;
+
     //Command Buffer
     CommandBuffer commandbuffer;
+
+    // Paintable IDs (Should be the same given that their loading the same scene)
+    int currentPaintableID = 0;
+    Dictionary<int, Paintable> idToPaintable = new Dictionary<int, Paintable>();
+    Dictionary<Paintable, int> paintableToID = new Dictionary<Paintable, int>();
 
     public void Awake()
     {
         _persistent = false;
         unwrapperMaterial = new Material(TextureUnwrapper);
         commandbuffer = new CommandBuffer();
+    }
+
+    public void Start()
+    {
+        EventManager.Instance.Listen(EventChannels.OnPaintPaintableEvent, OnPaintPaintableEvent);
+    }
+
+    public void OnPaintPaintableEvent(IEventRequestInfo eventRequestInfo)
+    {
+        EventRequestInfo<byte[]> info = (EventRequestInfo<byte[]>)eventRequestInfo;
+        PaintParticlesNetworkData data = CSZZNetworkInterface.DeserializeEventData<PaintParticlesNetworkData>(info.body);
+        foreach (var pos in data.collisionPositions)
+        {
+            Paint(idToPaintable[data.paintableID], (Color)data.painterProperties.color, (Vector3)pos, data.painterProperties.radius);
+        }
     }
 
     public void SetupPaintable(Paintable paintable)
@@ -40,6 +65,10 @@ public class NetworkPainterManager : Singleton<NetworkPainterManager>
         commandbuffer.DrawRenderer(paintable.renderer, unwrapperMaterial);
         Graphics.ExecuteCommandBuffer(commandbuffer);
         commandbuffer.Clear();
+
+        idToPaintable.Add(currentPaintableID, paintable);
+        paintableToID.Add(paintable, currentPaintableID);
+        currentPaintableID++;
     }
 
     public void Paint(Paintable paintable, Color color, Vector3 position, float radius)
@@ -58,5 +87,10 @@ public class NetworkPainterManager : Singleton<NetworkPainterManager>
         TexturePainter.SetMatrix(modelmatrixID, TRS);
 
         TexturePainter.Dispatch(0, (int)paintable.textureSize / 8, (int)paintable.textureSize / 8, 1);
+    }
+
+    public int GetPaintableID(Paintable paintable)
+    {
+        return paintableToID[paintable];
     }
 }

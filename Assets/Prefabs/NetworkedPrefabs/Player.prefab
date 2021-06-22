@@ -63,3 +63,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  serverEventProperties: {fileID: 11400000, guid: 38d583414f21e584199a2553e4bf7ff9, type: 2}

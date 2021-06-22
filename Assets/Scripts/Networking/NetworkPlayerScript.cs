@@ -10,16 +10,12 @@ namespace CSZZGame.Networking
     [AddComponentMenu("")]
     public class NetworkPlayerScript : NetworkBehaviour
     {
-        private CSZZNetworkServer cszzNetworkServer;
-        private CSZZNetwork cszzNetwork;
+        [SerializeField] public ServerEventProperties serverEventProperties;
+        private CSZZServerHandler cszzNetworkServer;
+        private CSZZNetworkInterface cszzNetworkInterface;
         public override void OnStartServer()
         {
-            if (!isLocalPlayer)
-            {
-                return;
-            }    
-            base.OnStartServer();
-            cszzNetworkServer = gameObject.AddComponent<CSZZNetworkServer>();
+            cszzNetworkServer = gameObject.AddComponent<CSZZServerHandler>();
         }
 
         public override void OnStartClient()
@@ -29,8 +25,8 @@ namespace CSZZGame.Networking
             {
                 return;
             }
-            cszzNetwork = gameObject.AddComponent<CSZZNetwork>();
-            cszzNetwork.SetupClient(this);
+            cszzNetworkInterface = gameObject.AddComponent<CSZZNetworkInterface>();
+            cszzNetworkInterface.SetupClient(this);
         }
 
         public override void OnStartAuthority()
@@ -45,13 +41,21 @@ namespace CSZZGame.Networking
         }
 
         [Command]
-        public void CmdRaiseEvent(string eventChannel, byte[] data)
+        public void CmdRaiseEvent(string eventChannel, byte[] data, NetworkConnectionToClient sender = null)
         {
-            OnEventRaised(eventChannel, data);
+            foreach (string n in serverEventProperties.ServerOnlyChannels)
+            {
+                if (eventChannel == n && (!isLocalPlayer || !isServer))
+                {
+                    Debug.LogError(sender.ToString() + " tried to raise a server only event: " + eventChannel);
+                    return;
+                }
+            }    
+            RaiseEventsToClients(eventChannel, data);
         }
 
         [ClientRpc]
-        public void OnEventRaised(string eventChannel, byte[] data)
+        public void RaiseEventsToClients(string eventChannel, byte[] data)
         {
             EventManager.Instance.Publish(eventChannel, null, data);
         }

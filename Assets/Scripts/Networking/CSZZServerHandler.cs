@@ -7,9 +7,9 @@ using Bamboo.Utility;
 // Handles calls from a client on the server side.
 namespace CSZZGame.Networking
 {
-    public class CSZZNetworkServer : MonoBehaviour
+    public class CSZZServerHandler : MonoBehaviour
     {
-        private List<NetworkConnectionToClient> clientConnections = new List<NetworkConnectionToClient>();
+        private NetworkConnectionToClient clientConnection;
         private NetworkRoomManagerScript networkManager;
 
         void Awake()
@@ -17,24 +17,28 @@ namespace CSZZGame.Networking
             networkManager = (NetworkRoomManagerScript)NetworkManager.singleton;
         }
 
-        public void spawnBullet(Transform transform)
+        public void spawnBullet(Transform transform, ServerCharacterData data)
         {
             GameObject bullet = Instantiate(networkManager.bulletPrefab);
             bullet.transform.position = transform.position;
             bullet.transform.LookAt(transform.position + transform.forward, Vector3.up);
-            bullet.GetComponent<NetworkedPaintBullet>().bulletSpeed = 50.0f;
+
+            NetworkBullet networkedPaintBullet = bullet.GetComponent<NetworkBullet>();
+
+            networkedPaintBullet.bulletSpeed = 50.0f;
+            networkedPaintBullet.ServerSetup(ServerCharacterData.teamToColor(data.characterTeam));
             NetworkServer.Spawn(bullet);
         }
 
         public void spawnCharacter(NetworkConnectionToClient sender)
         {
-            if (clientConnections.Contains(sender))
+            if (clientConnection != null)
             {
                 return;
             }
-            clientConnections.Add(sender);
+            clientConnection = sender;
             GameObject playerCharacter = Instantiate(networkManager.playerCharacterPrefab);
-            playerCharacter.GetComponent<NetworkCharacter>().SetupServer(this);
+            playerCharacter.GetComponent<NetworkCharacter>().SetupServerHandler(this);
             NetworkServer.Spawn(playerCharacter, sender);
         }
     }

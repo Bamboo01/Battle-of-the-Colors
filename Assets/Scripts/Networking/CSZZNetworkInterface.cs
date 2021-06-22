@@ -10,7 +10,7 @@ using Mirror;
 // Handles calls from local objects to send towards the server
 namespace CSZZGame.Networking
 {
-    public class CSZZNetwork : Singleton<CSZZNetwork>
+    public class CSZZNetworkInterface : Singleton<CSZZNetworkInterface>
     {
         NetworkPlayerScript currentClientPlayer;
 

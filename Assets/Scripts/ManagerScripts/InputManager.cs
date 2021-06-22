@@ -4,7 +4,7 @@ using UnityEngine;
 using Bamboo.Utility;
 using Bamboo.Events;
 
-namespace Refactor
+namespace CSZZGame.Refactor
 {
     public class InputManager : Singleton<InputManager>
     {

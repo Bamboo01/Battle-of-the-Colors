@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &254946577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,7 +262,7 @@ Transform:
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &461601837
 GameObject:
@@ -329,6 +329,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &718375437
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 718375439}
+  - component: {fileID: 718375438}
+  m_Layer: 0
+  m_Name: PaintManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &718375438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718375437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b10fb91dd58337044a43b2f1a78304ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _persistent: 1
+  TextureUnwrapper: {fileID: 4800000, guid: c4b6862b0635ada41afcf6df1d942ac4, type: 3}
+  TexturePainter: {fileID: 7200000, guid: d49748bf4da5e634b821b78ae2b47bd8, type: 3}
+--- !u!4 &718375439
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718375437}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &761376157
 GameObject:
@@ -529,7 +575,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1894075020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06b15be6ec407ce4fbf4cf228fc51e06, type: 3}
+  m_Script: {fileID: 11500000, guid: 5cd4404a3b02e984884983a57e1fa387, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   textureSize: 1024
@@ -757,3 +803,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b08a5b81b9ba4c48a47dfb0c2c7742e, type: 3}
+--- !u!1 &6235722732772077903 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6235722733588817784, guid: 5b08a5b81b9ba4c48a47dfb0c2c7742e, type: 3}
+  m_PrefabInstance: {fileID: 6235722732772077902}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6235722732772077904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6235722732772077903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beb82068c8e441648923458052c03805, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

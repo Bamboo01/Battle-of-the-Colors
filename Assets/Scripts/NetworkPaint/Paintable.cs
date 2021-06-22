@@ -70,7 +70,7 @@ public class Paintable : MonoBehaviour
         scalingMatrix = Matrix4x4.Scale(normalizedScale);
         inversescalingMatrix = scalingMatrix.inverse;
 
-        //PaintManager.Instance.SetupPaintable(this);
+        NetworkPainterManager.Instance.SetupPaintable(this);
 
         // Debug
         renderer.material.SetTexture("_MaskTexture", maskTexture);

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Refactor;
+using CSZZGame.Refactor;
 
 public class NetworkCharacterObserver : MonoBehaviour
 {

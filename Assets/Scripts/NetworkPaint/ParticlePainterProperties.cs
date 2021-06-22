@@ -24,9 +24,8 @@ public class ParticlePainterProperties : ScriptableObject
 [System.Serializable]
 public class ParticlePainterPropertiesSerialized
 {
-    public Vector4 color;
-    public float minRadius;
-    public float maxRadius;
+    public SerializedVector4 color;
+    public float radius;
     public float particleGravity;
     public float particleMinStartSpeed;
     public float particleMaxStartSpeed;
@@ -34,9 +33,18 @@ public class ParticlePainterPropertiesSerialized
 
     public ParticlePainterPropertiesSerialized(ParticlePainterProperties props)
     {
-        color = props.color;
-        minRadius = props.minRadius;
-        maxRadius = props.maxRadius;
+        color = new SerializedVector4(props.color);
+        radius = Random.Range(props.minRadius, props.maxRadius);
+        particleGravity = props.particleGravity;
+        particleMinStartSpeed = props.particleMinStartSpeed;
+        particleMaxStartSpeed = props.particleMaxStartSpeed;
+        particleColliderRadius = props.particleColliderRadius;
+    }
+
+    public ParticlePainterPropertiesSerialized(ParticlePainterProperties props, Color c)
+    {
+        color = new SerializedVector4(c);
+        radius = Random.Range(props.minRadius, props.maxRadius);
         particleGravity = props.particleGravity;
         particleMinStartSpeed = props.particleMinStartSpeed;
         particleMaxStartSpeed = props.particleMaxStartSpeed;

@@ -1,12 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CSZZGame.Refactor;
+using CSZZGame.Networking;
+
+[System.Serializable]
+struct PaintParticlesNetworkData
+{
+    public ParticlePainterPropertiesSerialized painterProperties;
+    public SerializedVector4[] collisionPositions;
+    public int paintableID;
+
+    public PaintParticlesNetworkData(ParticlePainterProperties props, List<Vector3> pos, int id)
+    {
+        painterProperties = new ParticlePainterPropertiesSerialized(props);
+        collisionPositions = SerializedVector4.vec3ArrayToSerializedVec4(pos.ToArray());
+        paintableID = id;
+    }
+}
 
 [RequireComponent(typeof(ParticleSystem))]
-public class ParticlePainter : MonoBehaviour
+public class NetworkParticlePainter : MonoBehaviour
 {
-    [Header("Particle Painter Properties")]
-    [SerializeField] public ParticlePainterProperties particlePainterProperties;
+
+    [HideInInspector] public ParticlePainterProperties particlePainterProperties;
 
     private ParticleSystem particleSystem;
     private ParticleSystemRenderer particleSystemRenderer;
@@ -28,7 +45,7 @@ public class ParticlePainter : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void SetupPainter()
     {
         particleSystemMain.startSpeed = new ParticleSystem.MinMaxCurve(particlePainterProperties.particleMinStartSpeed, particlePainterProperties.particleMaxStartSpeed);
         particleSystemMain.gravityModifier = particlePainterProperties.particleGravity;
@@ -37,23 +54,23 @@ public class ParticlePainter : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
+        List<Vector3> impactPositions = new List<Vector3>();
+        int hitPaintableID = -1;
         int numCollisionEvents = particleSystem.GetCollisionEvents(other, collisionEvents);
         Paintable p = other.GetComponent<Paintable>();
         if (p != null)
         {
+            hitPaintableID = NetworkPainterManager.Instance.GetPaintableID(p);
             for (int i = 0; i < numCollisionEvents; i++)
             {
-                // RPC to color stuff!
+                impactPositions.Add(collisionEvents[i].intersection);
             }
         }
-    }
 
-    [ContextMenu("Reload Properties")]
-    private void ReloadProperties()
-    {
-        particleSystemMain.startSpeed = new ParticleSystem.MinMaxCurve(particlePainterProperties.particleMinStartSpeed, particlePainterProperties.particleMaxStartSpeed);
-        particleSystemMain.gravityModifier = particlePainterProperties.particleGravity;
-        particleSystemCollider.radiusScale = particlePainterProperties.particleColliderRadius;
+        if (hitPaintableID != -1)
+        {
+            CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnPaintPaintableEvent, new PaintParticlesNetworkData(particlePainterProperties, impactPositions, hitPaintableID));
+        }
     }
 }
 

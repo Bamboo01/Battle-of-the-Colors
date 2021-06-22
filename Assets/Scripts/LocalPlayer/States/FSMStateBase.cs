@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Refactor
+namespace CSZZGame.Refactor
 {
     public interface IFSMStateBase
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using Cinemachine;
 using Bamboo.Utility;
 
-namespace Refactor
+namespace CSZZGame.Refactor
 {
     public class CameraManager : Singleton<CameraManager>
     {
@@ -20,6 +20,12 @@ namespace Refactor
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+        }
+
+        void OnDestroy()
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
         public void AssignTargets(Transform follow, Transform lookat)

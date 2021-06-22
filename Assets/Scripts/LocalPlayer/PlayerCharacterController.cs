@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Bamboo.Events;
 
-namespace Refactor
+namespace CSZZGame.Refactor
 {
     public class PlayerCharacterController : MonoBehaviour
     {
