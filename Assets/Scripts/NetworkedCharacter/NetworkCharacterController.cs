@@ -7,10 +7,6 @@ using CSZZGame.Refactor;
 
 public class NetworkCharacterController : MonoBehaviour
 {
-    [Header("Gun Alignment")]
-    [SerializeField] Transform GunHandBone;
-    [SerializeField] GameObject GunGameObject;
-
     [Header("Camera Target")]
     [SerializeField] Transform target;
 
@@ -42,8 +38,6 @@ public class NetworkCharacterController : MonoBehaviour
             this.enabled = false;
             return;
         }
-
-        GunGameObject.transform.position = GunHandBone.position;
         ProcessInputQueue();
         ProccessPhysics();
     }
@@ -60,11 +54,8 @@ public class NetworkCharacterController : MonoBehaviour
         Vector3 rightDir = target.transform.right;
         rightDir = new Vector3(rightDir.x, 0, rightDir.z).normalized;
 
-
-        if (!networkCharacter.isShooting == false)
-        {
-            networkCharacter.isShooting = false;
-        }
+        // Lazy af, shooting
+        bool localShooting = false;
 
         while (CommandQueue.Count != 0)
         {
@@ -85,10 +76,15 @@ public class NetworkCharacterController : MonoBehaviour
                     break;
                 case InputCommand.FIRE:
                     networkCharacter.CmdFireBullet();
+                    localShooting = true;
                     break;
             }
         }
 
+        if (networkCharacter.isShooting != localShooting)
+        {
+            networkCharacter.isShooting = localShooting;
+        }
         resultantDirection = resultantDirection.normalized;
         CommandQueue.Clear();
     }

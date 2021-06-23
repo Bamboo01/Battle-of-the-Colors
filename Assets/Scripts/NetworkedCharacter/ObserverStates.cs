@@ -5,17 +5,29 @@ using CSZZGame.Refactor;
 using Bamboo.Events;
 using Bamboo.Utility;
 
+public class ObserverUtility : MonoBehaviour
+{
+    public static IEnumerator PlayOneShot(string paramName, Animator _animator)
+    {
+        _animator.SetBool(paramName, true);
+        yield return null;
+        _animator.SetBool(paramName, false);
+    }
+}
+
 public class FSMIdleState : IFSMStateBase
 {
     Animator animator;
+    MonoBehaviour monoBehaviour;
 
     public FSMIdleState()
     {
 
     }
 
-    public void Setup(Animator anim)
+    public void Setup(Animator anim, MonoBehaviour mono)
     {
+        monoBehaviour = mono;
         animator = anim;
     }
 
@@ -23,6 +35,8 @@ public class FSMIdleState : IFSMStateBase
     {
         animator.SetBool("isIdle", true);
         animator.SetBool("isRunning", false);
+        animator.SetBool("isShooting", false);
+        animator.SetBool("isThrowing", false);
     }
 
     public void OnExit()
@@ -39,14 +53,16 @@ public class FSMIdleState : IFSMStateBase
 public class FSMRunState : IFSMStateBase
 {
     Animator animator;
+    MonoBehaviour monoBehaviour;
 
     public FSMRunState()
     {
 
     }
 
-    public void Setup(Animator anim)
+    public void Setup(Animator anim, MonoBehaviour mono)
     {
+        monoBehaviour = mono;
         animator = anim;
     }
 
@@ -70,70 +86,68 @@ public class FSMRunState : IFSMStateBase
 public class FSMShootState : IFSMStateBase
 {
     Animator animator;
-
+    MonoBehaviour monoBehaviour;
     public FSMShootState()
     {
 
     }
 
-    bool updatedOnce = false;
-
-    public void Setup(Animator anim)
+    public void Setup(Animator anim, MonoBehaviour mono)
     {
+        monoBehaviour = mono;
         animator = anim;
     }
 
     public void OnEnter()
     {
+        Debug.Log("Enter pew");
+        animator.SetBool("isIdle", false);
         animator.SetBool("isShooting", true);
     }
 
     public void OnExit()
     {
-        
+        Debug.Log("Exit pew");
+        animator.SetBool("isShooting", false);
+        animator.SetBool("isIdle", true);
     }
 
     public void OnUpdate()
     {
-        if (!updatedOnce)
-        {
-            animator.SetBool("isShooting", false);
-        }
+
     }
 }
 
 public class FSMThrowState : IFSMStateBase
 {
     Animator animator;
-
-    bool updatedOnce = false;
+    MonoBehaviour monoBehaviour;
 
     public FSMThrowState()
     {
 
     }
 
-    public void Setup(Animator anim)
+    public void Setup(Animator anim, MonoBehaviour mono)
     {
+        monoBehaviour = mono;
         animator = anim;
     }
 
     public void OnEnter()
     {
+        animator.SetBool("isIdle", false);
         animator.SetBool("isThrowing", true);
     }
 
     public void OnExit()
     {
-        updatedOnce = false;
+        animator.SetBool("isThrowing", false);
+        animator.SetBool("isIdle", true);
     }
 
     public void OnUpdate()
     {
-        if (!updatedOnce)
-        {
-            animator.SetBool("isThrowing", false);
-            updatedOnce = true;
-        }
+
     }
 }

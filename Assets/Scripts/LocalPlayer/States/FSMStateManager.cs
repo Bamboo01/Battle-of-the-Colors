@@ -16,10 +16,6 @@ namespace CSZZGame.Refactor
 
         public void UpdateState(IFSMStateBase nextState)
         {
-            if (currentState != null)
-            {
-                currentState.OnExit();
-            }
             IFSMStateBase newState = stateDictionary[nextState];
             if (currentState == newState)
             {
@@ -27,6 +23,11 @@ namespace CSZZGame.Refactor
             }
             else
             {
+                Debug.Log("Switching states");
+                if (currentState != null)
+                {
+                    currentState.OnExit();
+                }
                 currentState = stateDictionary[nextState];
                 currentState.OnEnter();
             }

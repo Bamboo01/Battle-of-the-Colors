@@ -882,8 +882,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ec26e27568182b45bcc1bee069ffd4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GunHandBone: {fileID: 6184638618190970636}
-  GunGameObject: {fileID: 6184638617927590093}
   target: {fileID: 6184638619281015600}
   controller: {fileID: 6184638618461802928}
   playerSpeed: 20
@@ -900,8 +898,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37d9551fab0b5aa448d1ba590de5e3cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GunHandBone: {fileID: 6184638618190970636}
+  GunGameObject: {fileID: 6184638617927590093}
   networkCharacter: {fileID: 6184638618461802934}
   animator: {fileID: 3573581219287518650}
+  isRunning: 0
+  isThrowing: 0
+  isShooting: 0
 --- !u!114 &7912340505395814315
 MonoBehaviour:
   m_ObjectHideFlags: 0

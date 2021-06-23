@@ -20,6 +20,7 @@ public class NetworkBullet : NetworkBehaviour
     public float masDistanceTravelled = 300.0f;
 
     private Vector3 lastPosition;
+    private float distanceTravelled = 0.0f;
 
     [Server]
     public void ServerSetup(Color c)
@@ -30,8 +31,13 @@ public class NetworkBullet : NetworkBehaviour
     [Server]
     void ServerUpdate()
     {
-        masDistanceTravelled += (lastPosition - transform.position).magnitude;
+        distanceTravelled += (lastPosition - transform.position).magnitude;
         lastPosition = transform.position;
+
+        if (distanceTravelled > masDistanceTravelled)
+        {
+            NetworkServer.Destroy(gameObject);
+        }
     }
 
     public override void OnStartServer()
