@@ -68,22 +68,36 @@ public class NetworkBullet : NetworkBehaviour
         Vector3 newForwardDir = Vector3.Cross(transform.right, dir);
         Vector3 lookPos = transform.position + newForwardDir.normalized;
 
-        // Spawn the particles locally (server)
+        // Spawn brush particles locally (server)
         GameObject brushParticles = Instantiate(brushParticlesPrefab, transform.position, transform.rotation);
-        brushParticles.GetComponent<BulletBrushParticlesManager>().SetupServerParticles(properties);
+        brushParticles.GetComponent<BulletBrushParticlesManager>().SetupServerParticles(properties, color);
         brushParticles.transform.LookAt(lookPos, -dir);
         Destroy(brushParticles, 3.0f);
 
-        SpawnParticlesRPC(transform.position, lookPos, -dir);
+        //Paint in a small radius (server)
+        
+
+        SpawnParticlesRPC(transform.position, lookPos, -dir, color);
+    }
+
+    [Server]
+    void RadiallyPaint(Vector3 center, float radius)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(center, radius);
+        foreach (var hitCollider in hitColliders)
+        {
+            //CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnPaintPaintableEvent, new PaintParticlesNetworkData(particlePainterProperties, impactPositions, hitPaintableID));
+        }
     }
 
 
     [ClientRpc]
-    void SpawnParticlesRPC(Vector3 contactPoint, Vector3 target, Vector3 up)
+    void SpawnParticlesRPC(Vector3 contactPoint, Vector3 target, Vector3 up, Vector4 color)
     {
         Debug.Log("Particles spawned");
         GameObject particlesGameObject = Instantiate(paintParticlesPrefab, contactPoint, transform.rotation);
         particlesGameObject.transform.LookAt(target, up);
+        particlesGameObject.GetComponent<BulletPaintParticlesManager>().SetupPaintParticles(color);
         Destroy(particlesGameObject, 3.0f);
         Destroy(gameObject);
     }

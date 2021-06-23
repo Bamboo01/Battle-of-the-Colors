@@ -2840,7 +2840,7 @@
 }
 
 {
-    "m_SGVersion": 2,
+    "m_SGVersion": 3,
     "m_Type": "UnityEditor.ShaderGraph.Internal.ColorShaderProperty",
     "m_ObjectId": "4d65649977b12e8f958652ec7700449b",
     "m_Guid": {
@@ -2848,7 +2848,7 @@
     },
     "m_Name": "Color",
     "m_DefaultReferenceName": "Color_5C93E64C",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_Color",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
@@ -2860,7 +2860,7 @@
         "b": 1.0,
         "a": 1.0
     },
-    "m_ColorMode": 1
+    "m_ColorMode": 0
 }
 
 {
@@ -6600,7 +6600,7 @@
     ],
     "synonyms": [],
     "m_Precision": 0,
-    "m_PreviewExpanded": false,
+    "m_PreviewExpanded": true,
     "m_PreviewMode": 0,
     "m_CustomColors": {
         "m_SerializableColors": []

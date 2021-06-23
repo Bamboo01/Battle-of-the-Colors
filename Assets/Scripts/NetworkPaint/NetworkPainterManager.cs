@@ -54,7 +54,7 @@ public class NetworkPainterManager : Singleton<NetworkPainterManager>
         PaintParticlesNetworkData data = CSZZNetworkInterface.DeserializeEventData<PaintParticlesNetworkData>(info.body);
         foreach (var pos in data.collisionPositions)
         {
-            Paint(idToPaintable[data.paintableID], (Color)data.painterProperties.color, (Vector3)pos, data.painterProperties.radius);
+            Paint(idToPaintable[data.paintableID], (Color)data.actualColor, (Vector3)pos, data.painterProperties.radius);
         }
     }
 

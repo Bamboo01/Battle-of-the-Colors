@@ -9,13 +9,15 @@ struct PaintParticlesNetworkData
 {
     public ParticlePainterPropertiesSerialized painterProperties;
     public SerializedVector4[] collisionPositions;
+    public SerializedVector4 actualColor;
     public int paintableID;
 
-    public PaintParticlesNetworkData(ParticlePainterProperties props, List<Vector3> pos, int id)
+    public PaintParticlesNetworkData(ParticlePainterProperties props, List<Vector3> pos, int id, Color color)
     {
         painterProperties = new ParticlePainterPropertiesSerialized(props);
         collisionPositions = SerializedVector4.vec3ArrayToSerializedVec4(pos.ToArray());
         paintableID = id;
+        actualColor = new SerializedVector4(color);
     }
 }
 
@@ -25,11 +27,11 @@ public class NetworkParticlePainter : MonoBehaviour
 
     [HideInInspector] public ParticlePainterProperties particlePainterProperties;
 
+    Color actualColor;
     private ParticleSystem particleSystem;
     private ParticleSystemRenderer particleSystemRenderer;
     private ParticleSystem.MainModule particleSystemMain;
     private ParticleSystem.CollisionModule particleSystemCollider;
-
     private List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
 
     private void Awake()
@@ -45,8 +47,9 @@ public class NetworkParticlePainter : MonoBehaviour
         }
     }
 
-    public void SetupPainter()
+    public void SetupPainter(Color color)
     {
+        actualColor = color;
         particleSystemMain.startSpeed = new ParticleSystem.MinMaxCurve(particlePainterProperties.particleMinStartSpeed, particlePainterProperties.particleMaxStartSpeed);
         particleSystemMain.gravityModifier = particlePainterProperties.particleGravity;
         particleSystemCollider.radiusScale = particlePainterProperties.particleColliderRadius;
@@ -69,7 +72,7 @@ public class NetworkParticlePainter : MonoBehaviour
 
         if (hitPaintableID != -1)
         {
-            CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnPaintPaintableEvent, new PaintParticlesNetworkData(particlePainterProperties, impactPositions, hitPaintableID));
+            CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnPaintPaintableEvent, new PaintParticlesNetworkData(particlePainterProperties, impactPositions, hitPaintableID, actualColor));
         }
     }
 }

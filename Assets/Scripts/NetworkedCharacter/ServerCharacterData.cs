@@ -14,7 +14,7 @@ public class ServerCharacterData : MonoBehaviour
 
     private static readonly Dictionary<CHARACTER_TEAM, Color> _teamToColor = new Dictionary<CHARACTER_TEAM, Color>()
     {
-        { CHARACTER_TEAM.TEAM_1, new Color(1.0f, 0.2f, 0.2f ) },
+        { CHARACTER_TEAM.TEAM_1, new Color(1.0f, 0.8f, 0.1f ) },
         { CHARACTER_TEAM.TEAM_2, new Color(0.2f, 1.0f, 0.2f ) }
     };
 
