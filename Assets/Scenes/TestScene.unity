@@ -1642,7 +1642,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.463, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5872,7 +5872,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4617228435635607438
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5989,7 +5989,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4617228435841333808}
-  m_LocalRotation: {x: -0.049922265, y: 0.8943543, z: -0.103254795, w: -0.43240795}
+  m_LocalRotation: {x: -0.04992228, y: 0.8943543, z: -0.10325482, w: -0.43240798}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -8735,7 +8735,7 @@ MonoBehaviour:
   bulletSpeed: 1
   bulletGravity: 9.8
   rb: {fileID: 7439221971043404062}
-  properties: {fileID: 11400000, guid: 4ec55f483f9f452469b63faba32abff1, type: 2}
+  properties: {fileID: 0}
   paintParticlesPrefab: {fileID: 494746822174059343, guid: 7309afde09d839e4fb500042cdd69ced, type: 3}
 --- !u!54 &7439221971043404062
 Rigidbody:
@@ -9133,7 +9133,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.463, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -9380,7 +9380,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.463, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
