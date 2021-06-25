@@ -4,11 +4,16 @@ using UnityEngine;
 
 namespace CSZZGame.Refactor
 {
-    public interface IFSMStateBase
+    // Indicates that whatever inherits this interface is a state
+    public interface IFSMState_AbstractIdentifier
+    {
+    }
+
+    public interface IFSMStateBase<Key> : IFSMState_AbstractIdentifier
     {
         public void OnEnter();
 
-        public void OnUpdate();
+        public Key OnUpdate();
 
         public void OnExit();
     }

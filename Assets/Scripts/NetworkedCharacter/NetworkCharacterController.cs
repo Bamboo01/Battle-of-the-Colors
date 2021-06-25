@@ -17,6 +17,9 @@ public class NetworkCharacterController : MonoBehaviour
     [Header("Networking")]
     [SerializeField] NetworkCharacter networkCharacter;
 
+    // Climbing
+    private bool isClimbing { get; set; } = false;
+
     // Commands
     private Queue<InputCommand> CommandQueue = new Queue<InputCommand>();
     Vector3 resultantDirection;
@@ -88,6 +91,51 @@ public class NetworkCharacterController : MonoBehaviour
         resultantDirection = resultantDirection.normalized;
         CommandQueue.Clear();
     }
+
+    /*
+    // Will change to be more extensible
+    // TODO: Move movement logic to NetworkCharacter_MovementStates.cs
+    void MoveCharacterStealth()
+    {
+        Vector3 originalPosition = transform.position;
+        Vector3 lastValidPosition = originalPosition; // Use to return to last valid stealth position if we end up at an invalid position
+        CollisionFlags collisionFlags; // Use to detect if he hit a wall
+
+        if (!isClimbing)
+        {
+            // We should be on the ground, so move normally
+            collisionFlags = controller.Move(resultantDirection * playerSpeed * Time.deltaTime);
+
+            if ((collisionFlags & CollisionFlags.CollidedSides) != 0)
+            {
+
+            }
+        }
+    }
+    bool CheckValidStealthPosition(Vector3 position, Vector3 up)
+    {
+        RaycastHit raycastHit;
+
+        // Get the surface underneath us
+        if (Physics.Raycast(position + up, -up, out raycastHit, 2.0f))
+        {
+            Paintable paintable = raycastHit.transform.GetComponent<Paintable>();
+            if (paintable)
+            {
+                int x = (int)((float)paintable.textureSize * raycastHit.textureCoord.x);
+                int y = (int)((float)paintable.textureSize * raycastHit.textureCoord.y);
+
+                RenderTexture.active = paintable.rawmaskcolorTexture;
+                pixelSampler.ReadPixels(new Rect(x, (int)paintable.textureSize - y, 1, 1), 0, 0, true);
+                pixelSampler.Apply();
+            }
+            else // This surface is not paintable - no way we can stealth through it
+                return false;
+        }
+        else // No hit, we are in the air
+            return true;
+    }
+    */
 
     void ProccessPhysics()
     {
