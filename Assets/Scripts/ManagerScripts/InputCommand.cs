@@ -12,6 +12,6 @@ namespace CSZZGame.Refactor
         STRAFE_RIGHT,
         FIRE,
         STEALTH,
-        SHIELD
+        SKILL
     }
 }

@@ -720,6 +720,7 @@ MonoBehaviour:
   - {fileID: 2421208305232949714, guid: 6ef108828aea6b54595cc5052957cb5c, type: 3}
   - {fileID: 290448140829060571, guid: 6eb3bc7f45282824c97d3ec18bfbc4b1, type: 3}
   - {fileID: 6579304775318102042, guid: f4f621c39ddb01847ad5d1fc0da2541b, type: 3}
+  - {fileID: 4773346249666374580, guid: ee528461b3460c04bbd297c09f60ee0f, type: 3}
   showRoomGUI: 1
   minPlayers: 1
   roomPlayerPrefab: {fileID: -7185082740407754354, guid: 0b5629bb4faee4d42ae650c882c75f5c, type: 3}
@@ -733,6 +734,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 2421208305232949714, guid: 6ef108828aea6b54595cc5052957cb5c, type: 3}
   dedicatedServerPrefab: {fileID: 290448140829060571, guid: 6eb3bc7f45282824c97d3ec18bfbc4b1, type: 3}
   shieldPrefab: {fileID: 6579304775318102042, guid: f4f621c39ddb01847ad5d1fc0da2541b, type: 3}
+  smokePrefab: {fileID: 4773346249666374580, guid: ee528461b3460c04bbd297c09f60ee0f, type: 3}
 --- !u!4 &2143497710
 Transform:
   m_ObjectHideFlags: 0

@@ -64,5 +64,10 @@ namespace CSZZGame.Networking
             networkedShield.ServerSetup(ServerCharacterData.teamToColor(data.characterTeam));
             NetworkServer.Spawn(shield);
         }
+
+        public void spawnSkill(Transform transform, ISkill skill)
+        {
+            skill.UseSkill(transform, networkManager);
+        }
     }
 }

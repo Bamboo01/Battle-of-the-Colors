@@ -36,6 +36,8 @@ public class NetworkCharacter : NetworkBehaviour
     ServerCharacterData serverCharacterData;
     CSZZServerHandler server;
 
+    public Behaviour[] SkillList;
+
     public override void OnStartServer()
     {
         serverCharacterData = gameObject.AddComponent<ServerCharacterData>();
@@ -107,5 +109,11 @@ public class NetworkCharacter : NetworkBehaviour
     public void CmdSpawnShield()
     {
         server.spawnShield(firePoint, serverCharacterData);
+    }
+
+    [Command]
+    public void CmdSpawnSkill()
+    {
+        server.spawnSkill(firePoint,(ISkill)SkillList[0]);
     }
 }
