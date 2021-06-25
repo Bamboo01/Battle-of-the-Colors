@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 1454805509270251551}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 2879789320707522930}
   - {fileID: 2879789321101179168}
@@ -4924,6 +4924,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particlePainterProperties: {fileID: 0}
+  paintScaleModifier: 1
 --- !u!1 &2879789321101179172
 GameObject:
   m_ObjectHideFlags: 0
@@ -4951,7 +4952,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2879789321101179172}
   m_LocalRotation: {x: 0.7071073, y: -0, z: -0, w: 0.7071063}
-  m_LocalPosition: {x: 0.23000002, y: 0.5, z: -0.07999992}
+  m_LocalPosition: {x: 0.23000002, y: 1, z: -0.07999992}
   m_LocalScale: {x: 1, y: 1, z: 0.9191984}
   m_Children: []
   m_Father: {fileID: 928300323496589251}
@@ -5531,7 +5532,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -9800,3 +9801,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particlePainterProperties: {fileID: 0}
+  paintScaleModifier: 1

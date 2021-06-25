@@ -14,12 +14,27 @@ namespace CSZZGame.Networking
     {
         NetworkPlayerScript currentClientPlayer;
 
+        protected override void OnAwake()
+        {
+            base.OnAwake();
+            _persistent = false;
+        }
+
         public void SendNetworkEvent<T>(string channel, T obj)
         {
             BinaryFormatter bf = new BinaryFormatter();
             var ms = new MemoryStream();
             bf.Serialize(ms, obj);
-            currentClientPlayer.CmdRaiseEvent(channel, ms.ToArray());
+            if (currentClientPlayer.isDedicatedServer)
+            {
+                byte[] data = ms.ToArray();
+                EventManager.Instance.Publish(channel, null, data);
+                currentClientPlayer.RaiseEventsToClients(channel, data);
+            }
+            else
+            {
+                currentClientPlayer.CmdRaiseEvent(channel, ms.ToArray());
+            }
         }
 
         public void SendNetworkEvent(string channel)

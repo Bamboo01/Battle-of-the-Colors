@@ -11,13 +11,15 @@ struct PaintParticlesNetworkData
     public SerializedVector4[] collisionPositions;
     public SerializedVector4 actualColor;
     public int paintableID;
+    public float paintScale;
 
-    public PaintParticlesNetworkData(ParticlePainterProperties props, List<Vector3> pos, int id, Color color)
+    public PaintParticlesNetworkData(ParticlePainterProperties props, List<Vector3> pos, int id, Color color, float scale)
     {
         painterProperties = new ParticlePainterPropertiesSerialized(props);
         collisionPositions = SerializedVector4.vec3ArrayToSerializedVec4(pos.ToArray());
         paintableID = id;
         actualColor = new SerializedVector4(color);
+        paintScale = scale;
     }
 }
 
@@ -34,6 +36,8 @@ public class NetworkParticlePainter : MonoBehaviour
     private ParticleSystem.CollisionModule particleSystemCollider;
     private List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
 
+    public float paintScaleModifier = 1.0f;
+
     private void Awake()
     {
         particleSystem = GetComponent<ParticleSystem>();
@@ -47,12 +51,13 @@ public class NetworkParticlePainter : MonoBehaviour
         }
     }
 
-    public void SetupPainter(Color color)
+    public void SetupPainter(Color color, float paintscale = 1.0f)
     {
+        paintScaleModifier = paintscale;
         actualColor = color;
         particleSystemMain.startSpeed = new ParticleSystem.MinMaxCurve(particlePainterProperties.particleMinStartSpeed, particlePainterProperties.particleMaxStartSpeed);
         particleSystemMain.gravityModifier = particlePainterProperties.particleGravity;
-        particleSystemCollider.radiusScale = particlePainterProperties.particleColliderRadius;
+        particleSystemCollider.radiusScale = particlePainterProperties.particleColliderRadius * paintscale;
     }
 
     void OnParticleCollision(GameObject other)
@@ -72,7 +77,7 @@ public class NetworkParticlePainter : MonoBehaviour
 
         if (hitPaintableID != -1)
         {
-            CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnPaintPaintableEvent, new PaintParticlesNetworkData(particlePainterProperties, impactPositions, hitPaintableID, actualColor));
+            CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnPaintPaintableEvent, new PaintParticlesNetworkData(particlePainterProperties, impactPositions, hitPaintableID, actualColor, paintScaleModifier));
         }
     }
 }

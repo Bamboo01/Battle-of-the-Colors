@@ -9,7 +9,20 @@ namespace CSZZGame.Networking
     [AddComponentMenu("")]
     public class NetworkRoomManagerScript : NetworkRoomManager
     {
+        [SerializeField] ServerEventProperties serverEventProperties;
         public GameObject playerCharacterPrefab;
         public GameObject bulletPrefab;
+        public GameObject dedicatedServerPrefab;
+
+        private GameObject dedicatedServer;
+
+        public override void OnServerSceneChanged(string sceneName)
+        {
+            if (sceneName == GameplayScene)
+            {
+                dedicatedServer = Instantiate(dedicatedServerPrefab);
+                NetworkServer.Spawn(dedicatedServer);
+            }
+        }
     }
 }

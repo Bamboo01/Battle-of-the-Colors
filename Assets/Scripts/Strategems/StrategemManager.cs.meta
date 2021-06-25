@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: bc1df47f278735440b221ce64b451706
+guid: 2d6cce21c23ffa443bf080509a7184dd
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - particlePainterProperties: {fileID: 11400000, guid: 567575fd005af5e46aa9c2af1f10be17, type: 2}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
