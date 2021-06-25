@@ -10,5 +10,5 @@ public class StrategemProperties : ScriptableObject
     public string stragagemName;
     public int executionLength;
     public float cooldownTime;
-    public StrategemGameobjectBase strategem;
+    public GameObject strategemPrefab;
 }
