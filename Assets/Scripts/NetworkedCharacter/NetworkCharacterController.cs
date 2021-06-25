@@ -4,6 +4,7 @@ using UnityEngine;
 using Bamboo.Events;
 using CSZZGame.Networking;
 using CSZZGame.Refactor;
+using CSZZGame.Character.Movement;
 
 public class NetworkCharacterController : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class NetworkCharacterController : MonoBehaviour
     [Header("Networking")]
     [SerializeField] NetworkCharacter networkCharacter;
 
+    // Movement
+    IFSMStateManager_Movement movementStateManager = new FSMStateManager_Movement();
+
     // Commands
     private Queue<InputCommand> CommandQueue = new Queue<InputCommand>();
     Vector3 resultantDirection;
@@ -26,6 +30,13 @@ public class NetworkCharacterController : MonoBehaviour
     {
         // Setting up of various managers
         CameraManager.Instance.AssignTargets(target, target);
+
+        // Setup movement
+        movementStateManager.SetPlayerSettings(controller, playerSpeed);
+
+        movementStateManager.AddState<FSMState_Movement_Normal>("normal");
+
+        movementStateManager.Init("normal");
 
         // Setting up of event listeners
         EventManager.Instance.Listen(EventChannels.OnInputEvent, OnInputEvent);
@@ -38,8 +49,11 @@ public class NetworkCharacterController : MonoBehaviour
             this.enabled = false;
             return;
         }
+
         ProcessInputQueue();
-        ProccessPhysics();
+        movementStateManager.Update(resultantDirection);
+
+        UpdateTransform();
     }
 
     void ProcessInputQueue()
@@ -89,14 +103,53 @@ public class NetworkCharacterController : MonoBehaviour
         CommandQueue.Clear();
     }
 
-    void ProccessPhysics()
+    /*
+    // Will change to be more extensible
+    // TODO: Move movement logic to NetworkCharacter_MovementStates.cs
+    void MoveCharacterStealth()
     {
-        // Apply Gravity
-        controller.SimpleMove(Physics.gravity);
+        Vector3 originalPosition = transform.position;
+        Vector3 lastValidPosition = originalPosition; // Use to return to last valid stealth position if we end up at an invalid position
+        CollisionFlags collisionFlags; // Use to detect if he hit a wall
 
-        // Proccess physics
-        controller.Move(resultantDirection * playerSpeed * Time.deltaTime);
+        if (!isClimbing)
+        {
+            // We should be on the ground, so move normally
+            collisionFlags = controller.Move(resultantDirection * playerSpeed * Time.deltaTime);
 
+            if ((collisionFlags & CollisionFlags.CollidedSides) != 0)
+            {
+
+            }
+        }
+    }
+    bool CheckValidStealthPosition(Vector3 position, Vector3 up)
+    {
+        RaycastHit raycastHit;
+
+        // Get the surface underneath us
+        if (Physics.Raycast(position + up, -up, out raycastHit, 2.0f))
+        {
+            Paintable paintable = raycastHit.transform.GetComponent<Paintable>();
+            if (paintable)
+            {
+                int x = (int)((float)paintable.textureSize * raycastHit.textureCoord.x);
+                int y = (int)((float)paintable.textureSize * raycastHit.textureCoord.y);
+
+                RenderTexture.active = paintable.rawmaskcolorTexture;
+                pixelSampler.ReadPixels(new Rect(x, (int)paintable.textureSize - y, 1, 1), 0, 0, true);
+                pixelSampler.Apply();
+            }
+            else // This surface is not paintable - no way we can stealth through it
+                return false;
+        }
+        else // No hit, we are in the air
+            return true;
+    }
+    */
+
+    void UpdateTransform()
+    {
         // Debug
         // Get direction of player to character
         Vector3 cameraDirection = (transform.position - CameraManager.Instance.GetCameraTransform().position).normalized;

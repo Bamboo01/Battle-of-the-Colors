@@ -12,7 +12,7 @@ public class NetworkCharacterObserver : MonoBehaviour
     public NetworkCharacter networkCharacter;
     [HideInInspector] public Animator animator;
 
-    FSMStateManager stateManager = new FSMStateManager();
+    IFSMStateManager_UpdatableBasic<string> stateManager = new FSMStateManager_UpdatableBasic<string>();
     Vector3 lastPosition;
 
     //State machine booleans
@@ -20,24 +20,21 @@ public class NetworkCharacterObserver : MonoBehaviour
     public bool isThrowing;
     public bool isShooting;
 
-    FSMIdleState idleState;
-    FSMRunState runState;
-    FSMShootState shootState;
-    FSMThrowState throwState;
-
     void Start()
     {
-        idleState = stateManager.AddState<FSMIdleState>();
-        idleState.Setup(animator, this);
+        FSMState_Observer_Base state = stateManager.AddState<FSMState_Observer_Idle>("idle");
+        state.Setup(animator, this);
 
-        runState = stateManager.AddState<FSMRunState>();
-        runState.Setup(animator, this);
+        state = stateManager.AddState<FSMState_Observer_Run>("run");
+        state.Setup(animator, this);
 
-        shootState = stateManager.AddState<FSMShootState>();
-        shootState.Setup(animator, this);
+        state = stateManager.AddState<FSMState_Observer_Shoot>("shoot");
+        state.Setup(animator, this);
 
-        throwState = stateManager.AddState<FSMThrowState>();
-        throwState.Setup(animator, this);
+        state = stateManager.AddState<FSMState_Observer_Throw>("throw");
+        state.Setup(animator, this);
+
+        stateManager.Init("idle");
     }
 
     void Update()
@@ -63,18 +60,18 @@ public class NetworkCharacterObserver : MonoBehaviour
                 Vector3 rotation = Vector3.zero;
                 rotation.y += 90.0f;
                 GunGameObject.transform.localRotation = Quaternion.Euler(rotation);
-                stateManager.UpdateState(shootState);
+                stateManager.ChangeState("shoot");
                 break;
             case (_, true, _):
-                stateManager.UpdateState(throwState);
+                stateManager.ChangeState("throw");
                 break;
             case (true, _, _):
-                stateManager.UpdateState(runState);
+                stateManager.ChangeState("run");
                 break;
             default:
                 // Man why the bone don't rotate
                 GunGameObject.transform.localRotation = Quaternion.identity;
-                stateManager.UpdateState(idleState);
+                stateManager.ChangeState("idle");
                 break;
         }
         stateManager.Update();
