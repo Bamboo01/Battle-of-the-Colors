@@ -9,5 +9,5 @@ public class StratagemProperties : ScriptableObject
     string stragagemName;
     int executionLength;    
     float cooldownTime;
-    StratagemGameobject strategem;
+    StrategemGameobject strategem;
 }

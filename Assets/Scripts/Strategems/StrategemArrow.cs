@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class StratagemArrow : MonoBehaviour
+public class StrategemArrow : MonoBehaviour
 {
     [SerializeField] Sprite[] arrowSprites;
     [HideInInspector] public int arrowDir;
