@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ParticlePainter", menuName = "new ParticlePainter")]
+[CreateAssetMenu(fileName = "ParticlePainter", menuName = "ParticlePainter")]
 public class ParticlePainterProperties : ScriptableObject
 {
     [Tooltip("Should be controlled by the Team, but if your script doesn't want to, define it here")]
