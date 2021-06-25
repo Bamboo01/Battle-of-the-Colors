@@ -13,6 +13,7 @@ namespace CSZZGame.Networking
         public GameObject playerCharacterPrefab;
         public GameObject bulletPrefab;
         public GameObject dedicatedServerPrefab;
+        public GameObject shieldPrefab;
 
         private GameObject dedicatedServer;
 

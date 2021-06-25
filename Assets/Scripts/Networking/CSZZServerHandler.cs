@@ -40,5 +40,29 @@ namespace CSZZGame.Networking
             playerCharacter.GetComponent<NetworkCharacter>().SetupServerHandler(this);
             NetworkServer.Spawn(playerCharacter, sender);
         }
+
+        public void spawnShield(Transform transform, ServerCharacterData data)
+        {
+            GameObject shield = Instantiate(networkManager.shieldPrefab);
+            shield.transform.position = transform.position;
+
+            Physics.Raycast(shield.transform.position + Vector3.up *3f, Vector3.down, out RaycastHit hit, 10f);
+            shield.transform.position = hit.point;
+            //shield.transform.LookAt(transform.position + transform.forward, Vector3.up);
+            shield.transform.up = hit.normal;
+
+            var localPos = shield.transform.InverseTransformDirection((transform.position + transform.forward) - shield.transform.position);
+            localPos.y = 0;
+            //var rotation = Quaternion.LookRotation(lookPos);
+
+            Vector3 lookPos = shield.transform.position + shield.transform.TransformDirection(localPos);
+            shield.transform.LookAt(lookPos, shield.transform.up);
+
+
+
+            NetworkA2Shield networkedShield = shield.GetComponent<NetworkA2Shield>();
+            networkedShield.ServerSetup(ServerCharacterData.teamToColor(data.characterTeam));
+            NetworkServer.Spawn(shield);
+        }
     }
 }

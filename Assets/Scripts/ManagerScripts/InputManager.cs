@@ -30,6 +30,10 @@ namespace CSZZGame.Refactor
             {
                 EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.FIRE);
             }
+            if (Input.GetMouseButtonDown(1) == true)
+            {
+                EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.SHIELD);
+            }
         }
     }
 }

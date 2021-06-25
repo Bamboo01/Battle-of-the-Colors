@@ -101,4 +101,11 @@ public class NetworkCharacter : NetworkBehaviour
             return;
         }
     }
+
+    [ContextMenu("SpawnShield")]
+    [Command]
+    public void CmdSpawnShield()
+    {
+        server.spawnShield(firePoint, serverCharacterData);
+    }
 }

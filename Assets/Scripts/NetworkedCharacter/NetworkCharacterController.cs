@@ -92,6 +92,9 @@ public class NetworkCharacterController : MonoBehaviour
                     networkCharacter.CmdFireBullet();
                     localShooting = true;
                     break;
+                case InputCommand.SHIELD:
+                    networkCharacter.CmdSpawnShield();
+                    break;
             }
         }
 
