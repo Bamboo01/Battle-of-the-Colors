@@ -53,6 +53,19 @@ public class NetworkCharacter : NetworkBehaviour
         controller.enabled = true;
     }
 
+    void Update()
+    {
+        if (isServer)
+        {
+            ServerUpdate();
+        }
+    }
+
+    void OnSkillReady()
+    {
+
+    }
+
     [Server]
     public void SetupServerHandler(CSZZServerHandler s)
     {
@@ -67,14 +80,6 @@ public class NetworkCharacter : NetworkBehaviour
         ClientSkill2Cooldown = serverCharacterData.Skill2Timer;
         ClientSkill3Cooldown = serverCharacterData.Skill3Timer;
         ClientSpeed = serverCharacterData.Speed;
-    }
-
-    void Update()
-    {
-        if (isServer)
-        {
-            ServerUpdate();
-        }
     }
 
     [Command]

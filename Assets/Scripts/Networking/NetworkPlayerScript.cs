@@ -11,8 +11,10 @@ namespace CSZZGame.Networking
     public class NetworkPlayerScript : NetworkBehaviour
     {
         [SerializeField] public ServerEventProperties serverEventProperties;
-        private CSZZServerHandler cszzNetworkServer;
-        private CSZZNetworkInterface cszzNetworkInterface;
+        protected CSZZServerHandler cszzNetworkServer;
+        protected CSZZNetworkInterface cszzNetworkInterface;
+        public bool isDedicatedServer = false;
+
         public override void OnStartServer()
         {
             cszzNetworkServer = gameObject.AddComponent<CSZZServerHandler>();
@@ -56,6 +58,13 @@ namespace CSZZGame.Networking
 
         [ClientRpc]
         public void RaiseEventsToClients(string eventChannel, byte[] data)
+        {
+            EventManager.Instance.Publish(eventChannel, null, data);
+        }
+
+
+        [TargetRpc]
+        public void RaiseEventsToTargettedClient(NetworkConnection target, string eventChannel, byte[] data)
         {
             EventManager.Instance.Publish(eventChannel, null, data);
         }
