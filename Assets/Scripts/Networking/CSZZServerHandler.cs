@@ -25,8 +25,7 @@ namespace CSZZGame.Networking
 
             NetworkBullet networkedPaintBullet = bullet.GetComponent<NetworkBullet>();
 
-            networkedPaintBullet.bulletSpeed = 50.0f;
-            networkedPaintBullet.ServerSetup(ServerCharacterData.teamToColor(data.characterTeam));
+            networkedPaintBullet.ServerSetup(ServerCharacterData.teamToColor(data.characterTeam), 50.0f, 1.0f, 300.0f, 0.01f);
             NetworkServer.Spawn(bullet);
         }
 

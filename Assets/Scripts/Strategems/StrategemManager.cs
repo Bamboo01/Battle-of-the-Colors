@@ -4,14 +4,9 @@ using UnityEngine;
 
 public class StrategemManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    StrategemProperties[] strategemProperties;
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
         
     }

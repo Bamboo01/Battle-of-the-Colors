@@ -17,5 +17,5 @@ MonoBehaviour:
   maxRadius: 1.2
   particleGravity: 0.5
   particleMinStartSpeed: 3
-  particleMaxStartSpeed: 3
+  particleMaxStartSpeed: 6
   particleColliderRadius: 0.15
