@@ -1,99 +1,75 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CSZZGame;
 using CSZZGame.Refactor;
 
 namespace CSZZGame.Character.Movement
 {
-    // Modify the signature of Update() from IFSMStateBase
-    public interface IFSMState_Movement_Base : IFSMState_AbstractIdentifier
+    public interface IFSMState_Movement_Base : IFSMState_Base
     {
-        public void OnUpdate(Vector3 desiredMovement);
-
-        #region Forwarded Functions
-        public void OnEnter();
-        public void OnExit();
-        #endregion
+        public CharacterController playerCharacter { get; set; }
+        public float playerSpeed { get; set; }
+        public string OnUpdate(Vector3 desiredMovement);
     }
 
-    // Modify the signature of Update() from IFSMStateManager_Abstract<T, U>
-    public interface IFSMStateManager_Movement<T> : IFSMStateManager_AbstractIdentifier
+    public interface IFSMStateManager_Movement : Refactor.Internal.I_IFSMStateManager_Abstract<string, IFSMState_Movement_Base>
     {
+        public void SetPlayerSettings(CharacterController characterController, float speed);
         public void Update(Vector3 desiredMovement);
-
-        #region Forwarded Functions
-        public void Init(CharacterController playerCharacter, T firstStateKey);
-        public void ChangeState(T stateKey);
-        public void AddState(T stateKey, IFSMState_Movement_Base newState);
-        public U AddState<U>(T stateKey) where U : IFSMState_Movement_Base, new();
-        #endregion
     }
 
-    public class Character_Movement_StateManagerBase : IFSMStateManager_Movement<string>
+    public class FSMStateManager_Movement : Refactor.Internal.I_FSMStateManager_Basic<string, IFSMState_Movement_Base>, IFSMStateManager_Movement
     {
-        protected FSMStateHolder<string, IFSMState_Movement_Base> stateHolder = new FSMStateHolder<string, IFSMState_Movement_Base>();
         private CharacterController playerCharacter = null;
+        private float playerSpeed = 1.0f;
 
-        public void Init(CharacterController playerCharacter, string firstStateKey)
+        public void SetPlayerSettings(CharacterController characterController, float speed)
         {
-            this.playerCharacter = playerCharacter;
-            ChangeState(firstStateKey);
+            playerCharacter = characterController;
+            playerSpeed = speed;
         }
 
-        public void AddState(string stateKey, IFSMState_Movement_Base newState)
+        public override void AddState(string stateKey, IFSMState_Movement_Base newState)
         {
-            stateHolder.AddState(stateKey, newState);
+            newState.playerCharacter = playerCharacter;
+            newState.playerSpeed = playerSpeed;
+            base.AddState(stateKey, newState);
         }
 
-        public T AddState<T>(string stateKey) where T : IFSMState_Movement_Base, new()
+        public void Update(Vector3 desiredMovement)
         {
-            T newState = new T();
-            stateHolder.AddState(stateKey, newState);
-            return newState;
-        }
-
-        public void ChangeState(string stateKey)
-        {
-            stateHolder.ChangeState(stateKey);
-        }
-
-        public virtual void Update(Vector3 desiredMovement)
-        {
-
+            stateHolder.currentState.OnUpdate(desiredMovement);
         }
     }
 
-    public abstract class Character_Movement_StateBase : IFSMState_Movement_Base
+    public abstract class FSMState_Movement_Base : IFSMState_Movement_Base
     {
+        public CharacterController playerCharacter { get; set; } = null;
+        public float playerSpeed { get; set; } = 1.0f;
+
         public virtual void OnEnter()
         {
-            throw new System.NotImplementedException();
         }
 
-        public virtual void OnUpdate(Vector3 desiredMovement)
+        public virtual string OnUpdate(Vector3 desiredMovement)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public virtual void OnExit()
         {
-            throw new System.NotImplementedException();
         }
     }
 
-    public class Character_Movement_StateNormal : Character_Movement_StateBase
+    public class FSMState_Movement_Normal : FSMState_Movement_Base
     {
-        public override void OnEnter()
+        public override string OnUpdate(Vector3 desiredMovement)
         {
-        }
+            playerCharacter.Move((desiredMovement * playerSpeed + Physics.gravity) * Time.deltaTime);
 
-        public override void OnUpdate(Vector3 desiredMovement)
-        {
-            base.OnUpdate(desiredMovement);
-        }
-
-        public override void OnExit()
-        {
+            // TODO: Check for state switch conditions
+            return null;
         }
     }
 }

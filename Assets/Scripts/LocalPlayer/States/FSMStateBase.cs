@@ -9,12 +9,15 @@ namespace CSZZGame.Refactor
     {
     }
 
-    public interface IFSMStateBase<Key> : IFSMState_AbstractIdentifier
+    public interface IFSMState_Base : IFSMState_AbstractIdentifier
     {
         public void OnEnter();
-
-        public Key OnUpdate();
-
         public void OnExit();
+    }
+
+    public interface IFSMState_UpdatableBasic<Key> : IFSMState_Base
+    {
+        // Return value is the next state to change to
+        public Key OnUpdate();
     }
 }

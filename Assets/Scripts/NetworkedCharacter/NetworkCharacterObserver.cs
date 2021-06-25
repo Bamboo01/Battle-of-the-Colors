@@ -12,7 +12,7 @@ public class NetworkCharacterObserver : MonoBehaviour
     public NetworkCharacter networkCharacter;
     [HideInInspector] public Animator animator;
 
-    IFSMStateManager_Abstract<string, IFSMStateBase<string>> stateManager = new FSMStateManager_Generic<string>();
+    IFSMStateManager_UpdatableBasic<string> stateManager = new FSMStateManager_UpdatableBasic<string>();
     Vector3 lastPosition;
 
     //State machine booleans
@@ -33,6 +33,8 @@ public class NetworkCharacterObserver : MonoBehaviour
 
         state = stateManager.AddState<FSMState_Observer_Throw>("throw");
         state.Setup(animator, this);
+
+        stateManager.Init("idle");
     }
 
     void Update()

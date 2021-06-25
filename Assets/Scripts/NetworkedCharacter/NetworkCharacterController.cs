@@ -4,6 +4,7 @@ using UnityEngine;
 using Bamboo.Events;
 using CSZZGame.Networking;
 using CSZZGame.Refactor;
+using CSZZGame.Character.Movement;
 
 public class NetworkCharacterController : MonoBehaviour
 {
@@ -17,8 +18,8 @@ public class NetworkCharacterController : MonoBehaviour
     [Header("Networking")]
     [SerializeField] NetworkCharacter networkCharacter;
 
-    // Climbing
-    private bool isClimbing { get; set; } = false;
+    // Movement
+    IFSMStateManager_Movement movementStateManager = new FSMStateManager_Movement();
 
     // Commands
     private Queue<InputCommand> CommandQueue = new Queue<InputCommand>();
@@ -29,6 +30,13 @@ public class NetworkCharacterController : MonoBehaviour
     {
         // Setting up of various managers
         CameraManager.Instance.AssignTargets(target, target);
+
+        // Setup movement
+        movementStateManager.SetPlayerSettings(controller, playerSpeed);
+
+        movementStateManager.AddState<FSMState_Movement_Normal>("normal");
+
+        movementStateManager.Init("normal");
 
         // Setting up of event listeners
         EventManager.Instance.Listen(EventChannels.OnInputEvent, OnInputEvent);
@@ -41,8 +49,11 @@ public class NetworkCharacterController : MonoBehaviour
             this.enabled = false;
             return;
         }
+
         ProcessInputQueue();
-        ProccessPhysics();
+        movementStateManager.Update(resultantDirection);
+
+        UpdateTransform();
     }
 
     void ProcessInputQueue()
@@ -137,14 +148,8 @@ public class NetworkCharacterController : MonoBehaviour
     }
     */
 
-    void ProccessPhysics()
+    void UpdateTransform()
     {
-        // Apply Gravity
-        controller.SimpleMove(Physics.gravity);
-
-        // Proccess physics
-        controller.Move(resultantDirection * playerSpeed * Time.deltaTime);
-
         // Debug
         // Get direction of player to character
         Vector3 cameraDirection = (transform.position - CameraManager.Instance.GetCameraTransform().position).normalized;
