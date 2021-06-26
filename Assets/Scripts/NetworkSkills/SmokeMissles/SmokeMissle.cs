@@ -19,17 +19,19 @@ public class SmokeMissle : MonoBehaviour, ISkill
 
     IEnumerator SpawnMissles(Transform startPoint, NetworkRoomManagerScript server)
     {
-        GameObject airdropMarker = Instantiate(server.markerPrefab, startPoint.position, Quaternion.identity);
+        GameObject airdropMarker = Instantiate(server.markerPrefab, startPoint.position, server.markerPrefab.transform.rotation);
         airdropMarker.GetComponent<Rigidbody>().AddForce(startPoint.forward * force);
         NetworkServer.Spawn(airdropMarker);
+
         yield return new WaitForSeconds(startupDelay);
 
         for (int i = 0; i < missleCount; i++)
         {
             Vector3 dir = new Vector3(airdropMarker.transform.position.x, 30f, airdropMarker.transform.position.z);
-            GameObject missle = Instantiate(server.smokePrefab, dir + new Vector3(Random.Range(-3, 3), 0, Random.Range(-3, 3)), Quaternion.identity);
+            GameObject missle = Instantiate(server.smokePrefab, dir + new Vector3(Random.Range(-3, 3), 0, Random.Range(-3, 3)), server.smokePrefab.transform.rotation);
             NetworkServer.Spawn(missle);
             yield return new WaitForSeconds(missleDelay);
         }
+        Destroy(airdropMarker, 3f);
     }
 }

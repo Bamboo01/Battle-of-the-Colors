@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8674728361239162502}
   - component: {fileID: 6009005531834083577}
   - component: {fileID: 3906097232389847565}
+  - component: {fileID: 2606317696825111248}
   m_Layer: 0
   m_Name: SmokeMissle
   m_TagString: Untagged
@@ -81,6 +82,23 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 
   hasSpawned: 0
+--- !u!114 &2606317696825111248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4773346249666374580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 929052e5c60ec244298c83dcfbe01f6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  collider: {fileID: 6009005531834083577}
+  smokeEffectPrefab: {fileID: 3212840462612405728, guid: 8f5b315e8d5a12e4f83cbeae92e4751a, type: 3}
+  smokeDuration: 8
 --- !u!1 &5834185845882224227
 GameObject:
   m_ObjectHideFlags: 0

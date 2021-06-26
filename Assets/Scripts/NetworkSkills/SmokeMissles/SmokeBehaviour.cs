@@ -1,18 +1,48 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmokeBehaviour : MonoBehaviour
+public class SmokeBehaviour : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Collider collider;
+    [SerializeField] private GameObject smokeEffectPrefab;
+    [SerializeField] private float smokeDuration = 8f;
+
+    public override void OnStartServer()
     {
-        
+        //
     }
 
-    // Update is called once per frame
+    public override void OnStartClient()
+    {
+        if (!isServer)
+        {
+            Destroy(collider);
+        }
+    }
+
     void Update()
     {
-        
+        if (isServer)
+        {
+            //ServerUpdate();
+        }
+    }
+
+    [Server]
+    private void OnTriggerEnter(Collider other)
+    {
+
+        Debug.Log("spawning smoke on clients");
+        RPCeffects();
+        Destroy(gameObject, 5f);
+    }
+
+
+    [ClientRpc]
+    private void RPCeffects()
+    {
+        Destroy(Instantiate(smokeEffectPrefab, transform.position, smokeEffectPrefab.transform.rotation), smokeDuration) ;
     }
 }
