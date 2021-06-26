@@ -144,12 +144,14 @@ namespace CSZZGame.Refactor
             {
                 return;
             }
+
             EventRequestInfo<InputCommand> info = (EventRequestInfo<InputCommand>)eventRequestInfo;
             int num = ConvertCommandToInt(info.body);
             if (num < 0)
             {
                 return;
             }
+            bool fail = true;
             foreach(var a in idToQueue)
             {
                 if (a.Value.Count == 0)
@@ -158,9 +160,15 @@ namespace CSZZGame.Refactor
                 }
                 if (a.Value.Peek() == num)
                 {
+                    fail = false;
                     idToStrategemUI[a.Key].SetArrowFinish();
                     a.Value.Dequeue();
                 }
+            }
+
+            if (fail)
+            {
+                ResetAllArrows();
             }
         }
 
@@ -178,6 +186,29 @@ namespace CSZZGame.Refactor
                     return 3;
             }
             return -1;
+        }
+
+        void ResetAllArrows()
+        {
+            foreach (var a in idToStrategemUI)
+            {
+                if (!idToReady[a.Key])
+                {
+                    continue;
+                }
+                var prop = networkManager.idToStrategem[a.Key];
+                var queue = idToQueue[a.Key];
+                a.Value.ClearArrows();
+                queue.Clear();
+                for (int i = 0; i < prop.executionLength; i++)
+                {
+                    GameObject go = Instantiate(arrowPrefab, idToStrategemUI[a.Key].arrowContainer.transform);
+                    StrategemArrow arrow = go.GetComponent<StrategemArrow>();
+                    int randomDir = Random.Range(0, 3);
+                    arrow.SetupArrow(randomDir);
+                    queue.Enqueue(randomDir);
+                }
+            }
         }
 
         void Awake()

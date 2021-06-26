@@ -9,8 +9,6 @@ namespace CSZZGame.Networking
     [AddComponentMenu("")]
     public class NetworkRoomPlayerScript : NetworkRoomPlayer
     {
-        [SerializeField] public ServerCharacterData characterData;
-
         [SyncVar(hook = nameof(TeamStateChanged))]
         public bool team;
 
@@ -20,7 +18,7 @@ namespace CSZZGame.Networking
         public void CmdChangeTeamState(bool teamState)
         {
             team = teamState;
-            characterData.swapTeam(teamState);
+            //characterData.swapTeam(teamState);
         }
 
         #endregion

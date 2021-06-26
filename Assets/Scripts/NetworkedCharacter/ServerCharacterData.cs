@@ -38,7 +38,7 @@ public class ServerCharacterData : MonoBehaviour
 
     void Start()
     {
-        DefaultSetup();
+        WeaponCD = 0.5f;
     }
 
     void FixedUpdate()

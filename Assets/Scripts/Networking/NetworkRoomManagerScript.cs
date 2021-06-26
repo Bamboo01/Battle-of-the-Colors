@@ -47,7 +47,7 @@ namespace CSZZGame.Networking
 
         public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
         {
-            gamePlayer.GetComponent<NetworkPlayerScript>().characterData = roomPlayer.GetComponent<ServerCharacterData>(); 
+            gamePlayer.GetComponent<NetworkPlayerScript>().characterData.swapTeam(roomPlayer.GetComponent<NetworkRoomPlayerScript>().team);
 
             return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
 

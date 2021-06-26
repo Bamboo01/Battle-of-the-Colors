@@ -26,6 +26,7 @@ namespace CSZZGame.Networking
             base.OnStartClient();
             if (!isLocalPlayer)
             {
+                Destroy(characterData);
                 return;
             }
             cszzNetworkInterface = gameObject.AddComponent<CSZZNetworkInterface>();
