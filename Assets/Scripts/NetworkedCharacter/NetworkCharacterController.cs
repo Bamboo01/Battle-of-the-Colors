@@ -13,7 +13,7 @@ public class NetworkCharacterController : MonoBehaviour
 
     [Header("Controller")]
     [SerializeField] CharacterController controller;
-    [SerializeField] float playerSpeed = 3.0f;
+    [SerializeField] PlayerSettings_Movement playerSettings;
 
     [Header("Networking")]
     [SerializeField] NetworkCharacter networkCharacter;
@@ -32,9 +32,11 @@ public class NetworkCharacterController : MonoBehaviour
         CameraManager.Instance.AssignTargets(target, target);
 
         // Setup movement
-        movementStateManager.SetPlayerSettings(controller, playerSpeed);
+        playerSettings.characterController = controller;
+        movementStateManager.SetPlayerSettings(playerSettings);
 
         movementStateManager.AddState<FSMState_Movement_Normal>("normal");
+        movementStateManager.AddState<FSMState_Movement_StealthNormal>("stealthNormal");
 
         movementStateManager.Init("normal");
 
