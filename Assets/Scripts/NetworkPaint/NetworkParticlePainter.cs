@@ -36,7 +36,9 @@ public class NetworkParticlePainter : MonoBehaviour
     private ParticleSystem.CollisionModule particleSystemCollider;
     private List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
 
-    public float paintScaleModifier = 1.0f;
+    [HideInInspector] public float paintScaleModifier = 1.0f;
+
+    public float localPaintScaleModifier = 1.0f;
 
     private void Awake()
     {
@@ -53,7 +55,7 @@ public class NetworkParticlePainter : MonoBehaviour
 
     public void SetupPainter(Color color, float paintscale = 1.0f)
     {
-        paintScaleModifier = paintscale;
+        paintScaleModifier = paintscale * localPaintScaleModifier;
         actualColor = color;
         particleSystemMain.startSpeed = new ParticleSystem.MinMaxCurve(particlePainterProperties.particleMinStartSpeed, particlePainterProperties.particleMaxStartSpeed);
         particleSystemMain.gravityModifier = particlePainterProperties.particleGravity;

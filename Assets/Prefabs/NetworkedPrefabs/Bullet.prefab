@@ -137,7 +137,7 @@ MonoBehaviour:
   paintParticlesPrefab: {fileID: 494746822174059343, guid: 7309afde09d839e4fb500042cdd69ced, type: 3}
   brushParticlesPrefab: {fileID: 1454805509270251551, guid: 4ed2921964c9cbc498628e5f21b66ee5, type: 3}
   masDistanceTravelled: 300
-  paintingScale: 1
+  paintingScale: 500
 --- !u!114 &8677805889824669449
 MonoBehaviour:
   m_ObjectHideFlags: 0
