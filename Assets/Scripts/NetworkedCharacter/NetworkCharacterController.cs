@@ -18,8 +18,8 @@ public class NetworkCharacterController : MonoBehaviour
     [Header("Networking")]
     [SerializeField] NetworkCharacter networkCharacter;
 
-    // Movement
-    IFSMStateManager_Character movementStateManager = new FSMStateManager_Character();
+    // Character State (Movement, etc.)
+    IFSMStateManager_Character characterStateManager = new FSMStateManager_Character();
     Vector3 resultantDirection = Vector3.zero;
 
     // Commands
@@ -32,12 +32,12 @@ public class NetworkCharacterController : MonoBehaviour
 
         // Setup movement
         playerSettings.characterController = controller;
-        movementStateManager.SetPlayerSettings(playerSettings);
+        characterStateManager.SetPlayerSettings(playerSettings);
 
-        movementStateManager.AddState<FSMState_Character_Normal>(FSMState_Character_Type.NORMAL);
-        movementStateManager.AddState<FSMState_Character_StealthNormal>(FSMState_Character_Type.STEALTH_NORMAL);
+        characterStateManager.AddState<FSMState_Character_Normal>(FSMState_Character_Type.NORMAL);
+        characterStateManager.AddState<FSMState_Character_StealthNormal>(FSMState_Character_Type.STEALTH_NORMAL);
 
-        movementStateManager.Init(FSMState_Character_Type.NORMAL);
+        characterStateManager.Init(FSMState_Character_Type.NORMAL);
 
         // Setting up of event listeners
         EventManager.Instance.Listen(EventChannels.OnInputEvent, OnInputEvent);
@@ -53,7 +53,7 @@ public class NetworkCharacterController : MonoBehaviour
 
         ProcessActions();
 
-        movementStateManager.Update(resultantDirection);
+        characterStateManager.Update(resultantDirection);
         resultantDirection = Vector3.zero;
 
         UpdateTransform();
@@ -65,7 +65,7 @@ public class NetworkCharacterController : MonoBehaviour
         {
             IAction_Character action = actionQueue.Dequeue();
 
-            if (!action.IsActionAllowed(movementStateManager.currentStateType))
+            if (!action.IsActionAllowed(characterStateManager.currentStateType))
                 continue;
 
             switch (action.identifier)
@@ -79,7 +79,7 @@ public class NetworkCharacterController : MonoBehaviour
                 case Action_Character_Type.STEALTH:
                     {
                         var actionStealth = action as Action_Character_Stealth;
-                        movementStateManager.ChangeState(actionStealth.startStealth ? FSMState_Character_Type.STEALTH_NORMAL : FSMState_Character_Type.NORMAL);
+                        characterStateManager.ChangeState(actionStealth.startStealth ? FSMState_Character_Type.STEALTH_NORMAL : FSMState_Character_Type.NORMAL);
                     }
                     break;
                 case Action_Character_Type.SHOOT:
