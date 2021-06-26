@@ -783,7 +783,6 @@ GameObject:
   - component: {fileID: 6184638618461802929}
   - component: {fileID: 6184638618461802934}
   - component: {fileID: 7495637079963509014}
-  - component: {fileID: 2835421215631110964}
   - component: {fileID: 7912340505395814315}
   - component: {fileID: -2000914324597039357}
   - component: {fileID: 1219505075960040773}
@@ -870,7 +869,7 @@ MonoBehaviour:
   ClientSkill2Cooldown: 0
   ClientSkill3Cooldown: 0
   animator: {fileID: 3573581219287518650}
-  observer: {fileID: 2835421215631110964}
+  observer: {fileID: 0}
   controller: {fileID: 7495637079963509014}
   firePoint: {fileID: 9077345702537557434}
   SkillList:
@@ -891,27 +890,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 6184638619281015600}
   controller: {fileID: 6184638618461802928}
-  playerSpeed: 20
+  playerSettings:
+    characterController: {fileID: 0}
+    normalSpeed: 20
+    stealthSpeed: 40
   networkCharacter: {fileID: 6184638618461802934}
---- !u!114 &2835421215631110964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6184638618461802932}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37d9551fab0b5aa448d1ba590de5e3cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GunHandBone: {fileID: 6184638618190970636}
-  GunGameObject: {fileID: 6184638617927590093}
-  networkCharacter: {fileID: 6184638618461802934}
-  animator: {fileID: 3573581219287518650}
-  isRunning: 0
-  isThrowing: 0
-  isShooting: 0
 --- !u!114 &7912340505395814315
 MonoBehaviour:
   m_ObjectHideFlags: 0
