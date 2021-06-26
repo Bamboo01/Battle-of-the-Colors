@@ -43,9 +43,9 @@ public class NetworkCharacter : NetworkBehaviour
 
     void Start()
     {
-        observer.animator = animator;
-        observer.networkCharacter = this;
-        observer.enabled = true;
+        //observer.animator = animator;
+        //observer.networkCharacter = this;
+        //observer.enabled = true;
         if (!hasAuthority)
         {
             return;
