@@ -20,6 +20,9 @@ public class NetworkCharacterObserver : MonoBehaviour
     public bool isThrowing;
     public bool isShooting;
 
+    /// Remove code that relies on animation states synced by NetworkCharacter.cs
+
+    /*
     void Start()
     {
         FSMState_Observer_Base state = stateManager.AddState<FSMState_Observer_Idle>("idle");
@@ -76,4 +79,5 @@ public class NetworkCharacterObserver : MonoBehaviour
         }
         stateManager.Update();
     }
+    */
 }

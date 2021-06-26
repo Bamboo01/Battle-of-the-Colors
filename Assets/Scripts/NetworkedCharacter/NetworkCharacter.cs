@@ -7,12 +7,6 @@ using CSZZGame.Refactor;
 
 public class NetworkCharacter : NetworkBehaviour
 {
-    [SyncVar]
-    public bool isShooting = false;
-
-    [SyncVar]
-    public bool isThrowing = false;
-
     [SyncVar] 
     public int ClientHP;
 
@@ -107,7 +101,6 @@ public class NetworkCharacter : NetworkBehaviour
     {
         if (serverCharacterData.WeaponTimer <= 0)
         {
-            isShooting = true;
             serverCharacterData.weaponFired();
             server.spawnBullet(firePoint, serverCharacterData);
         }
