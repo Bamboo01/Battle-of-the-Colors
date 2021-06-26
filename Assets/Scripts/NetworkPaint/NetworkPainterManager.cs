@@ -28,6 +28,9 @@ public class NetworkPainterManager : Singleton<NetworkPainterManager>
     [SerializeField] Shader TextureUnwrapper;
     [SerializeField] ComputeShader TexturePainter;
 
+    // Paint Calculator
+    [SerializeField] PaintCalculator paintCalculator;
+
     //Command Buffer
     CommandBuffer commandbuffer;
 
@@ -46,6 +49,14 @@ public class NetworkPainterManager : Singleton<NetworkPainterManager>
     public void Start()
     {
         EventManager.Instance.Listen(EventChannels.OnPaintPaintableEvent, OnPaintPaintableEvent);
+        Color[] colors = ServerCharacterData.getAllTeamColors();
+        int i = 0;
+        foreach (var a in colors)
+        {
+            paintCalculator.teamColors[i] = a;
+            paintCalculator.colorCounterList.Add(0);
+            i++;
+        }
     }
 
     public void OnPaintPaintableEvent(IEventRequestInfo eventRequestInfo)
@@ -69,6 +80,8 @@ public class NetworkPainterManager : Singleton<NetworkPainterManager>
         idToPaintable.Add(currentPaintableID, paintable);
         paintableToID.Add(paintable, currentPaintableID);
         currentPaintableID++;
+
+        paintCalculator.onPaintableAdded(paintable);
     }
 
     public void Paint(Paintable paintable, Color color, Vector3 position, float radius)

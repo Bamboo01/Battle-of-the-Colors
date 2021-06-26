@@ -4,9 +4,9 @@
 bool compareColor(float4 color1, float4 color2)
 {
     return (
-        color1.x == color2.x &&
-        color1.y == color2.y &&
-        color1.z == color2.z
+        (int)(color1.x * 255.0f) == (int)(color2.x * 255.0f) &&
+        (int)(color1.y * 255.0f) == (int)(color2.y * 255.0f) &&
+        (int)(color1.z * 255.0f) == (int)(color2.z * 255.0f)
     );
 }
 
@@ -37,8 +37,6 @@ void CSMain (uint3 id : SV_DispatchThreadID)
                     teamColorCounters[i]++;
                 }
             }
-
-            //cTargetTexture[id.xy] = colorToCompare;
         }
     }
 

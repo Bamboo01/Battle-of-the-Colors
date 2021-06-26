@@ -12,7 +12,7 @@ public class ServerCharacterData : MonoBehaviour
         NUM_TEAMS
     }
 
-    private static readonly Dictionary<CHARACTER_TEAM, Color> _teamToColor = new Dictionary<CHARACTER_TEAM, Color>()
+    public static readonly Dictionary<CHARACTER_TEAM, Color> _teamToColor = new Dictionary<CHARACTER_TEAM, Color>()
     {
         { CHARACTER_TEAM.TEAM_1, new Color(1.0f, 0.8f, 0.1f ) },
         { CHARACTER_TEAM.TEAM_2, new Color(0.2f, 1.0f, 0.2f ) }
@@ -63,5 +63,12 @@ public class ServerCharacterData : MonoBehaviour
     public static Color teamToColor(CHARACTER_TEAM team)
     {
         return _teamToColor[team];
+    }
+
+    public static Color[] getAllTeamColors()
+    {
+        Color[] returnarray = new Color[_teamToColor.Values.Count];
+        _teamToColor.Values.CopyTo(returnarray, 0);
+        return returnarray;
     }
 }

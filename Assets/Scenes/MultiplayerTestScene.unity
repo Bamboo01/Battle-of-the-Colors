@@ -5284,6 +5284,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PaintManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7950841384250446534, guid: b8f2cc6191074cf44be9be3d6595af36, type: 3}
+      propertyPath: paintCalculator
+      value: 
+      objectReference: {fileID: 7950841384949815498}
     - target: {fileID: 7950841384250446535, guid: b8f2cc6191074cf44be9be3d6595af36, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -5330,6 +5334,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8f2cc6191074cf44be9be3d6595af36, type: 3}
+--- !u!1 &7950841384949815497 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7950841384250446533, guid: b8f2cc6191074cf44be9be3d6595af36, type: 3}
+  m_PrefabInstance: {fileID: 7950841384949815496}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7950841384949815498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7950841384949815497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 126ee2cbe3199f84281f7258f8cdc865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mipMapGenerator: {fileID: 7200000, guid: cafd9546bdef51e4484e673e227eb87d, type: 3}
+  teamColors:
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  numberOfColors: 2
+  colorCounterList: 
+  debugList: []
 --- !u!114 &8017517538570596742
 MonoBehaviour:
   m_ObjectHideFlags: 0
