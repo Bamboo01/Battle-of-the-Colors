@@ -4,7 +4,7 @@ using UnityEngine;
 using Bamboo.Events;
 using CSZZGame.Networking;
 using CSZZGame.Refactor;
-using CSZZGame.Character.Movement;
+using CSZZGame.Character;
 
 public class NetworkCharacterController : MonoBehaviour
 {
@@ -13,18 +13,17 @@ public class NetworkCharacterController : MonoBehaviour
 
     [Header("Controller")]
     [SerializeField] CharacterController controller;
-    [SerializeField] PlayerSettings_Movement playerSettings;
+    [SerializeField] PlayerSettings playerSettings;
 
     [Header("Networking")]
     [SerializeField] NetworkCharacter networkCharacter;
 
     // Movement
-    IFSMStateManager_Movement movementStateManager = new FSMStateManager_Movement();
+    IFSMStateManager_Character movementStateManager = new FSMStateManager_Character();
+    Vector3 resultantDirection = Vector3.zero;
 
     // Commands
-    private Queue<InputCommand> CommandQueue = new Queue<InputCommand>();
-    Vector3 resultantDirection;
-
+    private Queue<IAction_Character> actionQueue = new Queue<IAction_Character>();
 
     void Start()
     {
@@ -35,10 +34,10 @@ public class NetworkCharacterController : MonoBehaviour
         playerSettings.characterController = controller;
         movementStateManager.SetPlayerSettings(playerSettings);
 
-        movementStateManager.AddState<FSMState_Movement_Normal>("normal");
-        movementStateManager.AddState<FSMState_Movement_StealthNormal>("stealthNormal");
+        movementStateManager.AddState<FSMState_Character_Normal>(FSMState_Character_Type.NORMAL);
+        movementStateManager.AddState<FSMState_Character_StealthNormal>(FSMState_Character_Type.STEALTH_NORMAL);
 
-        movementStateManager.Init("normal");
+        movementStateManager.Init(FSMState_Character_Type.NORMAL);
 
         // Setting up of event listeners
         EventManager.Instance.Listen(EventChannels.OnInputEvent, OnInputEvent);
@@ -52,66 +51,54 @@ public class NetworkCharacterController : MonoBehaviour
             return;
         }
 
-        ProcessInputQueue();
+        ProcessActions();
+
         movementStateManager.Update(resultantDirection);
+        resultantDirection = Vector3.zero;
 
         UpdateTransform();
     }
 
-    void ProcessInputQueue()
+    private void ProcessActions()
     {
-        resultantDirection = Vector3.zero;
-
-        // Get forward direction vector
-        Vector3 frontDir = target.transform.forward;
-        frontDir = new Vector3(frontDir.x, 0, frontDir.z).normalized;
-
-        // Get right direction vector
-        Vector3 rightDir = target.transform.right;
-        rightDir = new Vector3(rightDir.x, 0, rightDir.z).normalized;
-
-        // Lazy af, shooting
-        bool localShooting = false;
-
-        while (CommandQueue.Count != 0)
+        while (actionQueue.Count > 0)
         {
-            var command = CommandQueue.Dequeue();
-            switch (command)
+            IAction_Character action = actionQueue.Dequeue();
+
+            if (!action.IsActionAllowed(movementStateManager.currentStateType))
+                continue;
+
+            switch (action.identifier)
             {
-                case InputCommand.MOVE_FORWARD:
-                    resultantDirection += frontDir;
+                case Action_Character_Type.MOVE:
+                    {
+                        var actionMove = action as Action_Character_Move;
+                        resultantDirection += actionMove.desiredMovement;
+                    }
                     break;
-                case InputCommand.MOVE_BACKWARDS:
-                    resultantDirection -= frontDir;
+                case Action_Character_Type.STEALTH:
+                    {
+                        var actionStealth = action as Action_Character_Stealth;
+                        movementStateManager.ChangeState(actionStealth.startStealth ? FSMState_Character_Type.STEALTH_NORMAL : FSMState_Character_Type.NORMAL);
+                    }
                     break;
-                case InputCommand.STRAFE_LEFT:
-                    resultantDirection -= rightDir;
+                case Action_Character_Type.SHOOT:
+                    {
+                        networkCharacter.CmdFireBullet();
+                    }
                     break;
-                case InputCommand.STRAFE_RIGHT:
-                    resultantDirection += rightDir;
-                    break;
-                case InputCommand.FIRE:
-                    networkCharacter.CmdFireBullet();
-                    localShooting = true;
-                    break;
-                case InputCommand.SKILL1:
-                    networkCharacter.CmdSpawnSkill(0);
-                    break;
-                case InputCommand.SKILL2:
-                    networkCharacter.CmdSpawnSkill(1);
-                    break;
-                case InputCommand.SKILL3:
-                    networkCharacter.CmdSpawnSkill(2);
+                case Action_Character_Type.SKILL:
+                    {
+                        var actionSkill = action as Action_Character_Skill;
+                        networkCharacter.CmdSpawnSkill(actionSkill.skillID);
+                    }
                     break;
             }
+
+            EventManager.Instance.Publish<IAction_Character>(EventChannels.OnOwnCharacterActionEvent, this, action);
         }
 
-        if (networkCharacter.isShooting != localShooting)
-        {
-            networkCharacter.isShooting = localShooting;
-        }
-        resultantDirection = resultantDirection.normalized;
-        CommandQueue.Clear();
+        actionQueue.Clear();
     }
 
     /*
@@ -172,9 +159,53 @@ public class NetworkCharacterController : MonoBehaviour
         transform.rotation = Quaternion.Euler(finalRotation);
     }
 
+    // Queue up an action when an input is received
     void OnInputEvent(IEventRequestInfo eventRequestInfo)
     {
         EventRequestInfo<InputCommand> info = (EventRequestInfo<InputCommand>)eventRequestInfo;
-        CommandQueue.Enqueue(info.body);
+
+        switch (info.body)
+        {
+            case InputCommand.MOVE_FORWARD:
+            case InputCommand.MOVE_BACKWARDS:
+                {
+                    Vector3 frontDir = target.transform.forward;
+                    frontDir = new Vector3(frontDir.x, 0, frontDir.z).normalized;
+
+                    actionQueue.Enqueue(
+                        new Action_Character_Move(info.body == InputCommand.MOVE_FORWARD ? frontDir : -frontDir)
+                    );
+                }
+                break;
+            case InputCommand.STRAFE_LEFT:
+            case InputCommand.STRAFE_RIGHT:
+                {
+                    Vector3 rightDir = target.transform.right;
+                    rightDir = new Vector3(rightDir.x, 0, rightDir.z).normalized;
+
+                    actionQueue.Enqueue(
+                        new Action_Character_Move(info.body == InputCommand.STRAFE_RIGHT ? rightDir : -rightDir)
+                    );
+                }
+                break;
+            case InputCommand.STEALTH_START:
+                actionQueue.Enqueue(new Action_Character_Stealth(true));
+                break;
+            case InputCommand.STEALTH_STOP:
+                actionQueue.Enqueue(new Action_Character_Stealth(false));
+                break;
+            case InputCommand.FIRE:
+                actionQueue.Enqueue(new Action_Character_Shoot());
+                break;
+            case InputCommand.SKILL1:
+                actionQueue.Enqueue(new Action_Character_Skill(0));
+                break;
+            case InputCommand.SKILL2:
+                actionQueue.Enqueue(new Action_Character_Skill(1));
+                break;
+            case InputCommand.SKILL3:
+                actionQueue.Enqueue(new Action_Character_Skill(2));
+                break;
+        }
     }
 }

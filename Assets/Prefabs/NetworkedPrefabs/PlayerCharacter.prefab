@@ -783,7 +783,9 @@ GameObject:
   - component: {fileID: 6184638618461802929}
   - component: {fileID: 6184638618461802934}
   - component: {fileID: 7495637079963509014}
+  - component: {fileID: 4368064711272603126}
   - component: {fileID: 7912340505395814315}
+  - component: {fileID: 6679504345711940837}
   - component: {fileID: -2000914324597039357}
   - component: {fileID: 1219505075960040773}
   - component: {fileID: 7383254304030019155}
@@ -865,12 +867,8 @@ MonoBehaviour:
   isThrowing: 0
   ClientHP: 0
   ClientSpeed: 0
-  ClientSkill1Cooldown: 0
-  ClientSkill2Cooldown: 0
-  ClientSkill3Cooldown: 0
-  animator: {fileID: 3573581219287518650}
-  observer: {fileID: 0}
   controller: {fileID: 7495637079963509014}
+  animator: {fileID: 4368064711272603126}
   firePoint: {fileID: 9077345702537557434}
   SkillList:
   - {fileID: 1219505075960040773}
@@ -895,6 +893,19 @@ MonoBehaviour:
     normalSpeed: 20
     stealthSpeed: 40
   networkCharacter: {fileID: 6184638618461802934}
+--- !u!114 &4368064711272603126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6184638618461802932}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d75e8f821396e4b89be8ba2ce696fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 3573581219287518650}
 --- !u!114 &7912340505395814315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -916,6 +927,22 @@ MonoBehaviour:
   compressRotation: 0
   interpolateScale: 1
   syncScale: 1
+--- !u!114 &6679504345711940837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6184638618461802932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 1
+  animator: {fileID: 3573581219287518650}
 --- !u!114 &-2000914324597039357
 MonoBehaviour:
   m_ObjectHideFlags: 0

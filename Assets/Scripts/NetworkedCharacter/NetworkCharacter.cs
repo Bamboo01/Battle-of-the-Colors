@@ -22,9 +22,8 @@ public class NetworkCharacter : NetworkBehaviour
     readonly SyncDictionary<int, float> clientStrategemCooldowns = new SyncDictionary<int, float>();
     readonly SyncDictionary<int, bool> clientStrategemReady = new SyncDictionary<int, bool>();
 
-    [SerializeField] Animator animator;
-    [SerializeField] NetworkCharacterObserver observer;
     [SerializeField] NetworkCharacterController controller;
+    [SerializeField] NetworkCharacterAnimator animator;
     [SerializeField] Transform firePoint;
 
     // Server only
@@ -43,9 +42,6 @@ public class NetworkCharacter : NetworkBehaviour
 
     void Start()
     {
-        //observer.animator = animator;
-        //observer.networkCharacter = this;
-        //observer.enabled = true;
         if (!hasAuthority)
         {
             return;
@@ -56,6 +52,7 @@ public class NetworkCharacter : NetworkBehaviour
         clientStrategemReady.Callback += UIManager.Instance.OnStrategemReady;
 
         controller.enabled = true;
+        animator.enabled = true;
     }
 
     void Update()

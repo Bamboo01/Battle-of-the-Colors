@@ -16,7 +16,7 @@ namespace CSZZGame.Refactor
      *              Use when you only need to keep track of the current state
     */
 
-    public interface IFSMStateManager_Generic<Key> : I_IFSMStateManager_Abstract<Key, IFSMState_Base>
+    public interface IFSMStateManager_Generic<Key> : I_IFSMStateManager_Basic<Key, IFSMState_Base>
     {
     }
     public class FSMStateManager_Generic<Key> : I_FSMStateManager_Basic<Key, IFSMState_Base>, IFSMStateManager_Generic<Key>
@@ -50,13 +50,8 @@ namespace CSZZGame.Refactor
     {
         #region Interfaces
 
-        // Indicates that whatever inherits this interface is a state manager
-        public interface I_IFSMStateManager_AbstractIdentifier
-        {
-        }
-
         // Defines a state manager that maps key values to objects
-        public interface I_IFSMStateManager_Abstract<Key, State> : I_IFSMStateManager_AbstractIdentifier
+        public interface I_IFSMStateManager_Basic<Key, State>
         {
             public void Init(Key firstStateKey);
             public void AddState(Key stateKey, State newState);
@@ -65,7 +60,7 @@ namespace CSZZGame.Refactor
         }
 
         // Defines a state manager that supports a basic update function
-        public interface I_IFSMStateManager_UpdatableBasic<Key, State> : I_IFSMStateManager_Abstract<Key, State>
+        public interface I_IFSMStateManager_UpdatableBasic<Key, State> : I_IFSMStateManager_Basic<Key, State>
         {
             public void Update();
         }
@@ -79,6 +74,7 @@ namespace CSZZGame.Refactor
         {
             protected Dictionary<Key, State> stateDictionary = new Dictionary<Key, State>();
             public State currentState { get; protected set; } = null;
+            public Key currentStateKey { get; protected set; }
 
             public virtual void AddState(Key stateKey, State newState)
             {
@@ -89,6 +85,7 @@ namespace CSZZGame.Refactor
                 if (stateDictionary.TryGetValue(nextStateKey, out State nextState))
                 {
                     currentState = nextState;
+                    currentStateKey = nextStateKey;
                 }
                 else
                 {
@@ -101,8 +98,8 @@ namespace CSZZGame.Refactor
             }
         }
 
-        // Abstract state machine that only sets up state holder functions
-        public abstract class I_FSMStateManager_Abstract<Key, State> : I_IFSMStateManager_Abstract<Key, State> where State : class
+        // Basic state machine that only handles changing of states
+        public abstract class I_FSMStateManager_Basic<Key, State> : I_IFSMStateManager_Basic<Key, State> where State : class, IFSMState_Base
         {
             protected FSMStateHolder<Key, State> stateHolder = new FSMStateHolder<Key, State>();
 
@@ -131,22 +128,15 @@ namespace CSZZGame.Refactor
                     return;
                 }
 
-                SwitchState(stateKey);
-            }
-
-            protected abstract void SwitchState(Key stateKey);
-        }
-
-        // Basic state machine for specialization into specific state classes
-        public class I_FSMStateManager_Basic<Key, State> : I_FSMStateManager_Abstract<Key, State> where State : class, IFSMState_Base
-        {
-            protected override void SwitchState(Key stateKey)
-            {
-                Debug.Log("Switching states");
                 if (stateHolder.currentState != null)
                 {
+                    // If the new state is the same as the current state, return
+                    if (EqualityComparer<Key>.Default.Equals(stateHolder.currentStateKey, stateKey))
+                        return;
+
                     stateHolder.currentState.OnExit();
                 }
+                Debug.Log("Switching states");
                 stateHolder.ChangeState(stateKey);
                 stateHolder.currentState.OnEnter();
             }
