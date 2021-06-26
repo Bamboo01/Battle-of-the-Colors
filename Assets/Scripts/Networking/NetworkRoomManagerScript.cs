@@ -44,5 +44,13 @@ namespace CSZZGame.Networking
                 NetworkServer.Spawn(dedicatedServer);
             }
         }
+
+        public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
+        {
+            gamePlayer.GetComponent<NetworkPlayerScript>().characterData.swapTeam(roomPlayer.GetComponent<NetworkRoomPlayerScript>().team);
+
+            return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
+
+        }
     }
 }

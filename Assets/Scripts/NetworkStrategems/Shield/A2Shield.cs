@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class A2Shield : MonoBehaviour, ISkill
+public class A2Shield : StrategemBase
 {
     // The ACTUAL color of the particle
     private Color color;
@@ -13,10 +13,10 @@ public class A2Shield : MonoBehaviour, ISkill
         color = c;
     }
 
-    public void UseSkill(Transform startPoint, ServerCharacterData data, CSZZServerHandler serverHandler, NetworkRoomManagerScript server)
+    public override void UseSkill(Transform startPoint, ServerCharacterData data, CSZZServerHandler serverHandler, NetworkRoomManagerScript server, NetworkCharacter caller)
     {
         GameObject shield = Instantiate(server.shieldPrefab);
-        shield.transform.position = transform.position;
+        shield.transform.position = startPoint.position;
 
         //Code to align shield to floor and slope, while facing char dir. I can't get it to work on a downwards facing slope though
         Physics.Raycast(shield.transform.position + Vector3.up * 3f, Vector3.down, out RaycastHit hit, 10f);
@@ -29,5 +29,7 @@ public class A2Shield : MonoBehaviour, ISkill
 
         ServerSetup(ServerCharacterData.teamToColor(data.characterTeam));
         NetworkServer.Spawn(shield);
+
+        Destroy(this.gameObject);
     }
 }

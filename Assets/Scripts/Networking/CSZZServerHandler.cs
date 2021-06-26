@@ -29,7 +29,7 @@ namespace CSZZGame.Networking
             NetworkServer.Spawn(bullet);
         }
 
-        public void spawnCharacter(NetworkConnectionToClient sender)
+        public void spawnCharacter(NetworkConnectionToClient sender, ServerCharacterData characterData)
         {
             if (clientConnection != null)
             {
@@ -37,15 +37,19 @@ namespace CSZZGame.Networking
             }
             clientConnection = sender;
             GameObject playerCharacter = Instantiate(networkManager.playerCharacterPrefab);
-            playerCharacter.GetComponent<NetworkCharacter>().SetupServerHandler(this);
+            playerCharacter.GetComponent<NetworkCharacter>().SetupServerHandler(this, characterData);
             NetworkServer.Spawn(playerCharacter, sender);
         }
 
-
-
-        public void spawnSkill(Transform transform, ServerCharacterData data, ISkill skill)
+        public void spawnStrategem(Transform transform, ServerCharacterData data, int skillID, NetworkCharacter caller)
         {
-            skill.UseSkill(transform, data, this, networkManager);
+            GameObject go = Instantiate(networkManager.idToStrategem[skillID].strategemPrefab);
+            go.GetComponent<StrategemBase>().UseSkill(transform, data, this, networkManager, caller);
+        }
+
+        public void spawnSkill(Transform transform, ServerCharacterData data, StrategemBase skill, NetworkCharacter caller)
+        {
+            skill.UseSkill(transform, data, this, networkManager, caller);
         }
     }
 }

@@ -10,8 +10,8 @@ namespace CSZZGame.Networking
     [AddComponentMenu("")]
     public class NetworkPlayerScript : NetworkBehaviour
     {
-        [SerializeField] StrategemProperties[] strategemProperties;
         [SerializeField] public ServerEventProperties serverEventProperties;
+        [SerializeField] public ServerCharacterData characterData;
         protected CSZZServerHandler cszzNetworkServer;
         protected CSZZNetworkInterface cszzNetworkInterface;
         public bool isDedicatedServer = false;
@@ -26,6 +26,7 @@ namespace CSZZGame.Networking
             base.OnStartClient();
             if (!isLocalPlayer)
             {
+                Destroy(characterData);
                 return;
             }
             cszzNetworkInterface = gameObject.AddComponent<CSZZNetworkInterface>();
@@ -40,7 +41,7 @@ namespace CSZZGame.Networking
         [Command]
         public void CmdCreatePlayerCharacter(NetworkConnectionToClient sender = null)
         {
-            cszzNetworkServer.spawnCharacter(sender);
+            cszzNetworkServer.spawnCharacter(sender, characterData);
         }
 
         [Command]

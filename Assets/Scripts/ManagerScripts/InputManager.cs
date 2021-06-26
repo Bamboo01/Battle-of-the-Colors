@@ -34,6 +34,26 @@ namespace CSZZGame.Refactor
             {
                 EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.STEALTH_STOP);
             }
+            if (Input.GetKeyDown(KeyCode.W) == true)
+            {
+                EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.TAP_FORWARD);
+            }
+            if (Input.GetKeyDown(KeyCode.S) == true)
+            {
+                EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.TAP_BACKWARDS);
+            }
+            if (Input.GetKeyDown(KeyCode.A) == true)
+            {
+                EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.TAP_LEFT);
+            }
+            if (Input.GetKeyDown(KeyCode.D) == true)
+            {
+                EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.TAP_RIGHT);
+            }
+            if (Input.GetKeyDown(KeyCode.Space) == true)
+            {
+                EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.LAUNCH_STRATEGEM);
+            }
             if (Input.GetMouseButton(0) == true)
             {
                 EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.FIRE);

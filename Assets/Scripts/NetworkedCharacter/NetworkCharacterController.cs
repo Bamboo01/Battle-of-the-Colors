@@ -90,8 +90,19 @@ public class NetworkCharacterController : MonoBehaviour
                 case Action_Character_Type.SKILL:
                     {
                         var actionSkill = action as Action_Character_Skill;
-                        networkCharacter.CmdSpawnSkill(actionSkill.skillID);
+                        switch (actionSkill.skillID)
+                        {
+                            case 0:
+                                StrategemManager.Instance.strategemActivation();
+                                break;
+                            case 1:
+                                StrategemManager.Instance.strategemDeactivation();
+                                break;
+                        }
                     }
+                    break;
+                case Action_Character_Type.LAUNCH_STRATEGEM:
+                    networkCharacter.CmdSpawnSkill(StrategemManager.Instance.getCallableStrategem());
                     break;
             }
 
@@ -205,6 +216,9 @@ public class NetworkCharacterController : MonoBehaviour
                 break;
             case InputCommand.SKILL3:
                 actionQueue.Enqueue(new Action_Character_Skill(2));
+                break;
+            case InputCommand.LAUNCH_STRATEGEM:
+                actionQueue.Enqueue(new Action_Character_LaunchStrategem());
                 break;
         }
     }

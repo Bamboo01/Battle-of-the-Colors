@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 114387717104821018}
   - component: {fileID: -7185082740407754354}
   m_Layer: 0
-  m_Name: PlaceholderRoomPlayer
+  m_Name: RoomPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,3 +66,4 @@ MonoBehaviour:
   showRoomGUI: 1
   readyToBegin: 0
   index: 0
+  team: 0
