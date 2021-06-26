@@ -29,8 +29,8 @@ public class GameController : NetworkBehaviour
     {
         if(NetworkTime.time < initialGameTime + MatchDuration)
         {
-
-            TimeSpan t = TimeSpan.FromSeconds(MatchDuration - (NetworkTime.time - initialGameTime));
+            currentGameTime = MatchDuration - (NetworkTime.time - initialGameTime);
+            TimeSpan t = TimeSpan.FromSeconds(currentGameTime);
             string timeString = "";
             if (t.Minutes > 0)
             {

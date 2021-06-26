@@ -1254,7 +1254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  MatchDuration: 70
+  MatchDuration: 300
   timerText: {fileID: 2141635284}
 --- !u!114 &698114123
 MonoBehaviour:
