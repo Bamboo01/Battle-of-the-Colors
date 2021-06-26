@@ -56,7 +56,7 @@ namespace CSZZGame.Refactor
             isCallActive = true;
             foreach (var a in idToStrategemUI)
             {
-                a.Value.transform.parent = verticalStrategemContainer.transform;
+                a.Value.transform.SetParent(verticalStrategemContainer.transform);
                 a.Value.showArrows(true);
             }
         }
@@ -66,7 +66,7 @@ namespace CSZZGame.Refactor
             isCallActive = false;
             foreach (var a in idToStrategemUI)
             {
-                a.Value.transform.parent = horiztontalStrategemContainer.transform;
+                a.Value.transform.SetParent(horiztontalStrategemContainer.transform);
                 a.Value.showArrows(false);
             }
         }
@@ -140,6 +140,10 @@ namespace CSZZGame.Refactor
 
         void OnInputEvent(IEventRequestInfo eventRequestInfo)
         {
+            if (!isCallActive)
+            {
+                return;
+            }
             EventRequestInfo<InputCommand> info = (EventRequestInfo<InputCommand>)eventRequestInfo;
             int num = ConvertCommandToInt(info.body);
             if (num < 0)
