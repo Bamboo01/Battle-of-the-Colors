@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NetworkA2Shield : NetworkBehaviour
+public class A2ShieldBehaviour : NetworkBehaviour
 {
 
     [SerializeField] Collider collider;
@@ -11,14 +11,6 @@ public class NetworkA2Shield : NetworkBehaviour
     [SerializeField] float duration = 15.0f;
 
     float spawnTime = 0;
-
-    // The ACTUAL color of the particle
-    private Color color;
-    [Server]
-    public void ServerSetup(Color c)
-    {
-        color = c;
-    }
 
     [Server]
     void ServerUpdate()

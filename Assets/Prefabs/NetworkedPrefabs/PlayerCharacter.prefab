@@ -786,6 +786,7 @@ GameObject:
   - component: {fileID: 2835421215631110964}
   - component: {fileID: 7912340505395814315}
   - component: {fileID: 1112108455413661160}
+  - component: {fileID: -2000914324597039357}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -873,6 +874,7 @@ MonoBehaviour:
   firePoint: {fileID: 9077345702537557434}
   SkillList:
   - {fileID: 1112108455413661160}
+  - {fileID: -2000914324597039357}
 --- !u!114 &7495637079963509014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -942,6 +944,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   force: 500
+--- !u!114 &-2000914324597039357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6184638618461802932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f941bb11a8b41354c8a34172dd2c8e5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collider: {fileID: 0}
+  duration: 15
 --- !u!1 &6184638618556216453
 GameObject:
   m_ObjectHideFlags: 0

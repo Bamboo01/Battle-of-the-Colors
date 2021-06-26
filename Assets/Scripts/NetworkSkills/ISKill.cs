@@ -5,5 +5,5 @@ using UnityEngine;
 
 public interface ISkill
 {
-    void UseSkill(Transform startPoint, NetworkRoomManagerScript server);
+    void UseSkill(Transform startPoint, ServerCharacterData data, NetworkRoomManagerScript server);
 }

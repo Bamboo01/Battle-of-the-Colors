@@ -92,8 +92,14 @@ public class NetworkCharacterController : MonoBehaviour
                     networkCharacter.CmdFireBullet();
                     localShooting = true;
                     break;
-                case InputCommand.SKILL:
-                    networkCharacter.CmdSpawnSkill();
+                case InputCommand.SKILL1:
+                    networkCharacter.CmdSpawnSkill(0);
+                    break;
+                case InputCommand.SKILL2:
+                    networkCharacter.CmdSpawnSkill(1);
+                    break;
+                case InputCommand.SKILL3:
+                    networkCharacter.CmdSpawnSkill(2);
                     break;
             }
         }

@@ -96,24 +96,12 @@ public class NetworkCharacter : NetworkBehaviour
     }
 
     [Command]
-    public void CmdSkill(int skillID)
+    public void CmdSpawnSkill(int skillID)
     {
         if (skillID > 2)
         {
             return;
         }
-    }
-
-    [ContextMenu("SpawnShield")]
-    [Command]
-    public void CmdSpawnShield()
-    {
-        server.spawnShield(firePoint, serverCharacterData);
-    }
-
-    [Command]
-    public void CmdSpawnSkill()
-    {
-        server.spawnSkill(firePoint,(ISkill)SkillList[0]);
+        server.spawnSkill(firePoint, serverCharacterData, (ISkill)SkillList[skillID]);
     }
 }

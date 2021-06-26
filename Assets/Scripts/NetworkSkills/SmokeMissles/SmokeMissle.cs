@@ -12,8 +12,8 @@ public class SmokeMissle : MonoBehaviour, ISkill
     float missleDelay = 0.1f;
     [SerializeField] float force = 30f;
 
-    public void UseSkill(Transform startPoint, NetworkRoomManagerScript server)
-    {   
+    public void UseSkill(Transform startPoint, ServerCharacterData data, NetworkRoomManagerScript server)
+    {
         StartCoroutine(SpawnMissles(startPoint, server));
     }
 
