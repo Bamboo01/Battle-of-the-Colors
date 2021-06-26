@@ -6,8 +6,8 @@ using UnityEngine;
 public class StrategemProperties : ScriptableObject
 {
     public int strategemID;
-    public Sprite stratagemSprite;
-    public string stragagemName;
+    public Sprite strategemSprite;
+    public string strategemName;
     public int executionLength;
     public float cooldownTime;
     public GameObject strategemPrefab;

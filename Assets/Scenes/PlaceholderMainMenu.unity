@@ -727,6 +727,8 @@ MonoBehaviour:
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
+  strategemProperties:
+  - {fileID: 11400000, guid: b41784e490ab40848a6b53ac07350edb, type: 2}
   serverEventProperties: {fileID: 11400000, guid: 38d583414f21e584199a2553e4bf7ff9, type: 2}
   playerCharacterPrefab: {fileID: 6184638618461802932, guid: b440426bbc137cf42aad9eb39cc78869, type: 3}
   bulletPrefab: {fileID: 2421208305232949714, guid: 6ef108828aea6b54595cc5052957cb5c, type: 3}
