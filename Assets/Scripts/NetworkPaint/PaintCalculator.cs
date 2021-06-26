@@ -158,6 +158,15 @@ public class PaintCalculator : MonoBehaviour
             colorCounterList[i] = 0;
         }
 
+        Vector3Int[] colors255 = new Vector3Int[2];
+        for (int i = 0; i < numberOfColors; i++)
+        {
+            colors255[i] = new Vector3Int(
+                (int)(teamColors[i].r * 255.0f),
+                (int)(teamColors[i].g * 255.0f),
+                (int)(teamColors[i].b * 255.0f)
+                );
+        }
 
         foreach (var pair in paintablesToMipMaps)
         {
@@ -171,9 +180,15 @@ public class PaintCalculator : MonoBehaviour
                     {
                         continue;
                     }
+                    Vector3Int sampleColor255 = new Vector3Int(
+                        (int)(color[x + (y * 32)].r * 255.0f),
+                        (int)(color[x + (y * 32)].g * 255.0f),
+                        (int)(color[x + (y * 32)].b * 255.0f)
+                        );
                     for (int n = 0; n < numberOfColors; n++)
                     {
-                        if (color[x + (y * 32)] == teamColors[n])
+
+                        if (sampleColor255 == colors255[n])
                         {
                             colorCounterList[n]++;
                             break;
