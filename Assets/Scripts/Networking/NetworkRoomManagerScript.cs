@@ -9,13 +9,29 @@ namespace CSZZGame.Networking
     [AddComponentMenu("")]
     public class NetworkRoomManagerScript : NetworkRoomManager
     {
+        [Header("Strategems (Add prefabs to network manager!)")]
+        public List<StrategemProperties> strategemProperties;
+        [Space(10)]
+        [Header("Server-only event channels")]
         [SerializeField] ServerEventProperties serverEventProperties;
+        [Space(10)]
         public GameObject playerCharacterPrefab;
         public GameObject bulletPrefab;
         public GameObject dedicatedServerPrefab;
         public GameObject shieldPrefab;
 
         private GameObject dedicatedServer;
+
+        public Dictionary<int, StrategemProperties> idToStrategem = new Dictionary<int, StrategemProperties>();
+
+        public override void Start()
+        {
+            base.Start();
+            foreach (var a in strategemProperties)
+            {
+                idToStrategem.Add(a.strategemID, a);
+            }
+        }
 
         public override void OnServerSceneChanged(string sceneName)
         {

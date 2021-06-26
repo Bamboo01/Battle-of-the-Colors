@@ -10,5 +10,5 @@ public abstract class StrategemGameobjectBase : MonoBehaviour
 
     // Behaviours such as when to activate, what to do on startup should be defined in the monobehaviour functions
     // like start, update of the child strategem
-    public abstract void onActivation();
+    public abstract void onActivation(NetworkCharacter caller);
 }

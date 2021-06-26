@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using CSZZGame.Networking;
+using CSZZGame.Refactor;
 
 public class NetworkCharacter : NetworkBehaviour
 {
@@ -18,27 +19,24 @@ public class NetworkCharacter : NetworkBehaviour
     [SyncVar]
     public float ClientSpeed;
 
-    [SyncVar]
-    public float ClientSkill1Cooldown;
-
-    [SyncVar]
-    public float ClientSkill2Cooldown;
-
-    [SyncVar]
-    public float ClientSkill3Cooldown;
-
+    readonly SyncDictionary<int, float> clientStrategemCooldowns = new SyncDictionary<int, float>();
+    readonly SyncDictionary<int, bool> clientStrategemReady = new SyncDictionary<int, bool>();
 
     [SerializeField] Animator animator;
     [SerializeField] NetworkCharacterObserver observer;
     [SerializeField] NetworkCharacterController controller;
     [SerializeField] Transform firePoint;
 
+    // Server only
+    NetworkRoomManagerScript networkManager;
     ServerCharacterData serverCharacterData;
     CSZZServerHandler server;
 
     public override void OnStartServer()
     {
         serverCharacterData = gameObject.AddComponent<ServerCharacterData>();
+        networkManager = (NetworkRoomManagerScript)NetworkManager.singleton;
+        SetupStrategems();
     }
 
     void Start()
@@ -50,6 +48,11 @@ public class NetworkCharacter : NetworkBehaviour
         {
             return;
         }
+        // Setup of various local managers and callbacks related to changes done on the client's character
+        UIManager.Instance.SetupUIManager(this, clientStrategemCooldowns);
+        clientStrategemCooldowns.Callback += UIManager.Instance.OnStrategemUpdated;
+        clientStrategemReady.Callback += UIManager.Instance.OnStrategemReady;
+
         controller.enabled = true;
     }
 
@@ -61,9 +64,21 @@ public class NetworkCharacter : NetworkBehaviour
         }
     }
 
-    void OnSkillReady()
+    [Server]
+    public void SetupStrategems()
     {
-
+        // I think most games would allow you to choose what skills to add
+        //
+        // Since I have no time I'm just gonna add all of them, but this is just
+        // here for the sake of functionality in case I ever have to lay hands on
+        // this project again
+        
+        foreach (var strategem in networkManager.strategemProperties)
+        {
+            clientStrategemCooldowns.Add(strategem.strategemID, strategem.cooldownTime);
+            clientStrategemReady.Add(strategem.strategemID, false);
+            serverCharacterData.strategemCooldowns.Add(strategem.strategemID, strategem.cooldownTime);
+        }
     }
 
     [Server]
@@ -76,10 +91,16 @@ public class NetworkCharacter : NetworkBehaviour
     public void ServerUpdate()
     {
         ClientHP = serverCharacterData.HP;
-        ClientSkill1Cooldown = serverCharacterData.Skill1Timer;
-        ClientSkill2Cooldown = serverCharacterData.Skill2Timer;
-        ClientSkill3Cooldown = serverCharacterData.Skill3Timer;
         ClientSpeed = serverCharacterData.Speed;
+
+        foreach (var pair in serverCharacterData.strategemCooldowns)
+        {
+            clientStrategemCooldowns[pair.Key] = pair.Value;
+            if (clientStrategemReady[pair.Key] == false && pair.Value <= 0.0f)
+            {
+                clientStrategemReady[pair.Key] = true;
+            }
+        }
     }
 
     [Command]
