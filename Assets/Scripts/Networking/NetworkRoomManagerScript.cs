@@ -19,6 +19,9 @@ namespace CSZZGame.Networking
         public GameObject bulletPrefab;
         public GameObject dedicatedServerPrefab;
         public GameObject shieldPrefab;
+        public GameObject smokeMissilePrefab;
+        public GameObject paintMissilePrefab;
+        public GameObject markerPrefab;
 
         private GameObject dedicatedServer;
 

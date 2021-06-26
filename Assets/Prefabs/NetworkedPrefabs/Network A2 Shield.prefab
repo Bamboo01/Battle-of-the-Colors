@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4102393188432982909}
   - component: {fileID: 4429065737522698582}
-  - component: {fileID: 4485989456535695178}
   - component: {fileID: 2388610071324720128}
+  - component: {fileID: 6515449194138125007}
   m_Layer: 0
   m_Name: Network A2 Shield
   m_TagString: Untagged
@@ -52,22 +52,6 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &4485989456535695178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6579304775318102042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f941bb11a8b41354c8a34172dd2c8e5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  collider: {fileID: 2388610071324720128}
-  duration: 10
 --- !u!65 &2388610071324720128
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -81,6 +65,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4.6777077, y: 2.5845683, z: 0.99969554}
   m_Center: {x: 0, y: 1.3171738, z: -0.4953302}
+--- !u!114 &6515449194138125007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6579304775318102042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6827906a0b23a6c4db0ee2a34c46331c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  collider: {fileID: 2388610071324720128}
+  duration: 15
 --- !u!1 &8280511809125529590
 GameObject:
   m_ObjectHideFlags: 0
