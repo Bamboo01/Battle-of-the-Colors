@@ -51,6 +51,10 @@ public class ServerCharacterData : MonoBehaviour
         WeaponTimer -= Time.fixedDeltaTime;
     }
 
+    public void swapTeam(bool team2)
+    {
+        characterTeam = team2 ? CHARACTER_TEAM.TEAM_2 : CHARACTER_TEAM.TEAM_1;
+    }
     public void weaponFired()
     {
         WeaponTimer = WeaponCD;

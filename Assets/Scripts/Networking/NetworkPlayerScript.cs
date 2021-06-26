@@ -11,6 +11,7 @@ namespace CSZZGame.Networking
     public class NetworkPlayerScript : NetworkBehaviour
     {
         [SerializeField] public ServerEventProperties serverEventProperties;
+        [SerializeField] public ServerCharacterData characterData;
         protected CSZZServerHandler cszzNetworkServer;
         protected CSZZNetworkInterface cszzNetworkInterface;
         public bool isDedicatedServer = false;
@@ -39,7 +40,7 @@ namespace CSZZGame.Networking
         [Command]
         public void CmdCreatePlayerCharacter(NetworkConnectionToClient sender = null)
         {
-            cszzNetworkServer.spawnCharacter(sender);
+            cszzNetworkServer.spawnCharacter(sender, characterData);
         }
 
         [Command]

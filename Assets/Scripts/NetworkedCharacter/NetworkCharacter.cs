@@ -36,7 +36,6 @@ public class NetworkCharacter : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        serverCharacterData = gameObject.AddComponent<ServerCharacterData>();
         networkManager = (NetworkRoomManagerScript)NetworkManager.singleton;
         SetupStrategems();
     }
@@ -84,9 +83,10 @@ public class NetworkCharacter : NetworkBehaviour
     }
 
     [Server]
-    public void SetupServerHandler(CSZZServerHandler s)
+    public void SetupServerHandler(CSZZServerHandler s, ServerCharacterData characterData)
     {
         server = s;
+        serverCharacterData = characterData;
     }
 
     [Server]

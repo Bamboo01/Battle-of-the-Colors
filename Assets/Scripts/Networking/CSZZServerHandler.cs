@@ -29,7 +29,7 @@ namespace CSZZGame.Networking
             NetworkServer.Spawn(bullet);
         }
 
-        public void spawnCharacter(NetworkConnectionToClient sender)
+        public void spawnCharacter(NetworkConnectionToClient sender, ServerCharacterData characterData)
         {
             if (clientConnection != null)
             {
@@ -37,7 +37,7 @@ namespace CSZZGame.Networking
             }
             clientConnection = sender;
             GameObject playerCharacter = Instantiate(networkManager.playerCharacterPrefab);
-            playerCharacter.GetComponent<NetworkCharacter>().SetupServerHandler(this);
+            playerCharacter.GetComponent<NetworkCharacter>().SetupServerHandler(this, characterData);
             NetworkServer.Spawn(playerCharacter, sender);
         }
 

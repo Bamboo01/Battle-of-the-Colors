@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7388052575403984991}
   - component: {fileID: 7388052575403985056}
   - component: {fileID: 7388052575403985057}
+  - component: {fileID: -8344076520922338145}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -64,3 +65,19 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   serverEventProperties: {fileID: 11400000, guid: 38d583414f21e584199a2553e4bf7ff9, type: 2}
+  characterData: {fileID: -8344076520922338145}
+  isDedicatedServer: 0
+--- !u!114 &-8344076520922338145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7388052575403985058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8db422ee864bece408e0b4b98d5ddc9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterTeam: 0
+  characterColor: {r: 0, g: 0, b: 0, a: 0}
