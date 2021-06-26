@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3906097232389847565}
   - component: {fileID: 2606317696825111248}
   m_Layer: 0
-  m_Name: SmokeMissle
+  m_Name: SmokeMissile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

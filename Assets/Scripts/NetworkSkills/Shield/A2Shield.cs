@@ -13,8 +13,7 @@ public class A2Shield : MonoBehaviour, ISkill
         color = c;
     }
 
-
-    public void UseSkill(Transform startPoint, ServerCharacterData data, NetworkRoomManagerScript server)
+    public void UseSkill(Transform startPoint, ServerCharacterData data, CSZZServerHandler serverHandler, NetworkRoomManagerScript server)
     {
         GameObject shield = Instantiate(server.shieldPrefab);
         shield.transform.position = transform.position;

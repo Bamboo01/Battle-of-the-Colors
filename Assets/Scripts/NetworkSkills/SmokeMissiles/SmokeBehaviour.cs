@@ -9,11 +9,6 @@ public class SmokeBehaviour : NetworkBehaviour
     [SerializeField] private GameObject smokeEffectPrefab;
     [SerializeField] private float smokeDuration = 8f;
 
-    public override void OnStartServer()
-    {
-        //
-    }
-
     public override void OnStartClient()
     {
         if (!isServer)
@@ -22,18 +17,9 @@ public class SmokeBehaviour : NetworkBehaviour
         }
     }
 
-    void Update()
-    {
-        if (isServer)
-        {
-            //ServerUpdate();
-        }
-    }
-
     [Server]
     private void OnTriggerEnter(Collider other)
     {
-
         Debug.Log("spawning smoke on clients");
         RPCeffects();
         Destroy(gameObject, 5f);

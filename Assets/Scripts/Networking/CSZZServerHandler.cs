@@ -45,7 +45,7 @@ namespace CSZZGame.Networking
 
         public void spawnSkill(Transform transform, ServerCharacterData data, ISkill skill)
         {
-            skill.UseSkill(transform, data, networkManager);
+            skill.UseSkill(transform, data, this, networkManager);
         }
     }
 }
