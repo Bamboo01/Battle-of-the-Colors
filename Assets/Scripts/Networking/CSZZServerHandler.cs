@@ -44,10 +44,10 @@ namespace CSZZGame.Networking
         public void spawnStrategem(Transform transform, ServerCharacterData data, int skillID, NetworkCharacter caller)
         {
             GameObject go = Instantiate(networkManager.idToStrategem[skillID].strategemPrefab);
-            go.GetComponent<StratagemBase>().UseSkill(transform, data, this, networkManager, caller);
+            go.GetComponent<StrategemBase>().UseSkill(transform, data, this, networkManager, caller);
         }
 
-        public void spawnSkill(Transform transform, ServerCharacterData data, StratagemBase skill, NetworkCharacter caller)
+        public void spawnSkill(Transform transform, ServerCharacterData data, StrategemBase skill, NetworkCharacter caller)
         {
             skill.UseSkill(transform, data, this, networkManager, caller);
         }

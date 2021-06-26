@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaintMissile : StratagemBase
+public class PaintMissile : StrategemBase
 {
     float missleCount = 6;
     float startupDelay = 0.5f;

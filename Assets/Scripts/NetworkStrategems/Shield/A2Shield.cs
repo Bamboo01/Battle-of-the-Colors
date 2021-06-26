@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class A2Shield : StratagemBase
+public class A2Shield : StrategemBase
 {
     // The ACTUAL color of the particle
     private Color color;
