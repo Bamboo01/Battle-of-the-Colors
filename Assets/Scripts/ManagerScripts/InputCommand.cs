@@ -12,6 +12,12 @@ namespace CSZZGame.Refactor
         STRAFE_RIGHT,
         FIRE,
         STEALTH,
+        CONTROL_STRATEGEMS,
+        TAP_FORWARD,
+        TAP_BACKWARDS,
+        TAP_LEFT,
+        TAP_RIGHT,
+        LAUNCH_STRATEGEM,
         SKILL1,
         SKILL2,
         SKILL3

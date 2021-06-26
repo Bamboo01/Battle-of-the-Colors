@@ -51,9 +51,9 @@ public class NetworkCharacter : NetworkBehaviour
             return;
         }
         // Setup of various local managers and callbacks related to changes done on the client's character
-        UIManager.Instance.SetupUIManager(this, clientStrategemCooldowns);
-        clientStrategemCooldowns.Callback += UIManager.Instance.OnStrategemUpdated;
-        clientStrategemReady.Callback += UIManager.Instance.OnStrategemReady;
+        StrategemManager.Instance.SetupUIManager(this, clientStrategemCooldowns);
+        clientStrategemCooldowns.Callback += StrategemManager.Instance.OnStrategemUpdated;
+        clientStrategemReady.Callback += StrategemManager.Instance.OnStrategemReady;
 
         controller.enabled = true;
     }
@@ -119,10 +119,16 @@ public class NetworkCharacter : NetworkBehaviour
     [Command]
     public void CmdSpawnSkill(int skillID)
     {
-        if (skillID > 2)
+        if (!networkManager.idToStrategem.ContainsKey(skillID))
         {
             return;
         }
-        server.spawnSkill(firePoint, serverCharacterData, (ISkill)SkillList[skillID]);
+        if (clientStrategemReady[skillID] == false)
+        {
+            return;
+        }
+        server.spawnStrategem(firePoint, serverCharacterData, skillID, this);
+        serverCharacterData.strategemCooldowns[skillID] = networkManager.idToStrategem[skillID].cooldownTime;
+        clientStrategemReady[skillID] = false;
     }
 }

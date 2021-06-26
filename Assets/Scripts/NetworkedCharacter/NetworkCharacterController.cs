@@ -95,13 +95,13 @@ public class NetworkCharacterController : MonoBehaviour
                     localShooting = true;
                     break;
                 case InputCommand.SKILL1:
-                    networkCharacter.CmdSpawnSkill(0);
+                    StrategemManager.Instance.strategemActivation();
                     break;
                 case InputCommand.SKILL2:
-                    networkCharacter.CmdSpawnSkill(1);
+                    StrategemManager.Instance.strategemDeactivation();
                     break;
-                case InputCommand.SKILL3:
-                    networkCharacter.CmdSpawnSkill(2);
+                case InputCommand.LAUNCH_STRATEGEM:
+                    networkCharacter.CmdSpawnSkill(StrategemManager.Instance.getCallableStrategem());
                     break;
             }
         }

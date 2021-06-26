@@ -8,13 +8,16 @@ public class StrategemSkillContainer : MonoBehaviour
     [SerializeField] Image fillBackground;
     [SerializeField] Image fillImage;
     [SerializeField] public GameObject arrowContainer;
-    bool isArrowShown = false;
+    public int commandLength = -1;
+    private bool isArrowShown = false;
+    private int currentArrowIndex;
 
-    public void setupContainer(Sprite strategemSprite)
+    public void setupContainer(Sprite strategemSprite, int length)
     {
         fillBackground.sprite = strategemSprite;
         fillImage.sprite = strategemSprite;
-        HideArrows(true);
+        commandLength = length;
+        showArrows(true);
     }
 
     public void updateFill(float curr, float max)
@@ -22,9 +25,24 @@ public class StrategemSkillContainer : MonoBehaviour
         fillImage.fillAmount = Mathf.Min((max - curr) / max, 1.0f);
     }
 
-    public void HideArrows(bool a)
+    public void showArrows(bool a)
     {
         isArrowShown = a;
         arrowContainer.gameObject.SetActive(a);
+    }
+
+    public void ClearArrows()
+    {
+        foreach (Transform transform in arrowContainer.transform)
+        {
+            Destroy(transform.gameObject);
+        }
+        currentArrowIndex = 0;
+    }
+    
+    public void SetArrowFinish()
+    {
+        arrowContainer.transform.GetChild(currentArrowIndex).GetComponent<StrategemArrow>().SetFinish();
+        currentArrowIndex++;
     }
 }

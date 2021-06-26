@@ -7,9 +7,10 @@ using UnityEngine.UI;
 public class StrategemArrow : MonoBehaviour
 {
     [SerializeField] Sprite[] arrowSprites;
-    [HideInInspector] public int arrowDir;
-    private Color initialColor, finishedColor;
     [SerializeField] Image image;
+    [HideInInspector] public int arrowDir;
+    private Color initialColor;
+    private Color finishedColor;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class StrategemArrow : MonoBehaviour
         arrowDir = dir;
         image.sprite = arrowSprites[dir];
         image.SetNativeSize();
+        GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
     }
 
     public void SetFinish()
