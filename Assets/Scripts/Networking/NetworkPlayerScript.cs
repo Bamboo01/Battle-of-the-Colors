@@ -10,7 +10,6 @@ namespace CSZZGame.Networking
     [AddComponentMenu("")]
     public class NetworkPlayerScript : NetworkBehaviour
     {
-        [SerializeField] StrategemProperties[] strategemProperties;
         [SerializeField] public ServerEventProperties serverEventProperties;
         protected CSZZServerHandler cszzNetworkServer;
         protected CSZZNetworkInterface cszzNetworkInterface;
