@@ -24,7 +24,7 @@ namespace CSZZGame.Networking
         public override void OnStartClient()
         {
             base.OnStartClient();
-            if (!isLocalPlayer)
+            if (!isLocalPlayer && !isServer)
             {
                 Destroy(characterData);
                 return;
