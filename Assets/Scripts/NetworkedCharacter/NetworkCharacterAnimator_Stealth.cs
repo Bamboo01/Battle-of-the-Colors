@@ -10,6 +10,8 @@ public class NetworkCharacterAnimator_Stealth : NetworkBehaviour
 {
     [SerializeField]
     private GameObject modelGameObject;
+    [SerializeField]
+    private GameObject stealthParticleEmitter;
 
     [SyncVar(hook = nameof(SyncStealthState))]
     private bool isStealth = false;
@@ -73,5 +75,6 @@ public class NetworkCharacterAnimator_Stealth : NetworkBehaviour
     private void SetModelVisibility(bool isStealth)
     {
         modelGameObject.SetActive(!isStealth);
+        stealthParticleEmitter.SetActive(isStealth);
     }
 }
