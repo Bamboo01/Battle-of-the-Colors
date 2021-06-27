@@ -22,4 +22,9 @@ public class Menu : MonoBehaviour
     {
         this.gameObject.SetActive(false);
     }
+
+    public GameObject GetObject()
+    {
+        return gameObject;
+    }
 }

@@ -4112,7 +4112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e869fec0ee13f0b4f87bf2d1d0d8d831, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _persistent: 1
+  _persistent: 0
   Menus:
   - {fileID: 1122140644}
   - {fileID: 346245036}
