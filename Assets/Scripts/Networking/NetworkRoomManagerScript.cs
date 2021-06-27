@@ -25,10 +25,13 @@ namespace CSZZGame.Networking
 
         private GameObject dedicatedServer;
 
+        [SerializeField] bool isDedicatedServer;
+
         public Dictionary<int, StrategemProperties> idToStrategem = new Dictionary<int, StrategemProperties>();
 
         public override void Start()
         {
+            isDedicatedServer = true;
             base.Start();
             foreach (var a in strategemProperties)
             {
@@ -36,13 +39,26 @@ namespace CSZZGame.Networking
             }
         }
 
-        public override void OnServerSceneChanged(string sceneName)
+        public override void OnStartHost()
         {
-            if (sceneName == GameplayScene)
+            isDedicatedServer = false;
+            base.OnStartHost();
+        }
+
+        public override void OnStartClient()
+        {
+            isDedicatedServer = false;
+            base.OnStartClient();
+        }
+
+        public override void OnRoomServerSceneChanged(string sceneName)
+        {
+            if (sceneName == GameplayScene && isDedicatedServer)
             {
                 dedicatedServer = Instantiate(dedicatedServerPrefab);
                 NetworkServer.Spawn(dedicatedServer);
             }
+            base.OnRoomServerSceneChanged(sceneName);
         }
 
         public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)

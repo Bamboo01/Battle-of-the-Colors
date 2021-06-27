@@ -29,8 +29,11 @@ namespace CSZZGame.Networking
                 Destroy(characterData);
                 return;
             }
-            cszzNetworkInterface = gameObject.AddComponent<CSZZNetworkInterface>();
-            cszzNetworkInterface.SetupClient(this);
+            if (hasAuthority)
+            {
+                cszzNetworkInterface = gameObject.AddComponent<CSZZNetworkInterface>();
+                cszzNetworkInterface.SetupClient(this);
+            }
         }
 
         public override void OnStartAuthority()
