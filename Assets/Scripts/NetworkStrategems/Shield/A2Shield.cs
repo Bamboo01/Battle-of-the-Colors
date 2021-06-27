@@ -22,7 +22,7 @@ public class A2Shield : StrategemBase
         Physics.Raycast(shield.transform.position + Vector3.up * 3f, Vector3.down, out RaycastHit hit, 10f);
         shield.transform.position = hit.point;
         shield.transform.up = hit.normal;
-        var localPos = shield.transform.InverseTransformDirection((transform.position + transform.forward) - shield.transform.position);
+        var localPos = shield.transform.InverseTransformDirection((startPoint.position + startPoint.forward) - shield.transform.position);
         localPos.y = 0;
         Vector3 lookPos = shield.transform.position + shield.transform.TransformDirection(localPos);
         shield.transform.LookAt(lookPos, shield.transform.up);
