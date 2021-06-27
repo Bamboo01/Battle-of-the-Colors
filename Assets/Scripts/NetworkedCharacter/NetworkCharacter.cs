@@ -7,11 +7,14 @@ using CSZZGame.Refactor;
 
 public class NetworkCharacter : NetworkBehaviour
 {
-    [SyncVar] 
-    public int ClientHP;
+    [SyncVar]
+    [SerializeField] public int ClientHP;
 
     [SyncVar]
-    public float ClientSpeed;
+    [SerializeField]  public float ClientSpeed;
+
+    [SyncVar] 
+    [SerializeField] ServerCharacterData.CHARACTER_TEAM team;
 
     readonly SyncDictionary<int, float> clientStrategemCooldowns = new SyncDictionary<int, float>();
     readonly SyncDictionary<int, bool> clientStrategemReady = new SyncDictionary<int, bool>();
@@ -31,6 +34,7 @@ public class NetworkCharacter : NetworkBehaviour
     {
         networkManager = (NetworkRoomManagerScript)NetworkManager.singleton;
         SetupStrategems();
+        team = serverCharacterData.characterTeam;
     }
 
     void Start()
