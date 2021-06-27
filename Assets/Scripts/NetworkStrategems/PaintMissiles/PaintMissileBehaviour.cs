@@ -31,6 +31,7 @@ public class PaintMissileBehaviour : NetworkBehaviour
         Transform newTransform = transform;
         newTransform.position += Vector3.up;
         newTransform.forward = Vector3.down;
+        newTransform.localScale = newTransform.localScale * 3.0f;
         server.spawnBullet(newTransform, serverCharacterData);
         Destroy(gameObject);
     }

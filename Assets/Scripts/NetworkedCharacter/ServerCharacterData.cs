@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using CSZZGame.Networking;
 
 public class ServerCharacterData : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class ServerCharacterData : MonoBehaviour
         { CHARACTER_TEAM.TEAM_2, new Color(0.2f, 1.0f, 0.2f ) }
     };
 
+    NetworkRoomManagerScript networkManager;
 
     public int HP { private set; get; }
     public float Speed { private set; get; }
@@ -36,8 +38,25 @@ public class ServerCharacterData : MonoBehaviour
         characterTeam = CHARACTER_TEAM.TEAM_1;
     }
 
+    public void Respawn()
+    {
+        int[] strategemIDs = new int[strategemCooldowns.Count];
+        strategemCooldowns.Keys.CopyTo(strategemIDs, 0);
+        foreach (var id in strategemIDs)
+        {
+            strategemCooldowns[id] = networkManager.idToStrategem[id].cooldownTime;
+        }
+        HP = 10;
+    }
+
     void Start()
     {
+        networkManager = (NetworkRoomManagerScript)NetworkRoomManager.singleton;
+        foreach (var strategem in networkManager.strategemProperties)
+        {
+            strategemCooldowns.Add(strategem.strategemID, strategem.cooldownTime);
+        }
+        HP = 10;
         WeaponCD = 0.5f;
     }
 
@@ -58,6 +77,11 @@ public class ServerCharacterData : MonoBehaviour
     public void weaponFired()
     {
         WeaponTimer = WeaponCD;
+    }
+
+    public void playerDamaged(int damage)
+    {
+        HP -= damage;
     }
 
     public static Color teamToColor(CHARACTER_TEAM team)
