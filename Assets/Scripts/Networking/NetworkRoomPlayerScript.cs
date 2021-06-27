@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using TMPro;
+using UnityEngine.UI;
 
 // CSZZ - 褰╄壊鎴樹簤
 namespace CSZZGame.Networking
@@ -82,9 +83,23 @@ namespace CSZZGame.Networking
                 team2Container = room.team2Container;
                 RPCSwapTeam(team);
 
-                hostIcon.SetActive(((isServer && index == 0) || isServerOnly));
-                removeIcon.SetActive(((isServer && index > 0) || isServerOnly));
+                hostIcon.SetActive(index == 0);
+                if (((isServer && index > 0) || isServerOnly))
+                {
+                    removeIcon.GetComponent<Button>().onClick.AddListener(() => GetComponent<NetworkIdentity>().connectionToClient.Disconnect());
+                    removeIcon.SetActive(true);
+                }
+                else
+                {
+                    removeIcon.SetActive(false);
+                }
             }
+        }
+
+        public override void OnDisable()
+        {
+            base.OnDisable();
+            Destroy(UIObject);
         }
 
         //public override void OnGUI()
