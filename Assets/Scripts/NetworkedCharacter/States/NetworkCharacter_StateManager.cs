@@ -64,7 +64,7 @@ namespace CSZZGame.Character
                 else if (nextStateKey != currentStateKey)
                     ChangeState(nextStateKey);
             }
-            while (remainingMovementDist > 0.0f);
+            while (remainingMovementDist > -0.5f);
         }
     }
 }

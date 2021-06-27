@@ -12,7 +12,7 @@ namespace CSZZGame.Character
 
         public override FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist)
         {
-            remainingMovementDist = 0.0f;
+            remainingMovementDist = -1.0f;
             if (desiredMovementDist <= 0.0f)
                 return FSMSTATE_CHARACTER_TYPE.NULL;
 
@@ -41,7 +41,7 @@ namespace CSZZGame.Character
             }
             else // We have collided with an unclimbable area of the wall
             {
-                ApplyGravity();
+                //ApplyGravity();
                 return FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL;
             }
         }

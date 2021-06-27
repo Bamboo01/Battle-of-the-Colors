@@ -10,10 +10,13 @@ public class NetworkCharacterAnimator_Stealth : NetworkBehaviour
 {
     [SerializeField]
     private GameObject modelGameObject;
+    [SerializeField]
+    private GameObject stealthParticleEmitter;
 
     [SyncVar(hook = nameof(SyncStealthState))]
     private bool isStealth = false;
     private bool localIsStealth = false;
+    private bool thisFrameStealth = false;
 
     public override void OnStartAuthority()
     {
@@ -28,24 +31,30 @@ public class NetworkCharacterAnimator_Stealth : NetworkBehaviour
     {
         EventRequestInfo<IFSMState_Character_Base> state = eventRequestInfo as EventRequestInfo<IFSMState_Character_Base>;
 
-        bool isCurrentlyStealth;
         switch (state.body.type)
         {
             case FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL:
             case FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB:
-                isCurrentlyStealth = true;
+                thisFrameStealth = true;
                 break;
             default:
-                isCurrentlyStealth = false;
+                thisFrameStealth = false;
                 break;
         }
+    }
 
-        if (isCurrentlyStealth == localIsStealth)
+    private void LateUpdate()
+    {
+        if (!hasAuthority)
             return;
-        localIsStealth = isCurrentlyStealth;
 
-        CmdOnStealthStateChange(localIsStealth);
-        SetModelVisibility(localIsStealth);
+        if (thisFrameStealth != localIsStealth)
+        {
+            localIsStealth = thisFrameStealth;
+
+            CmdOnStealthStateChange(localIsStealth);
+            SetModelVisibility(localIsStealth);
+        }
     }
 
     [Command]
@@ -66,5 +75,6 @@ public class NetworkCharacterAnimator_Stealth : NetworkBehaviour
     private void SetModelVisibility(bool isStealth)
     {
         modelGameObject.SetActive(!isStealth);
+        stealthParticleEmitter.SetActive(isStealth);
     }
 }
