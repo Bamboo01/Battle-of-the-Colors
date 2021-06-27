@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: A2Strategem
   m_EditorClassIdentifier: 
   strategemID: 3
-  strategemSprite: {fileID: 21300000, guid: 3ebe32d9d5695a141bd364eb49b22628, type: 3}
+  strategemSprite: {fileID: 21300000, guid: aeb62591dfcae954b823e60a25641e9e, type: 3}
   strategemName: Sample Strategem
   executionLength: 4
-  cooldownTime: 10
+  cooldownTime: 30
   strategemPrefab: {fileID: 8261888066450994030, guid: 049f533d2ac82234ab01877f9ae0dfc2, type: 3}

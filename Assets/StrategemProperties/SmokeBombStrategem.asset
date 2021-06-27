@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SmokeBombStrategem
   m_EditorClassIdentifier: 
   strategemID: 1
-  strategemSprite: {fileID: 21300000, guid: fa08d2210b4a78841be89d3fada9fa7e, type: 3}
+  strategemSprite: {fileID: 21300000, guid: 3770186720f062243b65d4fecdb828a0, type: 3}
   strategemName: Sample Strategem
   executionLength: 5
   cooldownTime: 30
