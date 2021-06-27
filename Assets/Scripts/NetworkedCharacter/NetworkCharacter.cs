@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using Bamboo.Events;
 using CSZZGame.Networking;
 using CSZZGame.Refactor;
 
@@ -28,8 +29,6 @@ public class NetworkCharacter : NetworkBehaviour
     NetworkRoomManagerScript networkManager;
     ServerCharacterData serverCharacterData;
     CSZZServerHandler server;
-
-    public Behaviour[] SkillList;
 
     public override void OnStartServer()
     {
@@ -74,7 +73,6 @@ public class NetworkCharacter : NetworkBehaviour
         {
             clientStrategemCooldowns.Add(strategem.strategemID, strategem.cooldownTime);
             clientStrategemReady.Add(strategem.strategemID, false);
-            serverCharacterData.strategemCooldowns.Add(strategem.strategemID, strategem.cooldownTime);
         }
     }
 
@@ -98,6 +96,21 @@ public class NetworkCharacter : NetworkBehaviour
             {
                 clientStrategemReady[pair.Key] = true;
             }
+        }
+    }
+
+    [Server]
+    public void takeDamage(int amount, ServerCharacterData.CHARACTER_TEAM bulletTeam)
+    {
+        if (team != bulletTeam)
+        {
+            serverCharacterData.playerDamaged(amount);
+        }
+        if (serverCharacterData.HP <= 0)
+        {
+            RPCToDeadPlayer(connectionToClient);
+            RPCPOnCharacterDead();
+            server.RespawnCharacter(this);
         }
     }
 
@@ -127,4 +140,49 @@ public class NetworkCharacter : NetworkBehaviour
         serverCharacterData.strategemCooldowns[skillID] = networkManager.idToStrategem[skillID].cooldownTime;
         clientStrategemReady[skillID] = false;
     }
+
+    [ClientRpc]
+    public void RPCPOnCharacterDead()
+    {
+        gameObject.SetActive(false);
+    }
+
+    [ClientRpc]
+    public void RPCOnRespawnPlayer()
+    {
+        gameObject.SetActive(true);
+    }
+
+    [TargetRpc]
+    public void RPCToDeadPlayer(NetworkConnection target)
+    {
+        // Player needs to do some UI stuff on their side
+        //EventManager.Instance.Publish(EventChannels.OnClientPlayerDeath, this);
+    }
+
+    [Server]
+    public void RespawnPlayerOnServer(Vector3 respawnPosition, Quaternion rotation)
+    {
+        Debug.Log("Server preparing to respawn");
+        gameObject.transform.position = respawnPosition;
+        gameObject.transform.rotation = rotation;
+        serverCharacterData.Respawn();
+        RPCOnRespawnPlayer();
+    }
+
+    #region Debug
+    [ContextMenu("Force Kill 1")]
+    [Server]
+    void forceDieTeam1()
+    {
+        takeDamage(1000000, ServerCharacterData.CHARACTER_TEAM.TEAM_2);
+    }
+
+    [ContextMenu("Force Kill 2")]
+    [Server]
+    void forceDieTeam2()
+    {
+        takeDamage(1000000, ServerCharacterData.CHARACTER_TEAM.TEAM_1);
+    }
+    #endregion
 }

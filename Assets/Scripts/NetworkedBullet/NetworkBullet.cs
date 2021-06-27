@@ -26,16 +26,20 @@ public class NetworkBullet : NetworkBehaviour
     private float distanceTravelled = 0.0f;
     public float masDistanceTravelled = 300.0f;
     public float paintingScale = 1.0f;
+    private int damage;
+    public ServerCharacterData.CHARACTER_TEAM bulletTeam;
 
     [Server]
-    public void ServerSetup(Color c, float speed, float paintscale = 1.0f, float maxDistance = 300.0f, float gravity = 9.8f)
+    public void ServerSetup(ServerCharacterData.CHARACTER_TEAM team, float speed, float paintscale = 1.0f, float maxDistance = 300.0f, float gravity = 9.8f, int dmg = 1)
     {
-        color = c;
+        bulletTeam = team;
+        color = ServerCharacterData.teamToColor(bulletTeam);
         bulletSpeed = speed;
         gravityModifier = gravity;
         masDistanceTravelled = maxDistance;
         paintingScale = paintscale;
         rb.useGravity = false;
+        damage = dmg;
     }
 
     [Server]
@@ -84,6 +88,13 @@ public class NetworkBullet : NetworkBehaviour
         Vector3 dir = -collision.contacts[0].normal;
         Vector3 newForwardDir = Vector3.Cross(transform.right, dir);
         Vector3 lookPos = transform.position + newForwardDir.normalized;
+        SpawnParticlesRPC(transform.position, lookPos, -dir, color, paintingScale);
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("player"))
+        {
+            collision.gameObject.GetComponent<NetworkCharacter>().takeDamage(damage, bulletTeam);
+            return;
+        }
 
         // Spawn brush particles locally (server)
         GameObject brushParticles = Instantiate(brushParticlesPrefab, transform.position, transform.rotation);
@@ -91,11 +102,6 @@ public class NetworkBullet : NetworkBehaviour
         brushparticles.SetupServerParticles(properties, color, paintingScale);
         brushParticles.transform.LookAt(lookPos, -dir);
         Destroy(brushParticles, 3.0f);
-
-        //Paint in a small radius (server)
-        
-
-        SpawnParticlesRPC(transform.position, lookPos, -dir, color, paintingScale);
     }
 
     [Server]

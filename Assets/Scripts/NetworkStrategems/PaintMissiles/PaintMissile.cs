@@ -27,7 +27,7 @@ public class PaintMissile : StrategemBase
         for (int i = 0; i < missleCount; i++)
         {
             Vector3 dir = new Vector3(airdropMarker.transform.position.x, 30f, airdropMarker.transform.position.z);
-            GameObject missle = Instantiate(server.paintMissilePrefab, dir + new Vector3(Random.Range(-3, 3), 0, Random.Range(-3, 3)), server.paintMissilePrefab.transform.rotation);
+            GameObject missle = Instantiate(server.paintMissilePrefab, dir + new Vector3(Random.Range(-6, 6), 0, Random.Range(-6, 6)), server.paintMissilePrefab.transform.rotation);
             PaintMissileBehaviour missleBehaviour = missle.GetComponent<PaintMissileBehaviour>();
             missleBehaviour.server = serverHandler;
             missleBehaviour.serverCharacterData = data;

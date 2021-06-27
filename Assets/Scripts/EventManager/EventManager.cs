@@ -59,6 +59,19 @@ namespace Bamboo.Events
             }
         }
 
+        public void Publish(string channelname, object sender)
+        {
+            EventChannel channel;
+            if (EventDictionary.TryGetValue(channelname, out channel))
+            {
+                channel.Invoke(new EventRequestInfo(channelname, sender));
+            }
+            else
+            {
+                Debug.LogError("Tried to publish an event to a non-existent event channel with the name " + channelname + " (Did you forget to register a channel, or was it a typo?)");
+            }
+        }
+
         // Allows an object to stop listening to a channel
         public void Close(string channelname, UnityAction<IEventRequestInfo> action)
         {

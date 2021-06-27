@@ -788,9 +788,6 @@ GameObject:
   - component: {fileID: 2534912128947246163}
   - component: {fileID: 7912340505395814315}
   - component: {fileID: 6679504345711940837}
-  - component: {fileID: -2000914324597039357}
-  - component: {fileID: 1219505075960040773}
-  - component: {fileID: 7383254304030019155}
   m_Layer: 3
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -871,10 +868,6 @@ MonoBehaviour:
   animator: {fileID: 4368064711272603126}
   firePoint: {fileID: 9077345702537557434}
   lookAtPoint: {fileID: 6184638619281015600}
-  SkillList:
-  - {fileID: 1219505075960040773}
-  - {fileID: 7383254304030019155}
-  - {fileID: -2000914324597039357}
 --- !u!114 &7495637079963509014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -959,44 +952,6 @@ MonoBehaviour:
   syncInterval: 0.1
   clientAuthority: 1
   animator: {fileID: 3573581219287518650}
---- !u!114 &-2000914324597039357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6184638618461802932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f941bb11a8b41354c8a34172dd2c8e5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1219505075960040773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6184638618461802932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15f179888278f834e803824f5ad7642a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  force: 500
---- !u!114 &7383254304030019155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6184638618461802932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2bafe4f68337304d8c7451cab70efcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  force: 500
 --- !u!1 &6184638618556216453
 GameObject:
   m_ObjectHideFlags: 0
