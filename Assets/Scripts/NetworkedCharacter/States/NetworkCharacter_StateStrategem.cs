@@ -21,7 +21,7 @@ namespace CSZZGame.Character
         public override FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist)
         {
             ApplyGravity();
-            remainingMovementDist = 0.0f;
+            remainingMovementDist = -1.0f;
             return FSMSTATE_CHARACTER_TYPE.NULL;
         }
     }

@@ -87,7 +87,18 @@ public class NetworkCharacterController : MonoBehaviour
                 case ACTION_CHARACTER_TYPE.STEALTH:
                     {
                         var actionStealth = action as Action_Character_Stealth;
-                        characterStateManager.ChangeState(actionStealth.startStealth ? FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL : FSMSTATE_CHARACTER_TYPE.NORMAL);
+                        if (actionStealth.startStealth)
+                        {
+                            switch (characterStateManager.currentStateType)
+                            {
+                                case FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB:
+                                case FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL:
+                                    continue;
+                            }
+                            characterStateManager.ChangeState(FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL);
+                        }
+                        else
+                            characterStateManager.ChangeState(FSMSTATE_CHARACTER_TYPE.NORMAL);
                     }
                     break;
                 case ACTION_CHARACTER_TYPE.SHOOT:
