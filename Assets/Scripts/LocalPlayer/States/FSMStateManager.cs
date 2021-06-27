@@ -25,19 +25,13 @@ namespace CSZZGame.Refactor
         protected Dictionary<Key, IFSMState_Base> stateDictionary = new Dictionary<Key, IFSMState_Base>();
 
         /// <summary>
-        /// Get the currently active state object as IFSMState_Base.
-        /// <para>You should generally only use currentState instead.</para>
-        /// </summary>
-        protected IFSMState_Base currentStateAsBase { get; set; }
-
-        /// <summary>
         /// Get the currently active state object.
         /// <para>
         /// Replace this accessor with your preferred state class when extending this class.
         /// View NetworkCharacter_StateManager.cs for reference
         /// </para>
         /// </summary>
-        protected IFSMState_Base currentState { get => currentStateAsBase as IFSMState_Base; set => currentStateAsBase = value; }
+        protected IFSMState_Base currentState { get; set; }
 
         protected Key currentStateKey { get; set; }
 
@@ -53,6 +47,11 @@ namespace CSZZGame.Refactor
 
             SetupAddedState(newState);
             stateDictionary.Add(stateKey, newState);
+        }
+
+        protected virtual bool CheckStateType(IFSMState_Base state)
+        {
+            return true;
         }
 
         protected virtual void SetupAddedState(IFSMState_Base newState)
@@ -88,11 +87,6 @@ namespace CSZZGame.Refactor
             currentStateKey = stateKey;
 
             currentState.OnEnter();
-        }
-
-        protected virtual bool CheckStateType(IFSMState_Base state)
-        {
-            return true;
         }
     }
 }

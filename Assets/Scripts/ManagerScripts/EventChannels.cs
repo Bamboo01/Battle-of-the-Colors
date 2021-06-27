@@ -8,6 +8,7 @@ namespace CSZZGame.Refactor
     {
         static public string OnInputEvent = "OnInputEventChannel";
         static public string OnOwnCharacterActionEvent = "OnOwnCharacterActionEventChannel";
+        static public string OnOwnCharacterStateChangeEvent = "OnOwnCharacterStateChangeEventChannel";
         static public string OnPaintPaintableEvent = "OnPaintPaintableChannel";
     }
 }

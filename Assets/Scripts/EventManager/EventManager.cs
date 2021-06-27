@@ -53,7 +53,9 @@ namespace Bamboo.Events
             }
             else
             {
-                Debug.LogError("Tried to publish an event to a non-existent event channel (Did you forget to register a channel, or was it a typo?)");
+                Debug.LogWarning(
+                    string.Format("Tried to publish an event to non-existent event channel \"{0}\" (Did you forget to listen to the channel, or was it a typo?)", channelname)
+                );
             }
         }
 

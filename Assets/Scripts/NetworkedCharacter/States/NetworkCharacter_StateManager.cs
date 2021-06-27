@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CSZZGame.Refactor;
+using Bamboo.Events;
 
 namespace CSZZGame.Character
 {
@@ -16,13 +17,7 @@ namespace CSZZGame.Character
 
     public class FSMStateManager_Character : FSMStateManager_Basic<FSMState_Character_Type>, IFSMStateManager_Character
     {
-        /// <summary>
-        /// Get the currently active state object.
-        /// <para>
-        /// Replace this accessor with your preferred state class when extending this class.
-        /// </para>
-        /// </summary>
-        protected new IFSMState_Character_Base currentState { get => currentStateAsBase as IFSMState_Character_Base; set => currentStateAsBase = value; }
+        protected new IFSMState_Character_Base currentState { get => base.currentState as IFSMState_Character_Base; set => base.currentState = value; }
 
         private PlayerSettings playerSettings;
 
@@ -43,6 +38,13 @@ namespace CSZZGame.Character
             IFSMState_Character_Base state = newState as IFSMState_Character_Base;
 
             state.playerSettings = playerSettings;
+        }
+
+        public override void ChangeState(FSMState_Character_Type stateKey)
+        {
+            base.ChangeState(stateKey);
+
+            EventManager.Instance.Publish(EventChannels.OnOwnCharacterStateChangeEvent, this, currentState);
         }
 
         public void Update(Vector3 desiredMovement)
