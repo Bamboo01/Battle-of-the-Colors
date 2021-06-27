@@ -863,13 +863,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  isShooting: 0
-  isThrowing: 0
   ClientHP: 0
   ClientSpeed: 0
   controller: {fileID: 7495637079963509014}
   animator: {fileID: 4368064711272603126}
   firePoint: {fileID: 9077345702537557434}
+  lookAtPoint: {fileID: 6184638619281015600}
   SkillList:
   - {fileID: 1219505075960040773}
   - {fileID: 7383254304030019155}

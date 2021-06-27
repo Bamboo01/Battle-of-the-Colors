@@ -19,6 +19,7 @@ public class NetworkCharacter : NetworkBehaviour
     [SerializeField] NetworkCharacterController controller;
     [SerializeField] NetworkCharacterAnimator animator;
     [SerializeField] Transform firePoint;
+    [SerializeField] Transform lookAtPoint;
 
     // Server only
     NetworkRoomManagerScript networkManager;
@@ -102,6 +103,7 @@ public class NetworkCharacter : NetworkBehaviour
         if (serverCharacterData.WeaponTimer <= 0)
         {
             serverCharacterData.weaponFired();
+            firePoint.rotation = lookAtPoint.rotation;
             server.spawnBullet(firePoint, serverCharacterData);
         }
     }
