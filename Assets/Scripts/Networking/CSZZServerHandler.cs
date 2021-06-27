@@ -23,12 +23,12 @@ namespace CSZZGame.Networking
         {
         }
 
-        public void spawnBullet(Transform transform, ServerCharacterData data)
+        public void spawnBullet(Transform transform, ServerCharacterData data, float scale = 1.0f)
         {
             GameObject bullet = Instantiate(networkManager.bulletPrefab);
             bullet.transform.position = transform.position;
             bullet.transform.LookAt(transform.position + transform.forward, Vector3.up);
-
+            bullet.transform.localScale = new Vector3(scale, scale, scale);
             NetworkBullet networkedPaintBullet = bullet.GetComponent<NetworkBullet>();
 
             networkedPaintBullet.ServerSetup(data.characterTeam, 50.0f, 1.0f, 300.0f, 0.01f);
@@ -42,8 +42,13 @@ namespace CSZZGame.Networking
                 return;
             }
             clientConnection = sender;
-            GameObject playerCharacter = Instantiate(networkManager.playerCharacterPrefab);
-            playerCharacter.GetComponent<NetworkCharacter>().SetupServerHandler(this, characterData);
+
+            List<Transform> spawnPoints = networkManager.teamToStartPositionList[characterData.characterTeam];
+            int index = Random.Range(0, spawnPoints.Count);
+            GameObject playerCharacter = Instantiate(networkManager.playerCharacterPrefab, spawnPoints[index].position, spawnPoints[index].rotation);
+            var networkcharacter = playerCharacter.GetComponent<NetworkCharacter>();
+            networkcharacter.SetupServerHandler(this, characterData);
+
             NetworkServer.Spawn(playerCharacter, sender);
         }
 
@@ -61,14 +66,23 @@ namespace CSZZGame.Networking
         public void RespawnCharacter(NetworkCharacter playercharacter)
         {
             Debug.Log("Server waiting to respawn in 5 seconds");
+            //playercharacter.netIdentity.RemoveClientAuthority();
             StartCoroutine(_RespawnCharacter(playercharacter));
         }
 
-        private IEnumerator _RespawnCharacter(NetworkCharacter playercharacter)
+        private IEnumerator _RespawnCharacter(NetworkCharacter playercharacter, float time = 5.0f)
         {
-            yield return new WaitForSeconds(5.0f);
-            playercharacter.RespawnPlayerOnServer(Vector3.zero, Quaternion.identity);
+            yield return new WaitForSeconds(time);
+            List<Transform> spawnPoints = networkManager.teamToStartPositionList[playercharacter.team];
+            int index = Random.Range(0, spawnPoints.Count);
+            playercharacter.RespawnPlayerOnServer(spawnPoints[index].position, spawnPoints[index].rotation);
+            //playercharacter.netIdentity.AssignClientAuthority(clientConnection);
             yield break;
+        }
+
+        public void ServerOnGameEnd(NetworkCharacter playercharacter)
+        {
+            playercharacter.netIdentity.RemoveClientAuthority();
         }
     }
 }

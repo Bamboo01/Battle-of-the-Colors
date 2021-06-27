@@ -16,7 +16,7 @@ public class A2Shield : StrategemBase
     public override void UseSkill(Transform startPoint, ServerCharacterData data, CSZZServerHandler serverHandler, NetworkRoomManagerScript server, NetworkCharacter caller)
     {
         GameObject shield = Instantiate(server.shieldPrefab);
-        shield.transform.position = startPoint.position;
+        shield.transform.position = caller.transform.position;
 
         //Code to align shield to floor and slope, while facing char dir. I can't get it to work on a downwards facing slope though
         Physics.Raycast(shield.transform.position + Vector3.up * 3f, Vector3.down, out RaycastHit hit, 10f);
@@ -24,8 +24,8 @@ public class A2Shield : StrategemBase
         shield.transform.up = hit.normal;
         var localPos = shield.transform.InverseTransformDirection((transform.position + transform.forward) - shield.transform.position);
         localPos.y = 0;
-        Vector3 lookPos = shield.transform.position + shield.transform.TransformDirection(localPos);
-        shield.transform.LookAt(lookPos, shield.transform.up);
+
+        shield.transform.LookAt(shield.transform.position + caller.transform.forward, hit.normal);
 
         ServerSetup(ServerCharacterData.teamToColor(data.characterTeam));
         NetworkServer.Spawn(shield);

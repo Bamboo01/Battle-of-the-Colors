@@ -58,7 +58,7 @@ public class NetworkCharacterController : MonoBehaviour
             this.enabled = false;
             return;
         }
-
+        EventManager.Instance.Publish(EventChannels.OnHealthChange, this, characterStateData.networkCharacter.ClientHP);
         ProcessActions();
 
         characterStateManager.Update(resultantDirection);
@@ -135,6 +135,10 @@ public class NetworkCharacterController : MonoBehaviour
     // Queue up an action when an input is received
     void OnInputEvent(IEventRequestInfo eventRequestInfo)
     {
+        if (!isActiveAndEnabled)
+        {
+            return;
+        }
         EventRequestInfo<InputCommand> info = (EventRequestInfo<InputCommand>)eventRequestInfo;
 
         switch (info.body)

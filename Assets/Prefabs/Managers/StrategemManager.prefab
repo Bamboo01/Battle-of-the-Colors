@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6235722733588817784
+--- !u!1 &12379770781261455
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6235722733588817782}
-  - component: {fileID: 6235722733588817785}
-  - component: {fileID: 6235722732772077904}
+  - component: {fileID: 12379770781261442}
+  - component: {fileID: 12379770781261443}
   m_Layer: 0
-  m_Name: EventManager
+  m_Name: StrategemManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6235722733588817782
+--- !u!4 &12379770781261442
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6235722733588817784}
+  m_GameObject: {fileID: 12379770781261455}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,27 +31,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6235722733588817785
+--- !u!114 &12379770781261443
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6235722733588817784}
+  m_GameObject: {fileID: 12379770781261455}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fc1e62356916ee41a8019fa42104764, type: 3}
+  m_Script: {fileID: 11500000, guid: edd65dab6ef0f4544a25023c3a7e4be1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6235722732772077904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6235722733588817784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: beb82068c8e441648923458052c03805, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _persistent: 1
+  verticalStrategemContainer: {fileID: 0}
+  horiztontalStrategemContainer: {fileID: 0}
+  strategemUIPrefab: {fileID: 6207011376106152829, guid: f5be36b1bb6a52a4ab3bf14f0539212e, type: 3}
+  arrowPrefab: {fileID: 5910791016744901069, guid: b7370b56725981c44ba1f61f0c79a555, type: 3}

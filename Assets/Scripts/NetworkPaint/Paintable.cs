@@ -18,7 +18,7 @@ public class Paintable : MonoBehaviour
     [Tooltip("Normalized scale (Scaled to 1 unit) - (Enable gizmos to view, adjust this until the wiremesh fits the box)")]
     [SerializeField] public Vector3 normalizedScale = new Vector3(1, 1, 1);
     [SerializeField] public Mesh sceneMesh;
-
+    [SerializeField] public int paintableScore = 1;
     [Header("Raycast Threshold")]
     float maxDistance = 0.1f;
 
@@ -36,11 +36,14 @@ public class Paintable : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
 #if UNITY_EDITOR
-        Gizmos.DrawWireCube(transform.position, new Vector3(1, 1, 1));
+        Gizmos.matrix = Matrix4x4.identity;
         if (sceneMesh)
         {
             Gizmos.DrawWireMesh(sceneMesh, transform.position, transform.rotation, normalizedScale);
         }
+        Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        Gizmos.matrix = rotationMatrix;
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(1, 1, 1));
 #endif
     }
 

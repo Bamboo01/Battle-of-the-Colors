@@ -29,7 +29,7 @@ public class NetworkPainterManager : Singleton<NetworkPainterManager>
     [SerializeField] ComputeShader TexturePainter;
 
     // Paint Calculator
-    [SerializeField] PaintCalculator paintCalculator;
+    [SerializeField] public PaintCalculator paintCalculator;
 
     //Command Buffer
     CommandBuffer commandbuffer;

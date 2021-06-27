@@ -21,6 +21,15 @@ struct PaintParticlesNetworkData
         actualColor = new SerializedVector4(color);
         paintScale = scale;
     }
+
+    public PaintParticlesNetworkData(ParticlePainterProperties props, Vector3 pos, int id, Color color, float scale)
+    {
+        painterProperties = new ParticlePainterPropertiesSerialized(props);
+        collisionPositions = new SerializedVector4[1] { new SerializedVector4(pos) };
+        paintableID = id;
+        actualColor = new SerializedVector4(color);
+        paintScale = scale;
+    }
 }
 
 [RequireComponent(typeof(ParticleSystem))]

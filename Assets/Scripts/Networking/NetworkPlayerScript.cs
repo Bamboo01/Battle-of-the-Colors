@@ -19,6 +19,8 @@ namespace CSZZGame.Networking
         public override void OnStartServer()
         {
             cszzNetworkServer = gameObject.AddComponent<CSZZServerHandler>();
+
+
         }
 
         public override void OnStartClient()

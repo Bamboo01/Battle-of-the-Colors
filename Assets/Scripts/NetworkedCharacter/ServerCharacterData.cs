@@ -46,7 +46,7 @@ public class ServerCharacterData : MonoBehaviour
         {
             strategemCooldowns[id] = networkManager.idToStrategem[id].cooldownTime;
         }
-        HP = 10;
+        HP = networkManager.maxPlayerHealth;
     }
 
     void Start()
@@ -56,8 +56,8 @@ public class ServerCharacterData : MonoBehaviour
         {
             strategemCooldowns.Add(strategem.strategemID, strategem.cooldownTime);
         }
-        HP = 10;
-        WeaponCD = 0.5f;
+        HP = networkManager.maxPlayerHealth;
+        WeaponCD = 0.3f;
     }
 
     void FixedUpdate()

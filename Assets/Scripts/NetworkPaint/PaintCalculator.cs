@@ -125,7 +125,7 @@ public class PaintCalculator : MonoBehaviour
     //}
 
     [ContextMenu("Generate Mipmaps")]
-    public void GenerateMipMaps()
+    private void GenerateMipMaps()
     {
         foreach (var pair in paintablesToMipMaps)
         {
@@ -151,7 +151,7 @@ public class PaintCalculator : MonoBehaviour
     }
 
     [ContextMenu("Count Number of Colors")]
-    public void CalculateNumberOfColors()
+    private void CalculateNumberOfColors()
     {
         for (int i = 0; i < numberOfColors; i++)
         {
@@ -187,10 +187,9 @@ public class PaintCalculator : MonoBehaviour
                         );
                     for (int n = 0; n < numberOfColors; n++)
                     {
-
                         if (sampleColor255 == colors255[n])
                         {
-                            colorCounterList[n]++;
+                            colorCounterList[n] += pair.Key.paintableScore;
                             break;
                         }
                     }
@@ -200,7 +199,7 @@ public class PaintCalculator : MonoBehaviour
     }
 
     [ContextMenu("Start paint calculation...")]
-    void StartCalculatingPaint()
+    public void StartCalculatingPaint()
     {
         // DEBUG CODE, REMOVE WHEN IN USE
         var watch = System.Diagnostics.Stopwatch.StartNew();

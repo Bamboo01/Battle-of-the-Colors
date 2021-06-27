@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PlaceholderRoomMenu.unity
     guid: 9a9bcb7d27caebf43960415b7fa45956
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/SplatoonMultiplayerTest.unity
     guid: 441311f1fcf7ee64794a2a560311ccbd
   - enabled: 0
@@ -32,7 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MultiplayerTestScene.unity
     guid: d57c5772c759d864dbc736b1836de1ce
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/K0019_MultiplayerTestScene.unity
     guid: e4a71cfd1f906234d9dc9aa0f6ef74ba
   m_configObjects: {}

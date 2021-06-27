@@ -6,6 +6,8 @@ using Bamboo.UI;
 using TMPro;
 using UnityEngine.UI;
 
+using CSZZGame.Networking;
+using CSZZGame.Character;
 // CSZZ - 褰╄壊鎴樹簤
 namespace CSZZGame.Networking
 {
@@ -30,6 +32,7 @@ namespace CSZZGame.Networking
 
         [SerializeField] bool isDedicatedServer;
 
+        public Dictionary<ServerCharacterData.CHARACTER_TEAM, List<Transform>> teamToStartPositionList;
         public Dictionary<int, StrategemProperties> idToStrategem = new Dictionary<int, StrategemProperties>();
 
 
@@ -41,9 +44,11 @@ namespace CSZZGame.Networking
         public Button ReadyButton;
         public Button SwitchTeamButton;
         public Button StartGameButton;
-
+        public GameObject canvas;
         private NetworkIdentity localRoomPlayer;
 
+        [Header("GameSettings")]
+        public int maxPlayerHealth = 5;
 
         public override void Start()
         {
@@ -53,7 +58,7 @@ namespace CSZZGame.Networking
             {
                 idToStrategem.Add(a.strategemID, a);
             }
-            MenuManager.Instance.OnlyOpenThisMenu("LobbyMenu");
+            NetworkManagerMenuManager.Instance.OnlyOpenThisMenu("LobbyMenu");
         }
 
         public override void OnStartHost()
@@ -70,10 +75,16 @@ namespace CSZZGame.Networking
 
         public override void OnRoomServerSceneChanged(string sceneName)
         {
-            if (sceneName == GameplayScene && isDedicatedServer)
+            if (sceneName == GameplayScene)
             {
-                dedicatedServer = Instantiate(dedicatedServerPrefab);
-                NetworkServer.Spawn(dedicatedServer);
+                teamToStartPositionList = new Dictionary<ServerCharacterData.CHARACTER_TEAM, List<Transform>>();
+                teamToStartPositionList.Add(ServerCharacterData.CHARACTER_TEAM.TEAM_1, SpawnPointManager.Instance.team1SpawnPoints);
+                teamToStartPositionList.Add(ServerCharacterData.CHARACTER_TEAM.TEAM_2, SpawnPointManager.Instance.team2SpawnPoints);
+                if (isDedicatedServer)
+                {
+                    dedicatedServer = Instantiate(dedicatedServerPrefab);
+                    NetworkServer.Spawn(dedicatedServer);
+                }
             }
             base.OnRoomServerSceneChanged(sceneName);
         }
@@ -91,13 +102,13 @@ namespace CSZZGame.Networking
             var networkRoomPlayerScript = roomPlayer.GetComponent<NetworkRoomPlayerScript>();
             networkPlayerScript.characterData.swapTeam(networkRoomPlayerScript.team);
 
-            MenuManager.Instance.CloseAllMenus();
+            NetworkManagerMenuManager.Instance.CloseAllMenus();
             return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
         }
         public override void OnClientSceneChanged(NetworkConnection conn)
         {
             base.OnClientSceneChanged(conn);
-            //MenuManager.Instance.CloseAllMenus();
+            //NetworkManagerMenuManager.Instance.CloseAllMenus();
         }
 
         public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
@@ -105,7 +116,7 @@ namespace CSZZGame.Networking
             base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
             if(newSceneName == this.GameplayScene)
             {
-                MenuManager.Instance.CloseAllMenus();
+                NetworkManagerMenuManager.Instance.CloseAllMenus();
             }
         }
         public void OnHostGameButtonClick()
@@ -116,7 +127,7 @@ namespace CSZZGame.Networking
                 if (Application.platform != RuntimePlatform.WebGLPlayer)
                 {
                     this.StartHost();
-                    MenuManager.Instance.OnlyOpenThisMenu("RoomMenu");
+                    NetworkManagerMenuManager.Instance.OnlyOpenThisMenu("RoomMenu");
                     StartGameButton.gameObject.SetActive(true);
                 }
             }
@@ -127,7 +138,7 @@ namespace CSZZGame.Networking
             this.networkAddress = ipInputField.text.Length > 0 ? ipInputField.text : "localhost";
             this.StartClient();
             StartGameButton.gameObject.SetActive(false);
-            MenuManager.Instance.OnlyOpenThisMenu("RoomMenu");
+            NetworkManagerMenuManager.Instance.OnlyOpenThisMenu("RoomMenu");
         }
 
         public void OnQuitGameButtonClick()
@@ -160,7 +171,7 @@ namespace CSZZGame.Networking
             //if (allPlayersReady)
             //{
                 ServerChangeScene(GameplayScene);
-                MenuManager.Instance.CloseAllMenus();
+                NetworkManagerMenuManager.Instance.CloseAllMenus();
             //}
         }
     }

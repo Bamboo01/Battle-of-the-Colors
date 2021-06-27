@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using CSZZGame.Networking;
+using CSZZGame.Refactor;
 
 public class NetworkBullet : NetworkBehaviour
 {
@@ -102,15 +104,23 @@ public class NetworkBullet : NetworkBehaviour
         brushparticles.SetupServerParticles(properties, color, paintingScale);
         brushParticles.transform.LookAt(lookPos, -dir);
         Destroy(brushParticles, 3.0f);
+
+        // Radially Paint
+        RadiallyPaint(transform.position, transform.localScale.x);
     }
 
     [Server]
     void RadiallyPaint(Vector3 center, float radius)
     {
-        Collider[] hitColliders = Physics.OverlapSphere(center, radius);
+        Collider[] hitColliders = Physics.OverlapSphere(center, radius * 4.0f);
         foreach (var hitCollider in hitColliders)
         {
-            //CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnPaintPaintableEvent, new PaintParticlesNetworkData(particlePainterProperties, impactPositions, hitPaintableID));
+            Paintable p = hitCollider.GetComponent<Paintable>();
+            if (p != null)
+            {
+                int hitPaintableID = NetworkPainterManager.Instance.GetPaintableID(p);
+                CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnPaintPaintableEvent, new PaintParticlesNetworkData(properties, transform.position, hitPaintableID, color, paintingScale * 5.0f));
+            }
         }
     }
 

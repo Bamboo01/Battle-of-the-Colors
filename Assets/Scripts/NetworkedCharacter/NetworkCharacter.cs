@@ -24,7 +24,7 @@ public class NetworkCharacter : NetworkBehaviour
     [SerializeField] NetworkCharacterAnimator animator;
     [SerializeField] Transform firePoint;
     [SerializeField] Transform lookAtPoint;
-
+    [SerializeField] ParticleSystemRenderer psrenderer;
     // Server only
     NetworkRoomManagerScript networkManager;
     ServerCharacterData serverCharacterData;
@@ -32,9 +32,19 @@ public class NetworkCharacter : NetworkBehaviour
 
     public override void OnStartServer()
     {
+        base.OnStartServer();
         networkManager = (NetworkRoomManagerScript)NetworkManager.singleton;
         SetupStrategems();
         team = serverCharacterData.characterTeam;
+        // Subscribing to callbacks
+        EventManager.Instance.Listen(EventChannels.OnServerGameEnd, OnServerEnd);
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        EventManager.Instance.Publish(EventChannels.OnClientPlayerSpawn, this, team);
+        psrenderer.material.SetColor("_BaseColor", ServerCharacterData.teamToColor(team));
     }
 
     void Start()
@@ -108,8 +118,8 @@ public class NetworkCharacter : NetworkBehaviour
         }
         if (serverCharacterData.HP <= 0)
         {
+            RPCPOnCharacterDead(team);
             RPCToDeadPlayer(connectionToClient);
-            RPCPOnCharacterDead();
             server.RespawnCharacter(this);
         }
     }
@@ -142,33 +152,53 @@ public class NetworkCharacter : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void RPCPOnCharacterDead()
+    public void RPCPOnCharacterDead(ServerCharacterData.CHARACTER_TEAM team)
     {
         gameObject.SetActive(false);
-    }
-
-    [ClientRpc]
-    public void RPCOnRespawnPlayer()
-    {
-        gameObject.SetActive(true);
+        EventManager.Instance.Publish(EventChannels.OnClientPlayerDeath, this, team);
     }
 
     [TargetRpc]
     public void RPCToDeadPlayer(NetworkConnection target)
     {
-        // Player needs to do some UI stuff on their side
-        //EventManager.Instance.Publish(EventChannels.OnClientPlayerDeath, this);
+        EventManager.Instance.Publish(EventChannels.OnTargetClientPlayerDeath, this);
     }
+
+    [ClientRpc]
+    public void RPCOnRespawnPlayer(ServerCharacterData.CHARACTER_TEAM team)
+    {
+        gameObject.SetActive(true);
+        EventManager.Instance.Publish(EventChannels.OnClientPlayerSpawn, this, team);
+    }
+
+    [TargetRpc]
+    public void RPCToRespawnedPlayer(NetworkConnection target)
+    {
+        EventManager.Instance.Publish(EventChannels.OnTargetClientPlayerSpawn, this);
+    }
+
 
     [Server]
     public void RespawnPlayerOnServer(Vector3 respawnPosition, Quaternion rotation)
     {
         Debug.Log("Server preparing to respawn");
-        gameObject.transform.position = respawnPosition;
-        gameObject.transform.rotation = rotation;
+        transform.position = respawnPosition;
+        transform.rotation = rotation;
         serverCharacterData.Respawn();
-        RPCOnRespawnPlayer();
+        RPCOnRespawnPlayer(team);
+        RPCToRespawnedPlayer(connectionToClient);
     }
+
+    [Server]
+    void OnServerEnd(IEventRequestInfo info)
+    {
+        server.ServerOnGameEnd(this);
+    }
+
+    //void TeamSet(ServerCharacterData.CHARACTER_TEAM oldteam, ServerCharacterData.CHARACTER_TEAM newteam)
+    //{
+    //    EventManager.Instance.Publish(EventChannels.OnClientPlayerSpawn, this, newteam);
+    //}
 
     #region Debug
     [ContextMenu("Force Kill 1")]
