@@ -14,7 +14,7 @@ public class NetworkCharacter : NetworkBehaviour
     [SerializeField]  public float ClientSpeed;
 
     [SyncVar] 
-    [SerializeField] ServerCharacterData.CHARACTER_TEAM team;
+    [SerializeField] public ServerCharacterData.CHARACTER_TEAM team;
 
     readonly SyncDictionary<int, float> clientStrategemCooldowns = new SyncDictionary<int, float>();
     readonly SyncDictionary<int, bool> clientStrategemReady = new SyncDictionary<int, bool>();

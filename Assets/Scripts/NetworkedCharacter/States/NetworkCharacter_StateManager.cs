@@ -6,23 +6,23 @@ using Bamboo.Events;
 
 namespace CSZZGame.Character
 {
-    public interface IFSMStateManager_Character : IFSMStateManager_Basic<FSMState_Character_Type>
+    public interface IFSMStateManager_Character : IFSMStateManager_Basic<FSMSTATE_CHARACTER_TYPE>
     {
-        public FSMState_Character_Type currentStateType { get; }
+        public FSMSTATE_CHARACTER_TYPE currentStateType { get; }
 
         public void SetPlayerSettings(PlayerSettings playerSettings);
         public void Update(Vector3 desiredMovement);
     }
 
 
-    public class FSMStateManager_Character : FSMStateManager_Basic<FSMState_Character_Type>, IFSMStateManager_Character
+    public class FSMStateManager_Character : FSMStateManager_Basic<FSMSTATE_CHARACTER_TYPE>, IFSMStateManager_Character
     {
         protected new IFSMState_Character_Base currentState { get => base.currentState as IFSMState_Character_Base; set => base.currentState = value; }
 
         private PlayerSettings playerSettings;
 
         // Return the current state's type if it is valid, otherwise NULL
-        public FSMState_Character_Type currentStateType => currentState?.type ?? FSMState_Character_Type.NULL;
+        public FSMSTATE_CHARACTER_TYPE currentStateType => currentState?.type ?? FSMSTATE_CHARACTER_TYPE.NULL;
 
         public void SetPlayerSettings(PlayerSettings playerSettings)
         {
@@ -40,7 +40,7 @@ namespace CSZZGame.Character
             state.playerSettings = playerSettings;
         }
 
-        public override void ChangeState(FSMState_Character_Type stateKey)
+        public override void ChangeState(FSMSTATE_CHARACTER_TYPE stateKey)
         {
             base.ChangeState(stateKey);
 

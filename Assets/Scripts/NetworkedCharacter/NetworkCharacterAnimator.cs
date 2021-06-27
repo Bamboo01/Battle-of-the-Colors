@@ -27,7 +27,7 @@ public class NetworkCharacterAnimator : MonoBehaviour
 
         switch (action.body.identifier)
         {
-            case Action_Character_Type.MOVE:
+            case ACTION_CHARACTER_TYPE.MOVE:
                 animator.SetBool("isRunning", true);
                 movedThisFrame = true;
                 break;
@@ -35,11 +35,11 @@ public class NetworkCharacterAnimator : MonoBehaviour
             /// Listen to character state changes instead
             //case Action_Character_Type.STEALTH:
             //    break;
-            case Action_Character_Type.SHOOT:
+            case ACTION_CHARACTER_TYPE.SHOOT:
                 animator.SetBool("isShooting", true);
                 shotThisFrame = true;
                 break;
-            case Action_Character_Type.SKILL:
+            case ACTION_CHARACTER_TYPE.SKILL:
                 break;
         }
     }
@@ -49,8 +49,8 @@ public class NetworkCharacterAnimator : MonoBehaviour
 
         switch (state.body.type)
         {
-            case FSMState_Character_Type.STEALTH_NORMAL:
-            case FSMState_Character_Type.STEALTH_CLIMB:
+            case FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL:
+            case FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB:
                 animator.SetBool("isStealthing", true);
                 break;
             default:

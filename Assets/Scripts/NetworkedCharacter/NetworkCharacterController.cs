@@ -31,13 +31,15 @@ public class NetworkCharacterController : MonoBehaviour
         CameraManager.Instance.AssignTargets(target, target);
 
         // Setup movement
+        playerSettings.networkCharacter = networkCharacter;
         playerSettings.characterController = controller;
+        playerSettings.cameraTarget = target;
         characterStateManager.SetPlayerSettings(playerSettings);
 
-        characterStateManager.AddState<FSMState_Character_Normal>(FSMState_Character_Type.NORMAL);
-        characterStateManager.AddState<FSMState_Character_StealthNormal>(FSMState_Character_Type.STEALTH_NORMAL);
+        characterStateManager.AddState<FSMState_Character_Normal>(FSMSTATE_CHARACTER_TYPE.NORMAL);
+        characterStateManager.AddState<FSMState_Character_StealthNormal>(FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL);
 
-        characterStateManager.Init(FSMState_Character_Type.NORMAL);
+        characterStateManager.Init(FSMSTATE_CHARACTER_TYPE.NORMAL);
 
         // Setting up of event listeners
         EventManager.Instance.Listen(EventChannels.OnInputEvent, OnInputEvent);
@@ -70,24 +72,24 @@ public class NetworkCharacterController : MonoBehaviour
 
             switch (action.identifier)
             {
-                case Action_Character_Type.MOVE:
+                case ACTION_CHARACTER_TYPE.MOVE:
                     {
                         var actionMove = action as Action_Character_Move;
                         resultantDirection += actionMove.desiredMovement;
                     }
                     break;
-                case Action_Character_Type.STEALTH:
+                case ACTION_CHARACTER_TYPE.STEALTH:
                     {
                         var actionStealth = action as Action_Character_Stealth;
-                        characterStateManager.ChangeState(actionStealth.startStealth ? FSMState_Character_Type.STEALTH_NORMAL : FSMState_Character_Type.NORMAL);
+                        characterStateManager.ChangeState(actionStealth.startStealth ? FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL : FSMSTATE_CHARACTER_TYPE.NORMAL);
                     }
                     break;
-                case Action_Character_Type.SHOOT:
+                case ACTION_CHARACTER_TYPE.SHOOT:
                     {
                         networkCharacter.CmdFireBullet();
                     }
                     break;
-                case Action_Character_Type.SKILL:
+                case ACTION_CHARACTER_TYPE.SKILL:
                     {
                         var actionSkill = action as Action_Character_Skill;
                         switch (actionSkill.skillID)
@@ -101,7 +103,7 @@ public class NetworkCharacterController : MonoBehaviour
                         }
                     }
                     break;
-                case Action_Character_Type.LAUNCH_STRATEGEM:
+                case ACTION_CHARACTER_TYPE.LAUNCH_STRATEGEM:
                     networkCharacter.CmdSpawnSkill(StrategemManager.Instance.getCallableStrategem());
                     break;
             }
@@ -111,51 +113,6 @@ public class NetworkCharacterController : MonoBehaviour
 
         actionQueue.Clear();
     }
-
-    /*
-    // Will change to be more extensible
-    // TODO: Move movement logic to NetworkCharacter_MovementStates.cs
-    void MoveCharacterStealth()
-    {
-        Vector3 originalPosition = transform.position;
-        Vector3 lastValidPosition = originalPosition; // Use to return to last valid stealth position if we end up at an invalid position
-        CollisionFlags collisionFlags; // Use to detect if he hit a wall
-
-        if (!isClimbing)
-        {
-            // We should be on the ground, so move normally
-            collisionFlags = controller.Move(resultantDirection * playerSpeed * Time.deltaTime);
-
-            if ((collisionFlags & CollisionFlags.CollidedSides) != 0)
-            {
-
-            }
-        }
-    }
-    bool CheckValidStealthPosition(Vector3 position, Vector3 up)
-    {
-        RaycastHit raycastHit;
-
-        // Get the surface underneath us
-        if (Physics.Raycast(position + up, -up, out raycastHit, 2.0f))
-        {
-            Paintable paintable = raycastHit.transform.GetComponent<Paintable>();
-            if (paintable)
-            {
-                int x = (int)((float)paintable.textureSize * raycastHit.textureCoord.x);
-                int y = (int)((float)paintable.textureSize * raycastHit.textureCoord.y);
-
-                RenderTexture.active = paintable.rawmaskcolorTexture;
-                pixelSampler.ReadPixels(new Rect(x, (int)paintable.textureSize - y, 1, 1), 0, 0, true);
-                pixelSampler.Apply();
-            }
-            else // This surface is not paintable - no way we can stealth through it
-                return false;
-        }
-        else // No hit, we are in the air
-            return true;
-    }
-    */
 
     void UpdateTransform()
     {

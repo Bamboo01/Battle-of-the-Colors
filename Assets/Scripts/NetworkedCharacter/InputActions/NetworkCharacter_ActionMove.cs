@@ -6,12 +6,12 @@ namespace CSZZGame.Character
 {
     public class Action_Character_Move : IAction_Character
     {
-        public Action_Character_Type identifier => Action_Character_Type.MOVE;
-        public bool IsActionAllowed(FSMState_Character_Type stateType) => stateType switch
+        public ACTION_CHARACTER_TYPE identifier => ACTION_CHARACTER_TYPE.MOVE;
+        public bool IsActionAllowed(FSMSTATE_CHARACTER_TYPE stateType) => stateType switch
         {
-            FSMState_Character_Type.NORMAL          => true,
-            FSMState_Character_Type.STEALTH_NORMAL  => true,
-            FSMState_Character_Type.STEALTH_CLIMB   => true,
+            FSMSTATE_CHARACTER_TYPE.NORMAL          => true,
+            FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL  => true,
+            FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB   => true,
             _ => throw new System.NotImplementedException()
         };
 

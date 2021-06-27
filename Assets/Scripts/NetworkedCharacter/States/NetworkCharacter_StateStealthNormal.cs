@@ -6,14 +6,16 @@ namespace CSZZGame.Character
 {
     public class FSMState_Character_StealthNormal : FSMState_Character_StealthBase
     {
-        public override FSMState_Character_Type type => FSMState_Character_Type.STEALTH_NORMAL;
+        public override FSMSTATE_CHARACTER_TYPE type => FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL;
 
-        public override FSMState_Character_Type OnUpdate(Vector3 desiredMovement)
+        public override FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovement)
         {
+            if (CheckValidStealthPosition(cameraTarget.up))
+                playerController.Move(desiredMovement * playerSettings.stealthSpeed * Time.deltaTime);
 
-            playerController.Move((desiredMovement * playerSettings.stealthSpeed + Physics.gravity) * Time.deltaTime);
 
-            return FSMState_Character_Type.NULL;
+            playerController.Move(Physics.gravity * Time.deltaTime);
+            return FSMSTATE_CHARACTER_TYPE.NULL;
         }
     }
 }

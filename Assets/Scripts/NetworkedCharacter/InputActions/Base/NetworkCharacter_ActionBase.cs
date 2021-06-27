@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CSZZGame.Character
 {
-    public enum Action_Character_Type
+    public enum ACTION_CHARACTER_TYPE
     {
         NO_MOVE,
         MOVE,
@@ -16,8 +16,8 @@ namespace CSZZGame.Character
 
     public interface IAction_Character
     {
-        public Action_Character_Type identifier { get; }
+        public ACTION_CHARACTER_TYPE identifier { get; }
 
-        public bool IsActionAllowed(FSMState_Character_Type stateType);
+        public bool IsActionAllowed(FSMSTATE_CHARACTER_TYPE stateType);
     }
 }
