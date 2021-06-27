@@ -18,7 +18,6 @@ public class NetworkCharacterAnimator : MonoBehaviour
     private void Start()
     {
         EventManager.Instance.Listen(EventChannels.OnOwnCharacterActionEvent, OnActionEvent);
-        EventManager.Instance.Listen(EventChannels.OnOwnCharacterStateChangeEvent, OnCharacterStateChangeEvent);
     }
 
     private void OnActionEvent(IEventRequestInfo eventRequestInfo)
@@ -31,31 +30,13 @@ public class NetworkCharacterAnimator : MonoBehaviour
                 animator.SetBool("isRunning", true);
                 movedThisFrame = true;
                 break;
-            /// Do not listen to stealth action events, in case we are not on paint that we can stealth on
-            /// Listen to character state changes instead
-            //case Action_Character_Type.STEALTH:
-            //    break;
             case ACTION_CHARACTER_TYPE.SHOOT:
                 animator.SetBool("isShooting", true);
                 shotThisFrame = true;
                 break;
             case ACTION_CHARACTER_TYPE.SKILL:
                 break;
-        }
-    }
-    private void OnCharacterStateChangeEvent(IEventRequestInfo eventRequestInfo)
-    {
-        EventRequestInfo<IFSMState_Character_Base> state = eventRequestInfo as EventRequestInfo<IFSMState_Character_Base>;
-
-        switch (state.body.type)
-        {
-            case FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL:
-            case FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB:
-                animator.SetBool("isStealthing", true);
-                break;
-            default:
-                animator.SetBool("isStealthing", false);
-                break;
+            /// Stealth animation is handled in NetworkCharacterAnimator_Stealth.cs
         }
     }
 
@@ -73,6 +54,5 @@ public class NetworkCharacterAnimator : MonoBehaviour
     private void OnDestroy()
     {
         EventManager.Instance.Close(EventChannels.OnOwnCharacterActionEvent, OnActionEvent);
-        EventManager.Instance.Close(EventChannels.OnOwnCharacterStateChangeEvent, OnCharacterStateChangeEvent);
     }
 }
