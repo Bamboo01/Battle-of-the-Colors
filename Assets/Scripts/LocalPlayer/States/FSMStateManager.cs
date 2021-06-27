@@ -1,161 +1,98 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CSZZGame.Refactor.Internal;
 
 namespace CSZZGame.Refactor
 {
-    #region Public
-
-    #region Generic
-
-    /* 
-     * Class: FSMStateManager_Generic
-     * 
-     * Description: Barebones state machine.
-     *              Use when you only need to keep track of the current state
-    */
-
-    public interface IFSMStateManager_Generic<Key> : I_IFSMStateManager_Basic<Key, IFSMState_Base>
+    /// <summary>
+    /// Defines a state manager that maps key values to state objects.
+    /// </summary>
+    /// <typeparam name="Key">The variable type used to reference states.</typeparam>
+    public interface IFSMStateManager_Basic<Key>
     {
-    }
-    public class FSMStateManager_Generic<Key> : I_FSMStateManager_Basic<Key, IFSMState_Base>, IFSMStateManager_Generic<Key>
-    {
+        public void Init(Key firstStateKey);
+        public void AddState(Key stateKey, IFSMState_Base newState);
+        public T AddState<T>(Key stateKey) where T : IFSMState_Base, new();
+        public void ChangeState(Key stateKey);
     }
 
-    #endregion
-
-    #region UpdatableBasic
-
-    /* 
-     * Class: FSMStateManager_UpdatableBasic
-     * 
-     * Description: State machine with a basic update function
-    */
-
-    public interface IFSMStateManager_UpdatableBasic<Key> : I_IFSMStateManager_UpdatableBasic<Key, IFSMState_UpdatableBasic<Key>>
+    /// <summary>
+    /// Basic state machine that only handles changing of states.
+    /// </summary>
+    /// <typeparam name="Key">The variable type used to reference states.</typeparam>
+    public class FSMStateManager_Basic<Key> : IFSMStateManager_Basic<Key>
     {
-    }
-    public class FSMStateManager_UpdatableBasic<Key> : I_FSMStateManager_UpdatableBasic<Key, IFSMState_UpdatableBasic<Key>>, IFSMStateManager_UpdatableBasic<Key>
-    {
-    }
+        protected Dictionary<Key, IFSMState_Base> stateDictionary = new Dictionary<Key, IFSMState_Base>();
 
-    #endregion
+        /// <summary>
+        /// Get the currently active state object as IFSMState_Base.
+        /// <para>You should generally only use currentState instead.</para>
+        /// </summary>
+        protected IFSMState_Base currentStateAsBase { get; set; }
 
-    #endregion
+        /// <summary>
+        /// Get the currently active state object.
+        /// <para>
+        /// Replace this accessor with your preferred state class when extending this class.
+        /// View NetworkCharacter_StateManager.cs for reference
+        /// </para>
+        /// </summary>
+        protected IFSMState_Base currentState { get => currentStateAsBase as IFSMState_Base; set => currentStateAsBase = value; }
 
-    #region Internal
+        protected Key currentStateKey { get; set; }
 
-    namespace Internal
-    {
-        #region Interfaces
-
-        // Defines a state manager that maps key values to objects
-        public interface I_IFSMStateManager_Basic<Key, State>
+        public virtual void Init(Key firstStateKey)
         {
-            public void Init(Key firstStateKey);
-            public void AddState(Key stateKey, State newState);
-            public T AddState<T>(Key stateKey) where T : State, new();
-            public void ChangeState(Key stateKey);
+            ChangeState(firstStateKey);
         }
 
-        // Defines a state manager that supports a basic update function
-        public interface I_IFSMStateManager_UpdatableBasic<Key, State> : I_IFSMStateManager_Basic<Key, State>
+        public virtual void AddState(Key stateKey, IFSMState_Base newState)
         {
-            public void Update();
+            if (!CheckStateType(newState))
+                throw new System.ArgumentException("The added state is not compatible with this state machine!");
+
+            SetupAddedState(newState);
+            stateDictionary.Add(stateKey, newState);
         }
 
-        #endregion
-
-        #region Classes
-
-        // Holds all state objects added to a state manager
-        public class FSMStateHolder<Key, State> where State : class
+        protected virtual void SetupAddedState(IFSMState_Base newState)
         {
-            protected Dictionary<Key, State> stateDictionary = new Dictionary<Key, State>();
-            public State currentState { get; protected set; } = null;
-            public Key currentStateKey { get; protected set; }
-
-            public virtual void AddState(Key stateKey, State newState)
-            {
-                stateDictionary.Add(stateKey, newState);
-            }
-            public virtual void ChangeState(Key nextStateKey)
-            {
-                if (stateDictionary.TryGetValue(nextStateKey, out State nextState))
-                {
-                    currentState = nextState;
-                    currentStateKey = nextStateKey;
-                }
-                else
-                {
-                    Debug.LogErrorFormat("Unable to find state with key \"{0}\"", nextStateKey);
-                }
-            }
-            public bool ContainsState(Key stateKey)
-            {
-                return stateDictionary.ContainsKey(stateKey);
-            }
         }
 
-        // Basic state machine that only handles changing of states
-        public abstract class I_FSMStateManager_Basic<Key, State> : I_IFSMStateManager_Basic<Key, State> where State : class, IFSMState_Base
+        public virtual T AddState<T>(Key stateKey) where T : IFSMState_Base, new()
         {
-            protected FSMStateHolder<Key, State> stateHolder = new FSMStateHolder<Key, State>();
+            T newState = new T();
+            AddState(stateKey, newState);
+            return newState;
+        }
 
-            public virtual void Init(Key firstStateKey)
+        public virtual void ChangeState(Key stateKey)
+        {
+            if (!stateDictionary.ContainsKey(stateKey))
             {
-                ChangeState(firstStateKey);
+                Debug.LogErrorFormat("State with key \"{0}\" does not exist.", stateKey);
+                return;
             }
 
-            public virtual void AddState(Key stateKey, State newState)
+            if (currentState != null)
             {
-                stateHolder.AddState(stateKey, newState);
-            }
-
-            public virtual T AddState<T>(Key stateKey) where T : State, new()
-            {
-                T newState = new T();
-                AddState(stateKey, newState);
-                return newState;
-            }
-
-            public virtual void ChangeState(Key stateKey)
-            {
-                if (!stateHolder.ContainsState(stateKey))
-                {
-                    Debug.LogErrorFormat("State with key \"{0}\" does not exist.", stateKey);
+                // If the new state is the same as the current state, return
+                if (EqualityComparer<Key>.Default.Equals(currentStateKey, stateKey))
                     return;
-                }
 
-                if (stateHolder.currentState != null)
-                {
-                    // If the new state is the same as the current state, return
-                    if (EqualityComparer<Key>.Default.Equals(stateHolder.currentStateKey, stateKey))
-                        return;
-
-                    stateHolder.currentState.OnExit();
-                }
-                Debug.Log("Switching states");
-                stateHolder.ChangeState(stateKey);
-                stateHolder.currentState.OnEnter();
+                currentState.OnExit();
             }
+
+            Debug.Log("Switching states");
+            currentState = stateDictionary[stateKey];
+            currentStateKey = stateKey;
+
+            currentState.OnEnter();
         }
 
-        // State machine with basic update support
-        public class I_FSMStateManager_UpdatableBasic<Key, State> : I_FSMStateManager_Basic<Key, State>, I_IFSMStateManager_UpdatableBasic<Key, State> where State : class, IFSMState_UpdatableBasic<Key>
+        protected virtual bool CheckStateType(IFSMState_Base state)
         {
-            public void Update()
-            {
-                Key nextStateKey = stateHolder.currentState.OnUpdate();
-
-                if (nextStateKey != null)
-                    ChangeState(nextStateKey);
-            }
+            return true;
         }
-
-        #endregion
     }
-
-    #endregion
 }

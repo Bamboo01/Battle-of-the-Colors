@@ -15,7 +15,7 @@ public class ObserverUtility : MonoBehaviour
     }
 }
 
-public abstract class FSMState_Observer_Base : IFSMState_UpdatableBasic<string>
+public abstract class FSMState_Observer_Base : IFSMState_Base
 {
     protected Animator animator;
     protected MonoBehaviour monoBehaviour;
