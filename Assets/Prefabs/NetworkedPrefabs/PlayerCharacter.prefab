@@ -865,6 +865,7 @@ MonoBehaviour:
   syncInterval: 0.1
   ClientHP: 0
   ClientSpeed: 0
+  team: 0
   controller: {fileID: 7495637079963509014}
   animator: {fileID: 4368064711272603126}
   firePoint: {fileID: 9077345702537557434}
@@ -888,9 +889,9 @@ MonoBehaviour:
   target: {fileID: 6184638619281015600}
   controller: {fileID: 6184638618461802928}
   playerSettings:
-    characterController: {fileID: 0}
     normalSpeed: 20
     stealthSpeed: 40
+    stealthClimbSpeed: 20
   networkCharacter: {fileID: 6184638618461802934}
 --- !u!114 &4368064711272603126
 MonoBehaviour:

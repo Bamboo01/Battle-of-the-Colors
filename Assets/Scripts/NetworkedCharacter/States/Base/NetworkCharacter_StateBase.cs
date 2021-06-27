@@ -9,17 +9,20 @@ namespace CSZZGame.Character
     [System.Serializable]
     public struct PlayerSettings
     {
-        [HideInInspector]
-        public NetworkCharacter networkCharacter;
-        [HideInInspector]
-        public CharacterController characterController;
-        [HideInInspector]
-        public Transform cameraTarget;
-
         public float normalSpeed;
 
         [Header("Stealth")]
         public float stealthSpeed;
+        public float stealthClimbSpeed;
+    }
+
+    public class PlayerData
+    {
+        public NetworkCharacter networkCharacter;
+        public CharacterController characterController;
+        public Transform cameraTarget;
+
+        public Vector3 velocity = new Vector3();
     }
 
     public enum FSMSTATE_CHARACTER_TYPE
@@ -36,7 +39,8 @@ namespace CSZZGame.Character
         public FSMSTATE_CHARACTER_TYPE type { get; }
 
         public PlayerSettings playerSettings { get; set; }
-        public FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovement);
+        public PlayerData playerData { get; set; }
+        public FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist);
     }
 
     public abstract class FSMState_Character_Base : IFSMState_Character_Base
@@ -44,19 +48,29 @@ namespace CSZZGame.Character
         public abstract FSMSTATE_CHARACTER_TYPE type { get; }
 
         public PlayerSettings playerSettings { get; set; }
-        protected CharacterController playerController { get => playerSettings.characterController; }
+        public PlayerData playerData { get; set; }
+        protected CharacterController playerController { get => playerData.characterController; }
 
         public virtual void OnEnter()
         {
         }
 
-        public virtual FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovement)
+        public virtual FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist)
         {
+            remainingMovementDist = 0.0f;
             return FSMSTATE_CHARACTER_TYPE.NULL;
         }
 
         public virtual void OnExit()
         {
+        }
+
+        protected virtual void ApplyGravity()
+        {
+            playerData.velocity += Physics.gravity * Time.deltaTime;
+            playerController.Move(playerData.velocity * Time.deltaTime);
+            if (playerController.isGrounded)
+                playerData.velocity = new Vector3(playerData.velocity.x, 0.0f, playerData.velocity.z);
         }
     }
 }

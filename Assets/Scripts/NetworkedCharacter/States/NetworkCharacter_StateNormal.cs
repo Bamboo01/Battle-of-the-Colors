@@ -8,10 +8,12 @@ namespace CSZZGame.Character
     {
         public override FSMSTATE_CHARACTER_TYPE type => FSMSTATE_CHARACTER_TYPE.NORMAL;
 
-        public override FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovement)
+        public override FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist)
         {
-            playerController.Move((desiredMovement * playerSettings.normalSpeed + Physics.gravity) * Time.deltaTime);
+            playerController.Move(desiredMovementDir * desiredMovementDist * playerSettings.normalSpeed * Time.deltaTime);
 
+            ApplyGravity();
+            remainingMovementDist = 0.0f;
             return FSMSTATE_CHARACTER_TYPE.NULL;
         }
     }

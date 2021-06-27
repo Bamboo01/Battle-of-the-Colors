@@ -20,6 +20,7 @@ public class NetworkCharacterController : MonoBehaviour
 
     // Character State (Movement, etc.)
     IFSMStateManager_Character characterStateManager = new FSMStateManager_Character();
+    PlayerData characterStateData;
     Vector3 resultantDirection = Vector3.zero;
 
     // Commands
@@ -31,13 +32,17 @@ public class NetworkCharacterController : MonoBehaviour
         CameraManager.Instance.AssignTargets(target, target);
 
         // Setup movement
-        playerSettings.networkCharacter = networkCharacter;
-        playerSettings.characterController = controller;
-        playerSettings.cameraTarget = target;
-        characterStateManager.SetPlayerSettings(playerSettings);
+        characterStateData = new PlayerData()
+        {
+            networkCharacter = networkCharacter,
+            characterController = controller,
+            cameraTarget = target
+        };
+        characterStateManager.SetPlayerSettings(playerSettings, characterStateData);
 
         characterStateManager.AddState<FSMState_Character_Normal>(FSMSTATE_CHARACTER_TYPE.NORMAL);
         characterStateManager.AddState<FSMState_Character_StealthNormal>(FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL);
+        characterStateManager.AddState<FSMState_Character_StealthClimb>(FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB);
 
         characterStateManager.Init(FSMSTATE_CHARACTER_TYPE.NORMAL);
 

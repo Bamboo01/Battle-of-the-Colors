@@ -8,13 +8,25 @@ namespace CSZZGame.Character
     {
         public override FSMSTATE_CHARACTER_TYPE type => FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL;
 
-        public override FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovement)
+        public override FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist)
         {
-            if (CheckValidStealthPosition(cameraTarget.up))
-                playerController.Move(desiredMovement * playerSettings.stealthSpeed * Time.deltaTime);
 
+            Vector3 originalPosition = playerController.transform.position;
+            var stealthCheckFlags = CheckValidStealthPosition(cameraTarget.up, out _);
 
-            playerController.Move(Physics.gravity * Time.deltaTime);
+            // Move only if we are on valid paint, or in the air
+            if ((stealthCheckFlags & STEALTH_RESULTFLAG.VALID) != 0)
+                playerController.Move(desiredMovementDir * desiredMovementDist * playerSettings.stealthSpeed * Time.deltaTime);
+
+            // Start climbing if we collide with a wall
+            if ((playerController.collisionFlags & CollisionFlags.Sides) != 0)
+            {
+                remainingMovementDist = desiredMovementDist - (playerController.transform.position - originalPosition).magnitude;
+                return FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB;
+            }
+
+            ApplyGravity();
+            remainingMovementDist = 0.0f;
             return FSMSTATE_CHARACTER_TYPE.NULL;
         }
     }

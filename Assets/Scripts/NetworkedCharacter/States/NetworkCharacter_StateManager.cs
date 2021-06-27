@@ -10,7 +10,7 @@ namespace CSZZGame.Character
     {
         public FSMSTATE_CHARACTER_TYPE currentStateType { get; }
 
-        public void SetPlayerSettings(PlayerSettings playerSettings);
+        public void SetPlayerSettings(PlayerSettings playerSettings, PlayerData playerData);
         public void Update(Vector3 desiredMovement);
     }
 
@@ -20,13 +20,15 @@ namespace CSZZGame.Character
         protected new IFSMState_Character_Base currentState { get => base.currentState as IFSMState_Character_Base; set => base.currentState = value; }
 
         private PlayerSettings playerSettings;
+        private PlayerData playerData;
 
         // Return the current state's type if it is valid, otherwise NULL
         public FSMSTATE_CHARACTER_TYPE currentStateType => currentState?.type ?? FSMSTATE_CHARACTER_TYPE.NULL;
 
-        public void SetPlayerSettings(PlayerSettings playerSettings)
+        public void SetPlayerSettings(PlayerSettings playerSettings, PlayerData playerData)
         {
             this.playerSettings = playerSettings;
+            this.playerData = playerData;
         }
 
         protected override bool CheckStateType(IFSMState_Base state)
@@ -38,6 +40,7 @@ namespace CSZZGame.Character
             IFSMState_Character_Base state = newState as IFSMState_Character_Base;
 
             state.playerSettings = playerSettings;
+            state.playerData = playerData;
         }
 
         public override void ChangeState(FSMSTATE_CHARACTER_TYPE stateKey)
@@ -49,7 +52,19 @@ namespace CSZZGame.Character
 
         public void Update(Vector3 desiredMovement)
         {
-            currentState.OnUpdate(desiredMovement);
+            float remainingMovementDist = desiredMovement.magnitude;
+            Vector3 desiredMovementDir = desiredMovement / remainingMovementDist;
+
+            do
+            {
+                var nextStateKey = currentState.OnUpdate(desiredMovementDir, remainingMovementDist, out remainingMovementDist);
+
+                if (nextStateKey == FSMSTATE_CHARACTER_TYPE.NULL)
+                    break;
+                else if (nextStateKey != currentStateKey)
+                    ChangeState(nextStateKey);
+            }
+            while (remainingMovementDist > 0.0f);
         }
     }
 }
