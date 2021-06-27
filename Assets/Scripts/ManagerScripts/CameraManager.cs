@@ -9,7 +9,8 @@ namespace CSZZGame.Refactor
     public class CameraManager : Singleton<CameraManager>
     {
         [SerializeField] Camera mainCamera;
-        [SerializeField] CinemachineFreeLook cinemachineFreeLook;
+        [SerializeField] CinemachineVirtualCamera cinemachineVC;
+        Transform _lookat;
 
         protected override void OnAwake()
         {
@@ -30,10 +31,16 @@ namespace CSZZGame.Refactor
 
         public void AssignTargets(Transform follow, Transform lookat)
         {
-            cinemachineFreeLook.LookAt = lookat;
-            cinemachineFreeLook.Follow = follow;
+            cinemachineVC.LookAt = lookat;
+            cinemachineVC.Follow = follow;
+            _lookat = lookat;
         }
 
+        private void Update()
+        {
+            if (_lookat)
+            _lookat.rotation = cinemachineVC.VirtualCameraGameObject.transform.rotation;
+        }
         public Transform GetCameraTransform()
         {
             return mainCamera.transform;
