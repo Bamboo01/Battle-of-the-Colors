@@ -58,17 +58,9 @@ namespace CSZZGame.Refactor
             {
                 EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.FIRE);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha1) == true)
+            if (Input.GetKeyDown(KeyCode.LeftControl) == true)
             {
-                EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.SKILL1);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2) == true)
-            {
-                EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.SKILL2);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha3) == true)
-            {
-                EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.SKILL3);
+                EventManager.Instance.Publish(EventChannels.OnInputEvent, this, InputCommand.STRATEGEM_MODE);
             }
         }
     }

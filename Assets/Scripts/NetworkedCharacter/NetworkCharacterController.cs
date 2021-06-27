@@ -43,6 +43,7 @@ public class NetworkCharacterController : MonoBehaviour
         characterStateManager.AddState<FSMState_Character_Normal>(FSMSTATE_CHARACTER_TYPE.NORMAL);
         characterStateManager.AddState<FSMState_Character_StealthNormal>(FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL);
         characterStateManager.AddState<FSMState_Character_StealthClimb>(FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB);
+        characterStateManager.AddState<FSMState_Character_Strategem>(FSMSTATE_CHARACTER_TYPE.STRATEGEM);
 
         characterStateManager.Init(FSMSTATE_CHARACTER_TYPE.NORMAL);
 
@@ -90,26 +91,14 @@ public class NetworkCharacterController : MonoBehaviour
                     }
                     break;
                 case ACTION_CHARACTER_TYPE.SHOOT:
-                    {
                         networkCharacter.CmdFireBullet();
-                    }
                     break;
-                case ACTION_CHARACTER_TYPE.SKILL:
-                    {
-                        var actionSkill = action as Action_Character_Skill;
-                        switch (actionSkill.skillID)
-                        {
-                            case 0:
-                                StrategemManager.Instance.strategemActivation();
-                                break;
-                            case 1:
-                                StrategemManager.Instance.strategemDeactivation();
-                                break;
-                        }
-                    }
+                case ACTION_CHARACTER_TYPE.TOGGLE_STRATEGEM_MODE:
+                    characterStateManager.ChangeState(characterStateManager.currentStateType == FSMSTATE_CHARACTER_TYPE.STRATEGEM ? FSMSTATE_CHARACTER_TYPE.NORMAL : FSMSTATE_CHARACTER_TYPE.STRATEGEM);
                     break;
                 case ACTION_CHARACTER_TYPE.LAUNCH_STRATEGEM:
                     networkCharacter.CmdSpawnSkill(StrategemManager.Instance.getCallableStrategem());
+                    characterStateManager.ChangeState(FSMSTATE_CHARACTER_TYPE.NORMAL);
                     break;
             }
 
@@ -170,14 +159,8 @@ public class NetworkCharacterController : MonoBehaviour
             case InputCommand.FIRE:
                 actionQueue.Enqueue(new Action_Character_Shoot());
                 break;
-            case InputCommand.SKILL1:
-                actionQueue.Enqueue(new Action_Character_Skill(0));
-                break;
-            case InputCommand.SKILL2:
-                actionQueue.Enqueue(new Action_Character_Skill(1));
-                break;
-            case InputCommand.SKILL3:
-                actionQueue.Enqueue(new Action_Character_Skill(2));
+            case InputCommand.STRATEGEM_MODE:
+                actionQueue.Enqueue(new Action_Character_ToggleStrategemMode());
                 break;
             case InputCommand.LAUNCH_STRATEGEM:
                 actionQueue.Enqueue(new Action_Character_LaunchStrategem());

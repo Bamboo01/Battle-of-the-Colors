@@ -12,6 +12,7 @@ namespace CSZZGame.Character
             FSMSTATE_CHARACTER_TYPE.NORMAL          => startStealth,
             FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL  => !startStealth,
             FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB   => !startStealth,
+            FSMSTATE_CHARACTER_TYPE.STRATEGEM       => false,
             _ => throw new System.NotImplementedException()
         };
 

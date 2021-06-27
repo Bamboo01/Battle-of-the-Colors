@@ -31,7 +31,8 @@ namespace CSZZGame.Character
 
         NORMAL,
         STEALTH_NORMAL,
-        STEALTH_CLIMB
+        STEALTH_CLIMB,
+        STRATEGEM
     }
 
     public interface IFSMState_Character_Base : IFSMState_Base

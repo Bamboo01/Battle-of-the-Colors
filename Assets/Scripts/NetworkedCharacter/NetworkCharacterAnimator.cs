@@ -34,8 +34,6 @@ public class NetworkCharacterAnimator : MonoBehaviour
                 animator.SetBool("isShooting", true);
                 shotThisFrame = true;
                 break;
-            case ACTION_CHARACTER_TYPE.SKILL:
-                break;
             /// Stealth animation is handled in NetworkCharacterAnimator_Stealth.cs
         }
     }

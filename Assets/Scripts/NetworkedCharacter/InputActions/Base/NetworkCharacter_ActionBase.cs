@@ -10,7 +10,7 @@ namespace CSZZGame.Character
         MOVE,
         STEALTH,
         SHOOT,
-        SKILL,
+        TOGGLE_STRATEGEM_MODE,
         LAUNCH_STRATEGEM
     }
 
