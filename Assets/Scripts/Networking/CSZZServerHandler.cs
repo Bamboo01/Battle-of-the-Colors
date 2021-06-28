@@ -48,7 +48,7 @@ namespace CSZZGame.Networking
             GameObject playerCharacter = Instantiate(networkManager.playerCharacterPrefab, spawnPoints[index].position, spawnPoints[index].rotation);
             var networkcharacter = playerCharacter.GetComponent<NetworkCharacter>();
             networkcharacter.SetupServerHandler(this, characterData);
-
+            networkcharacter.respawnedPosition = spawnPoints[index].position;
             NetworkServer.Spawn(playerCharacter, sender);
         }
 
@@ -75,6 +75,8 @@ namespace CSZZGame.Networking
             yield return new WaitForSeconds(time);
             List<Transform> spawnPoints = networkManager.teamToStartPositionList[playercharacter.team];
             int index = Random.Range(0, spawnPoints.Count);
+            playercharacter.respawnedPosition = spawnPoints[index].position;
+            playercharacter.transform.position = spawnPoints[index].position;
             playercharacter.RespawnPlayerOnServer(spawnPoints[index].position, spawnPoints[index].rotation);
             //playercharacter.netIdentity.AssignClientAuthority(clientConnection);
             yield break;

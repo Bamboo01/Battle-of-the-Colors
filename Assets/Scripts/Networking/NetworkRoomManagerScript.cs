@@ -5,6 +5,7 @@ using Mirror;
 using Bamboo.UI;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 using CSZZGame.Networking;
 using CSZZGame.Character;
@@ -162,6 +163,10 @@ namespace CSZZGame.Networking
             else if (NetworkServer.active)
             {
                 this.StopServer();
+            }
+            else
+            {
+                NetworkManagerMenuManager.Instance.OnlyOpenThisMenu("LobbyMenu");
             }
         }
 

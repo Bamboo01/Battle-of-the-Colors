@@ -25,10 +25,23 @@ public class NetworkCharacter : NetworkBehaviour
     [SerializeField] Transform firePoint;
     [SerializeField] Transform lookAtPoint;
     [SerializeField] ParticleSystemRenderer psrenderer;
+
     // Server only
     NetworkRoomManagerScript networkManager;
     ServerCharacterData serverCharacterData;
     CSZZServerHandler server;
+
+    // Authority client only
+    [SyncVar] public Vector3 respawnedPosition;
+
+    public void OnEnable()
+    {
+        if (!hasAuthority)
+        {
+            return;
+        }
+        transform.position = respawnedPosition;
+    }
 
     public override void OnStartServer()
     {
@@ -154,26 +167,32 @@ public class NetworkCharacter : NetworkBehaviour
     [ClientRpc]
     public void RPCPOnCharacterDead(ServerCharacterData.CHARACTER_TEAM team)
     {
-        gameObject.SetActive(false);
+        if (!hasAuthority)
+        {
+            gameObject.SetActive(false);
+        }
         EventManager.Instance.Publish(EventChannels.OnClientPlayerDeath, this, team);
     }
 
     [TargetRpc]
     public void RPCToDeadPlayer(NetworkConnection target)
     {
+        gameObject.SetActive(false);
         EventManager.Instance.Publish(EventChannels.OnTargetClientPlayerDeath, this);
     }
 
     [ClientRpc]
-    public void RPCOnRespawnPlayer(ServerCharacterData.CHARACTER_TEAM team)
+    public void RPCOnRespawnPlayer(ServerCharacterData.CHARACTER_TEAM team, Vector3 pos)
     {
         gameObject.SetActive(true);
+        transform.position = pos;
         EventManager.Instance.Publish(EventChannels.OnClientPlayerSpawn, this, team);
     }
 
     [TargetRpc]
-    public void RPCToRespawnedPlayer(NetworkConnection target)
+    public void RPCToRespawnedPlayer(NetworkConnection target, Vector3 pos)
     {
+        gameObject.SetActive(true);
         EventManager.Instance.Publish(EventChannels.OnTargetClientPlayerSpawn, this);
     }
 
@@ -182,11 +201,12 @@ public class NetworkCharacter : NetworkBehaviour
     public void RespawnPlayerOnServer(Vector3 respawnPosition, Quaternion rotation)
     {
         Debug.Log("Server preparing to respawn");
+        gameObject.SetActive(true);
         transform.position = respawnPosition;
         transform.rotation = rotation;
         serverCharacterData.Respawn();
-        RPCOnRespawnPlayer(team);
-        RPCToRespawnedPlayer(connectionToClient);
+        RPCOnRespawnPlayer(team, respawnPosition);
+        RPCToRespawnedPlayer(connectionToClient, respawnPosition);
     }
 
     [Server]
