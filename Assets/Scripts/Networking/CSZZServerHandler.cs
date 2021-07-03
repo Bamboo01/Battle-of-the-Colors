@@ -13,14 +13,13 @@ namespace CSZZGame.Networking
     {
         private NetworkConnectionToClient clientConnection;
         private NetworkRoomManagerScript networkManager;
+        private NetworkCharacter networkCharacter;
 
-        void Awake()
+        [Server]
+        public void ServerSetup()
         {
             networkManager = (NetworkRoomManagerScript)NetworkManager.singleton;
-        }
-
-        void Start()
-        {
+            EventManager.Instance.Listen(EventChannels.OnServerGameStarted, OnServerGameStarted);
         }
 
         public void spawnBullet(Transform transform, ServerCharacterData data, float scale = 1.0f)
@@ -35,21 +34,40 @@ namespace CSZZGame.Networking
             NetworkServer.Spawn(bullet);
         }
 
-        public void spawnCharacter(NetworkConnectionToClient sender, ServerCharacterData characterData)
+        public void spawnCharacter(NetworkConnectionToClient sender, ServerCharacterData characterData, out int spawnIndex)
         {
+            List<Transform> spawnPoints = networkManager.teamToStartPositionList[characterData.characterTeam];
+            int index = Random.Range(0, spawnPoints.Count);
+            spawnIndex = index;
             if (clientConnection != null)
             {
                 return;
             }
             clientConnection = sender;
 
-            List<Transform> spawnPoints = networkManager.teamToStartPositionList[characterData.characterTeam];
-            int index = Random.Range(0, spawnPoints.Count);
             GameObject playerCharacter = Instantiate(networkManager.playerCharacterPrefab, spawnPoints[index].position, spawnPoints[index].rotation);
-            var networkcharacter = playerCharacter.GetComponent<NetworkCharacter>();
-            networkcharacter.SetupServerHandler(this, characterData);
-            networkcharacter.respawnedPosition = spawnPoints[index].position;
-            NetworkServer.Spawn(playerCharacter, sender);
+            networkCharacter = playerCharacter.GetComponent<NetworkCharacter>();
+            networkCharacter.SetupServerHandler(this, characterData);
+            networkCharacter.transform.position = spawnPoints[index].position;
+            networkCharacter.transform.rotation = spawnPoints[index].rotation;
+            NetworkServer.Spawn(playerCharacter);
+        }
+
+        public void AssignAuthority()
+        {
+            if (clientConnection != null)
+            {
+                networkCharacter.netIdentity.AssignClientAuthority(clientConnection);
+                networkCharacter.networkTransform.clientAuthority = true;
+            }
+        }
+
+        public void RevokeAuthority()
+        {
+            if (clientConnection != null)
+            {
+                networkCharacter.netIdentity.RemoveClientAuthority();
+            }
         }
 
         public void spawnStrategem(Transform transform, ServerCharacterData data, int skillID, NetworkCharacter caller)
@@ -63,28 +81,40 @@ namespace CSZZGame.Networking
             skill.UseSkill(transform, data, this, networkManager, caller);
         }
 
-        public void RespawnCharacter(NetworkCharacter playercharacter)
+        public void RespawnCharacter()
         {
             Debug.Log("Server waiting to respawn in 5 seconds");
-            //playercharacter.netIdentity.RemoveClientAuthority();
-            StartCoroutine(_RespawnCharacter(playercharacter));
+            StartCoroutine(_RespawnCharacter(networkCharacter));
         }
 
         private IEnumerator _RespawnCharacter(NetworkCharacter playercharacter, float time = 5.0f)
         {
-            yield return new WaitForSeconds(time);
+            playercharacter.RPCToDeadPlayer(clientConnection);
+            RevokeAuthority();
+            playercharacter.RPCPOnCharacterDead(playercharacter.team);
             List<Transform> spawnPoints = networkManager.teamToStartPositionList[playercharacter.team];
             int index = Random.Range(0, spawnPoints.Count);
-            playercharacter.respawnedPosition = spawnPoints[index].position;
-            playercharacter.transform.position = spawnPoints[index].position;
-            playercharacter.RespawnPlayerOnServer(spawnPoints[index].position, spawnPoints[index].rotation);
-            //playercharacter.netIdentity.AssignClientAuthority(clientConnection);
+            playercharacter.networkTransform.ServerTeleport(spawnPoints[index].position, spawnPoints[index].rotation);
+            yield return new WaitForSeconds(time);
+            AssignAuthority();
+            playercharacter.gameObject.SetActive(true);
+            playercharacter.RespawnPlayerOnServer();
             yield break;
         }
 
+        [Server]
         public void ServerOnGameEnd(NetworkCharacter playercharacter)
         {
-            playercharacter.netIdentity.RemoveClientAuthority();
+            RevokeAuthority();
+        }
+
+        [Server]
+        public void OnServerGameStarted(IEventRequestInfo info)
+        {
+            // Assign authority at end of the countdown!
+            AssignAuthority();
+            networkCharacter.RPCGameStarted();
+            networkCharacter.TargetClientGameStarted(clientConnection);
         }
     }
 }

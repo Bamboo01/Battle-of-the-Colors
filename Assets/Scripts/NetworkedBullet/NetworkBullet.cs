@@ -104,7 +104,6 @@ public class NetworkBullet : NetworkBehaviour
         brushparticles.SetupServerParticles(properties, color, paintingScale);
         brushParticles.transform.LookAt(lookPos, -dir);
         Destroy(brushParticles, 3.0f);
-
         // Radially Paint
         RadiallyPaint(transform.position, transform.localScale.x);
     }

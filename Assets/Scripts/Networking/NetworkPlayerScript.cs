@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Bamboo.Events;
+using CSZZGame.Networking;
+using CSZZGame.Refactor;
 
 // Network interface for the player
 namespace CSZZGame.Networking
@@ -16,13 +18,6 @@ namespace CSZZGame.Networking
         protected CSZZNetworkInterface cszzNetworkInterface;
         public bool isDedicatedServer = false;
 
-        public override void OnStartServer()
-        {
-            cszzNetworkServer = gameObject.AddComponent<CSZZServerHandler>();
-
-
-        }
-
         public override void OnStartClient()
         {
             base.OnStartClient();
@@ -35,18 +30,19 @@ namespace CSZZGame.Networking
             {
                 cszzNetworkInterface = gameObject.AddComponent<CSZZNetworkInterface>();
                 cszzNetworkInterface.SetupClient(this);
+                CmdCreatePlayerCharacter();
             }
-        }
-
-        public override void OnStartAuthority()
-        {
-            CmdCreatePlayerCharacter();
         }
 
         [Command]
         public void CmdCreatePlayerCharacter(NetworkConnectionToClient sender = null)
         {
-            cszzNetworkServer.spawnCharacter(sender, characterData);
+            cszzNetworkServer = gameObject.AddComponent<CSZZServerHandler>();
+            cszzNetworkServer.ServerSetup();
+            int index;
+            cszzNetworkServer.spawnCharacter(sender, characterData, out index);
+            OnTargetPlayerLoaded(sender, EventChannels.OnClientLoadedIntoGame, new SpawnInfo(index, characterData.characterTeam));
+            EventManager.Instance.Publish(EventChannels.OnServerClientLoadedIntoGame, this);
         }
 
         [Command]
@@ -69,11 +65,16 @@ namespace CSZZGame.Networking
             EventManager.Instance.Publish(eventChannel, null, data);
         }
 
-
         [TargetRpc]
-        public void RaiseEventsToTargettedClient(NetworkConnection target, string eventChannel, byte[] data)
+        public void RaiseEventToTarget(NetworkConnection target, string eventChannel, byte[] data)
         {
             EventManager.Instance.Publish(eventChannel, null, data);
+        }
+
+        [TargetRpc]
+        public void OnTargetPlayerLoaded(NetworkConnection target, string eventChannel, SpawnInfo spawnIndex)
+        {
+            EventManager.Instance.Publish(eventChannel, null, spawnIndex);
         }
     }
 }

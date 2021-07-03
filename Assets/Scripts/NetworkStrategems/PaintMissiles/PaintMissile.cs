@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PaintMissile : StrategemBase
 {
-    float missleCount = 6;
+    float missleCount = 12;
     float startupDelay = 0.5f;
     float missleDelay = 0.1f;
     [SerializeField] float force = 30f;
@@ -27,7 +27,7 @@ public class PaintMissile : StrategemBase
         for (int i = 0; i < missleCount; i++)
         {
             Vector3 dir = new Vector3(airdropMarker.transform.position.x, 30f, airdropMarker.transform.position.z);
-            GameObject missle = Instantiate(server.paintMissilePrefab, dir + new Vector3(Random.Range(-6, 6), 0, Random.Range(-6, 6)), server.paintMissilePrefab.transform.rotation);
+            GameObject missle = Instantiate(server.paintMissilePrefab, dir + new Vector3(Random.Range(-12, 12), 0, Random.Range(-12, 12)), server.paintMissilePrefab.transform.rotation);
             PaintMissileBehaviour missleBehaviour = missle.GetComponent<PaintMissileBehaviour>();
             missleBehaviour.server = serverHandler;
             missleBehaviour.serverCharacterData = data;

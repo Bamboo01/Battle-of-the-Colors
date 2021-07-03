@@ -123,6 +123,153 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &172579654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 172579656}
+  - component: {fileID: 172579655}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &172579655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 172579654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88ae0f25e5e0f8f48826a27ae2dee3d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _persistent: 1
+  soundClips:
+  - name: BombardmentHit
+    audioclip: {fileID: 8300000, guid: 41b8b70e522b840419fd41e1e0d5aad6, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Die
+    audioclip: {fileID: 8300000, guid: 8aee67e124a23364a900a19ccaebdf9a, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Splash0
+    audioclip: {fileID: 8300000, guid: eda507bbb7b9b6f46a3fd9f8a7a025a5, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Splash1
+    audioclip: {fileID: 8300000, guid: c61aed86305cc254b80b22f9c0c8561c, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Splash2
+    audioclip: {fileID: 8300000, guid: b5236cfa9de32b44b91513e6fb3ebf56, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Splash3
+    audioclip: {fileID: 8300000, guid: 058d4264e866f554dbd9bf3cc753e82f, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    audioclip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    audioclip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    audioclip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    audioclip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    audioclip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    audioclip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    audioclip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    audioclip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    audioclip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    audioclip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: 
+    audioclip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+--- !u!4 &172579656
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 172579654}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 64.76788, y: 10.591776, z: 56.186413}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &521226152 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4185912119247509763, guid: 5ba879b607d49ed41865508c5c1a94e6, type: 3}
@@ -667,6 +814,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2143497710}
   - component: {fileID: 2143497709}
+  - component: {fileID: 2143497711}
   - component: {fileID: 2143497707}
   - component: {fileID: 2143497708}
   m_Layer: 0
@@ -754,7 +902,7 @@ MonoBehaviour:
   - {fileID: 4773346249666374580, guid: ee528461b3460c04bbd297c09f60ee0f, type: 3}
   - {fileID: 1571797524380340188, guid: ade4321d7573c42449c740800455d992, type: 3}
   showRoomGUI: 0
-  minPlayers: 8
+  minPlayers: 1
   roomPlayerPrefab: {fileID: 5507716262819648413, guid: 5dcf6512db947b040b4df9739e32e32e, type: 3}
   RoomScene: Assets/Scenes/PlaceholderRoomMenu.unity
   GameplayScene: Assets/Scenes/SplatoonMultiplayerTest.unity
@@ -797,6 +945,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2143497711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2143497706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 839f9ae9de3217d4e845188ffd40bcbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4185912119768735403
 PrefabInstance:
   m_ObjectHideFlags: 0

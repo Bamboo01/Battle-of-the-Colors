@@ -12,12 +12,22 @@ namespace CSZZGame.Networking
 {
     public class CSZZNetworkInterface : Singleton<CSZZNetworkInterface>
     {
-        NetworkPlayerScript currentClientPlayer;
+        public NetworkPlayerScript currentClientPlayer;
 
         protected override void OnAwake()
         {
             base.OnAwake();
             _persistent = false;
+        }
+
+        public void SendTargettedNetworkEvent<T>(NetworkConnection target, string channel, T obj)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            var ms = new MemoryStream();
+            bf.Serialize(ms, obj);
+            byte[] data = ms.ToArray();
+            currentClientPlayer.RaiseEventToTarget(target, channel, data);
+            currentClientPlayer.CmdRaiseEvent(channel, ms.ToArray());
         }
 
         public void SendNetworkEvent<T>(string channel, T obj)

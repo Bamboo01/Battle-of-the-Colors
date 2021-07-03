@@ -1147,17 +1147,17 @@
     },
     "m_Name": "Distan",
     "m_DefaultReferenceName": "Vector1_1cbe3860417e46a8ae7341837f3a064b",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_CamDistThreshold",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 0.41999998688697817,
+    "m_Value": 4.0,
     "m_FloatType": 1,
     "m_RangeValues": {
         "x": 0.0,
-        "y": 2.0
+        "y": 10.0
     }
 }
 

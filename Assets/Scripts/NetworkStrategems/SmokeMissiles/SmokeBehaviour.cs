@@ -29,6 +29,6 @@ public class SmokeBehaviour : NetworkBehaviour
     [ClientRpc]
     private void RPCeffects()
     {
-        Destroy(Instantiate(smokeEffectPrefab, transform.position, smokeEffectPrefab.transform.rotation), smokeDuration) ;
+        Destroy(Instantiate(smokeEffectPrefab, transform.position, smokeEffectPrefab.transform.rotation), smokeDuration);
     }
 }

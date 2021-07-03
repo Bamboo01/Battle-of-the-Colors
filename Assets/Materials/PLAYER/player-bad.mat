@@ -113,7 +113,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_1cbe3860417e46a8ae7341837f3a064b: 0.88
+    - Vector1_1cbe3860417e46a8ae7341837f3a064b: 9
     - Vector1_2a0d5b8df77444d2bffd44d71661ac47: 0
     - Vector1_3467acfa092740b8b169e614cfad96e0: 0
     - Vector1_8c6f034fcd2447c08f1b06cff488abbd: 0.62
@@ -122,6 +122,7 @@ Material:
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
+    - _CamDistThreshold: 8.58
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2

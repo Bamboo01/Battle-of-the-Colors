@@ -9,6 +9,9 @@ using UnityEngine.SceneManagement;
 
 using CSZZGame.Networking;
 using CSZZGame.Character;
+using CSZZGame.Refactor;
+
+using Bamboo.Events;
 // CSZZ - 褰╄壊鎴樹簤
 namespace CSZZGame.Networking
 {
@@ -106,6 +109,13 @@ namespace CSZZGame.Networking
             NetworkManagerMenuManager.Instance.CloseAllMenus();
             return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
         }
+
+        public override void OnClientDisconnect(NetworkConnection conn)
+        {
+            base.OnClientDisconnect(conn);
+            EventManager.Instance.Publish(EventChannels.OnServerClientDisconnect, this);
+        }
+
         public override void OnClientSceneChanged(NetworkConnection conn)
         {
             base.OnClientSceneChanged(conn);

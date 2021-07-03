@@ -12,9 +12,9 @@ public class NetworkCharacter : NetworkBehaviour
     [SerializeField] public int ClientHP;
 
     [SyncVar]
-    [SerializeField]  public float ClientSpeed;
+    [SerializeField] public float ClientSpeed;
 
-    [SyncVar] 
+    [SyncVar]
     [SerializeField] public ServerCharacterData.CHARACTER_TEAM team;
 
     readonly SyncDictionary<int, float> clientStrategemCooldowns = new SyncDictionary<int, float>();
@@ -22,26 +22,17 @@ public class NetworkCharacter : NetworkBehaviour
 
     [SerializeField] NetworkCharacterController controller;
     [SerializeField] NetworkCharacterAnimator animator;
+    public NetworkTransform networkTransform;
     [SerializeField] Transform firePoint;
     [SerializeField] Transform lookAtPoint;
     [SerializeField] ParticleSystemRenderer psrenderer;
+    [SerializeField] Renderer[] playerRenderers;
+
 
     // Server only
     NetworkRoomManagerScript networkManager;
     ServerCharacterData serverCharacterData;
     CSZZServerHandler server;
-
-    // Authority client only
-    [SyncVar] public Vector3 respawnedPosition;
-
-    public void OnEnable()
-    {
-        if (!hasAuthority)
-        {
-            return;
-        }
-        transform.position = respawnedPosition;
-    }
 
     public override void OnStartServer()
     {
@@ -62,6 +53,12 @@ public class NetworkCharacter : NetworkBehaviour
 
     void Start()
     {
+        foreach (var a in playerRenderers)
+        {
+            a.material.SetFloat("_CamDistThreshold", 0.0f);
+        }
+        
+        networkTransform = GetComponent<NetworkTransform>();
         if (!hasAuthority)
         {
             return;
@@ -70,9 +67,6 @@ public class NetworkCharacter : NetworkBehaviour
         StrategemManager.Instance.SetupUIManager(this, clientStrategemCooldowns);
         clientStrategemCooldowns.Callback += StrategemManager.Instance.OnStrategemUpdated;
         clientStrategemReady.Callback += StrategemManager.Instance.OnStrategemReady;
-
-        controller.enabled = true;
-        animator.enabled = true;
     }
 
     void Update()
@@ -91,7 +85,7 @@ public class NetworkCharacter : NetworkBehaviour
         // Since I have no time I'm just gonna add all of them, but this is just
         // here for the sake of functionality in case I ever have to lay hands on
         // this project again
-        
+
         foreach (var strategem in networkManager.strategemProperties)
         {
             clientStrategemCooldowns.Add(strategem.strategemID, strategem.cooldownTime);
@@ -131,9 +125,8 @@ public class NetworkCharacter : NetworkBehaviour
         }
         if (serverCharacterData.HP <= 0)
         {
-            RPCPOnCharacterDead(team);
-            RPCToDeadPlayer(connectionToClient);
-            server.RespawnCharacter(this);
+            gameObject.SetActive(false);
+            server.RespawnCharacter();
         }
     }
 
@@ -167,52 +160,69 @@ public class NetworkCharacter : NetworkBehaviour
     [ClientRpc]
     public void RPCPOnCharacterDead(ServerCharacterData.CHARACTER_TEAM team)
     {
-        if (!hasAuthority)
-        {
-            gameObject.SetActive(false);
-        }
+        gameObject.SetActive(false);
         EventManager.Instance.Publish(EventChannels.OnClientPlayerDeath, this, team);
     }
 
     [TargetRpc]
     public void RPCToDeadPlayer(NetworkConnection target)
     {
-        gameObject.SetActive(false);
         EventManager.Instance.Publish(EventChannels.OnTargetClientPlayerDeath, this);
     }
 
     [ClientRpc]
-    public void RPCOnRespawnPlayer(ServerCharacterData.CHARACTER_TEAM team, Vector3 pos)
+    public void RPCOnRespawnPlayer(ServerCharacterData.CHARACTER_TEAM team)
     {
         gameObject.SetActive(true);
-        transform.position = pos;
         EventManager.Instance.Publish(EventChannels.OnClientPlayerSpawn, this, team);
     }
 
     [TargetRpc]
-    public void RPCToRespawnedPlayer(NetworkConnection target, Vector3 pos)
+    public void RPCToRespawnedPlayer(NetworkConnection target)
     {
         gameObject.SetActive(true);
+        controller.enabled = true;
+        animator.enabled = true;
         EventManager.Instance.Publish(EventChannels.OnTargetClientPlayerSpawn, this);
+    }
+
+    [TargetRpc]
+    public void RPCOnReadyTargettedPlayer()
+    {
+        controller.enabled = true;
     }
 
 
     [Server]
-    public void RespawnPlayerOnServer(Vector3 respawnPosition, Quaternion rotation)
+    public void RespawnPlayerOnServer()
     {
         Debug.Log("Server preparing to respawn");
         gameObject.SetActive(true);
-        transform.position = respawnPosition;
-        transform.rotation = rotation;
         serverCharacterData.Respawn();
-        RPCOnRespawnPlayer(team, respawnPosition);
-        RPCToRespawnedPlayer(connectionToClient, respawnPosition);
+        RPCOnRespawnPlayer(team);
+        RPCToRespawnedPlayer(connectionToClient);
     }
 
     [Server]
     void OnServerEnd(IEventRequestInfo info)
     {
         server.ServerOnGameEnd(this);
+    }
+
+    [TargetRpc]
+    public void TargetClientGameStarted(NetworkConnection connection)
+    {
+        controller.enabled = true;
+        animator.enabled = true;
+    }
+
+    [ClientRpc]
+    public void RPCGameStarted()
+    {
+        foreach (var a in playerRenderers)
+        {
+            a.material.SetFloat("_CamDistThreshold", 8.0f);
+        }
     }
 
     //void TeamSet(ServerCharacterData.CHARACTER_TEAM oldteam, ServerCharacterData.CHARACTER_TEAM newteam)

@@ -10,6 +10,8 @@ using Bamboo.Events;
 using CSZZGame.Networking;
 using CSZZGame.Refactor;
 using Bamboo.UI;
+using DG.Tweening;
+
 
 public class GameController : NetworkBehaviour
 {
@@ -18,6 +20,7 @@ public class GameController : NetworkBehaviour
     double initialGameTime = 0;
     double currentGameTime = 0;
     bool gameEnded;
+    float StartTime = 2.0f;
 
     //I AM CODING THIS AT 4AM
     Queue<GameObject> team1LiveContainer = new Queue<GameObject>();
@@ -42,8 +45,17 @@ public class GameController : NetworkBehaviour
     [SerializeField] Image team2Fill;
     [SerializeField] TMP_Text team2Text;
     [SerializeField] Transform endTarget;
+    [SerializeField] RectTransform readyUIGameObject;
+    [SerializeField] RectTransform goUIGameObject;
+    [SerializeField] RectTransform waitingUIGameObject;
 
     [SyncVar] int maxHealth = 1;
+
+    public Dictionary<ServerCharacterData.CHARACTER_TEAM, List<Transform>> teamToStartPositionList = new Dictionary<ServerCharacterData.CHARACTER_TEAM, List<Transform>>();
+    public Dictionary<int, StrategemProperties> idToStrategem = new Dictionary<int, StrategemProperties>();
+
+    bool isGameStarted = false;
+    int numLoaded = 0;
 
     public override void OnStartClient()
     {
@@ -57,6 +69,10 @@ public class GameController : NetworkBehaviour
         EventManager.Instance.Listen(EventChannels.OnClientPlayerSpawn, OnClientPlayerSpawn);
         EventManager.Instance.Listen(EventChannels.OnHealthChange, OnHealthChange);
         EventManager.Instance.Listen(EventChannels.OnServerGameEnd, OnServerGameEnd);
+        EventManager.Instance.Listen(EventChannels.OnClientLoadedIntoGame, OnClientLoadedIntoGame);
+        EventManager.Instance.Listen(EventChannels.OnServerClientLoadedIntoGame, OnServerClientLoadedIntoGame);
+        EventManager.Instance.Listen(EventChannels.OnServerAllClientsLoadedIntoGame, OnServerAllClientsLoadedIntoGame);
+        EventManager.Instance.Listen(EventChannels.OnAllClientsLoadedIntoGame, OnAllClientsLoadedIntoGame);
     }
 
     void InitializeServer()
@@ -67,31 +83,103 @@ public class GameController : NetworkBehaviour
         maxHealth = networkManager.maxPlayerHealth;
     }
 
+    void Awake()
+    {
+        teamToStartPositionList = new Dictionary<ServerCharacterData.CHARACTER_TEAM, List<Transform>>();
+        teamToStartPositionList.Add(ServerCharacterData.CHARACTER_TEAM.TEAM_1, SpawnPointManager.Instance.team1SpawnPoints);
+        teamToStartPositionList.Add(ServerCharacterData.CHARACTER_TEAM.TEAM_2, SpawnPointManager.Instance.team2SpawnPoints);
+    }
+
     private void Update()
     {
-        if(NetworkTime.time < initialGameTime + MatchDuration)
+        if (isGameStarted)
         {
-            currentGameTime = MatchDuration - (NetworkTime.time - initialGameTime);
-            TimeSpan t = TimeSpan.FromSeconds(currentGameTime);
-            string timeString = "";
-            if (t.Minutes > 0)
+            if (NetworkTime.time < initialGameTime + MatchDuration)
             {
-                timeString = t.ToString(@"mm\:ss");
+                currentGameTime = MatchDuration - (NetworkTime.time - initialGameTime);
+                TimeSpan t = TimeSpan.FromSeconds(currentGameTime);
+                string timeString = "";
+                if (t.Minutes > 0)
+                {
+                    timeString = t.ToString(@"mm\:ss");
+                }
+                else
+                {
+                    timeString = t.ToString(@"ss\:ff");
+                }
+                timerText.text = timeString;
             }
-            else
+            else if (!gameEnded && isServer)
             {
-                timeString = t.ToString(@"ss\:ff");
+                // I wan die alr
+                gameEnded = true;
+                NetworkPainterManager.Instance.paintCalculator.StartCalculatingPaint();
+                var scores = NetworkPainterManager.Instance.paintCalculator.colorCounterList;
+                CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnServerGameEnd, new SerializablePaintScore(scores[0], scores[1]));
             }
-            timerText.text = timeString;
         }
-        else if (!gameEnded && isServer)
+    }
+
+    void OnServerAllClientsLoadedIntoGame(IEventRequestInfo info)
+    {
+        // Begin a countdown and send events to client to start counting down
+        CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnAllClientsLoadedIntoGame);
+        StartCoroutine(DelayedStartGame(StartTime));
+    }
+
+    void OnAllClientsLoadedIntoGame(IEventRequestInfo info)
+    {
+        waitingUIGameObject.gameObject.SetActive(false);
+        // Do tweening
+        MenuManager.Instance.OnlyOpenThisMenu("PregameMenu");
+        readyUIGameObject.gameObject.SetActive(true);
+        readyUIGameObject.DORotate(new Vector3(0, 0, -340), 1.5f, RotateMode.LocalAxisAdd).OnComplete(
+            () =>
+            {
+                readyUIGameObject.DOScale(Vector3.zero, 0.5f).OnComplete(() => { readyUIGameObject.gameObject.SetActive(false); }).Play();
+                goUIGameObject.gameObject.SetActive(true);
+                goUIGameObject.DOScale(new Vector3(3.0f, 3.0f, 3.0f), 0.6f).OnPlay(
+                    ()=> 
+                    {
+                        goUIGameObject.DORotate(new Vector3(0, 0, -340), 0.5f, RotateMode.LocalAxisAdd);
+                    }
+                    ).OnComplete(() => 
+                        {
+                            goUIGameObject.DOScale(Vector3.zero, 0.2f).OnComplete(() => { goUIGameObject.gameObject.SetActive(false); }).Play().OnComplete(() =>
+                            {
+                                MenuManager.Instance.OnlyOpenThisMenu("GameInfoMenu");
+                                MenuManager.Instance.OpenMenu("PlayerInfoMenu");
+                                MenuManager.Instance.OpenMenu("StrategemMenu");
+                                isGameStarted = true;
+                                initialGameTime = NetworkTime.time;
+                            }
+                            );
+                        }
+                        ).Play();
+            }
+            ).Play();
+    }
+
+    public void OnClientLoadedIntoGame(IEventRequestInfo info)
+    {
+        EventRequestInfo<SpawnInfo> eventRequestInfo = info as EventRequestInfo<SpawnInfo>;
+        List<Transform> spawnPoints = teamToStartPositionList[eventRequestInfo.body.Team];
+        CameraManager.Instance.AssignTargets(spawnPoints[eventRequestInfo.body.SpawnIndex], spawnPoints[eventRequestInfo.body.SpawnIndex]);
+    }
+
+    public void OnServerClientLoadedIntoGame(IEventRequestInfo info)
+    {
+        numLoaded++;
+        if (numLoaded == networkManager.numPlayers)
         {
-            // I wan die alr
-            gameEnded = true;
-            NetworkPainterManager.Instance.paintCalculator.StartCalculatingPaint();
-            var scores = NetworkPainterManager.Instance.paintCalculator.colorCounterList;
-            CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnServerGameEnd, new SerializablePaintScore(scores[0], scores[1]));
+            Debug.Log("All clients have connected!");
+            EventManager.Instance.Publish(EventChannels.OnServerAllClientsLoadedIntoGame, this);
         }
+    }
+
+    public void OnServerClientDisconnect(IEventRequestInfo info)
+    {
+        numLoaded--;
     }
 
     public void OnHealthChange(IEventRequestInfo info)
@@ -211,4 +299,15 @@ public class GameController : NetworkBehaviour
         }
         SceneManager.LoadScene("PlaceholderMainMenu");
     }
+
+    public IEnumerator DelayedStartGame(float t)
+    {
+        yield return new WaitForSeconds(t);
+        CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnServerGameStarted);
+        yield break;
+    }
+
+    #region Countdown
+
+    #endregion
 }

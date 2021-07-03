@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class SmokeMissile : StrategemBase
 {
-    float missleCount = 6;
+    float missleCount = 8;
     float startupDelay = 0.5f;
     float missleDelay = 0.1f;
     [SerializeField] float force = 30f;
@@ -27,7 +27,7 @@ public class SmokeMissile : StrategemBase
         for (int i = 0; i < missleCount; i++)
         {
             Vector3 dir = new Vector3(airdropMarker.transform.position.x, 30f, airdropMarker.transform.position.z);
-            GameObject missle = Instantiate(server.smokeMissilePrefab, dir + new Vector3(Random.Range(-3, 3), 0, Random.Range(-3, 3)), server.smokeMissilePrefab.transform.rotation);
+            GameObject missle = Instantiate(server.smokeMissilePrefab, dir + new Vector3(Random.Range(-6, 6), 0, Random.Range(-6, 6)), server.smokeMissilePrefab.transform.rotation);
             NetworkServer.Spawn(missle);
             yield return new WaitForSeconds(missleDelay);
         }
