@@ -6,7 +6,6 @@ using UnityEngine;
 public class SmokeBehaviour : NetworkBehaviour
 {
     [SerializeField] private Collider collider;
-    [SerializeField] private GameObject smokeEffectPrefab;
     [SerializeField] private float smokeDuration = 8f;
 
     public override void OnStartClient()
@@ -29,6 +28,11 @@ public class SmokeBehaviour : NetworkBehaviour
     [ClientRpc]
     private void RPCeffects()
     {
-        Destroy(Instantiate(smokeEffectPrefab, transform.position, smokeEffectPrefab.transform.rotation), smokeDuration);
+        GameObject particlesGameObject = ObjectPool.Instance.spawnFromPool("SmokeEffect");
+        particlesGameObject.transform.position = transform.position;
+        particlesGameObject.transform.rotation = transform.rotation;
+        particlesGameObject.SetActiveDelayed(false, smokeDuration);
+
+        AudioSource pointSound = SoundManager.Instance.PlaySoundAtPointByName("SmokeBombHit", transform.position);
     }
 }

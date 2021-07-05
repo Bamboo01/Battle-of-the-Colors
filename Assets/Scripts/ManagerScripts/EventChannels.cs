@@ -18,7 +18,7 @@ namespace CSZZGame.Refactor
 
         static public string OnHealthChange = "OnHealthChangeChannel";
 
-        static public string OnServerGameEnd = "OnServerGameEndChannel";
+        static public string OnClientGameEnd = "OnClientGameEndhannel";
 
         static public string OnClientLoadedIntoGame = "OnClientLoadedIntoGameChannel";
         static public string OnServerClientLoadedIntoGame = "OnServerClientLoadedIntoGameChannel";
@@ -27,5 +27,7 @@ namespace CSZZGame.Refactor
         static public string OnServerAllClientsLoadedIntoGame = "OnServerAllClientsLoadedIntoGameChannel";
         static public string OnAllClientsLoadedIntoGame = "OnAllClientsLoadedIntoGameChannel";
         static public string OnServerGameStarted = "OnServerGameStartedChannel";
+        static public string OnClientGameReachedHype = "OnClientGameReachedHypeChannel";
+        static public string OnTargetClientHitSomething = "OnTargetClientHitSomethingChannel";
     }
 }

@@ -34,7 +34,7 @@ namespace CSZZGame.Networking
 
         private GameObject dedicatedServer;
 
-        [SerializeField] bool isDedicatedServer;
+        [SerializeField] public bool isDedicatedServer;
 
         public Dictionary<ServerCharacterData.CHARACTER_TEAM, List<Transform>> teamToStartPositionList;
         public Dictionary<int, StrategemProperties> idToStrategem = new Dictionary<int, StrategemProperties>();
@@ -178,6 +178,12 @@ namespace CSZZGame.Networking
             {
                 NetworkManagerMenuManager.Instance.OnlyOpenThisMenu("LobbyMenu");
             }
+        }
+
+        public void StartDedicatedServer()
+        {
+            NetworkManagerMenuManager.Instance.OnlyOpenThisMenu("DedicatedServerMenu");
+            GetComponent<NetworkServerStarter>().startServer();
         }
 
         public void OnStartGameButtonClick()

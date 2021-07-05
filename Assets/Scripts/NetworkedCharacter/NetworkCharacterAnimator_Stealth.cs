@@ -18,6 +18,10 @@ public class NetworkCharacterAnimator_Stealth : NetworkBehaviour
     private bool localIsStealth = false;
     private bool thisFrameStealth = false;
 
+    AudioSource swimSoundSource = null;
+    [SerializeField]
+    NetworkCharacterSoundController soundController;
+
     public override void OnStartAuthority()
     {
         EventManager.Instance.Listen(EventChannels.OnOwnCharacterStateChangeEvent, OnCharacterStateChangeEvent);
@@ -47,6 +51,11 @@ public class NetworkCharacterAnimator_Stealth : NetworkBehaviour
     {
         if (!hasAuthority)
             return;
+        
+        if (swimSoundSource)
+        {
+            swimSoundSource.transform.position = transform.position;
+        }
 
         if (thisFrameStealth != localIsStealth)
         {
@@ -66,6 +75,19 @@ public class NetworkCharacterAnimator_Stealth : NetworkBehaviour
 
     private void SyncStealthState(bool oldState, bool newState)
     {
+        soundController.enabled = !newState;
+        SoundManager.Instance.PlaySoundAtPointByName("SwimEnter", transform.position);
+        if (newState)
+        {
+            swimSoundSource = SoundManager.Instance.PlaySoundAtPointByName("SwimLoop", transform.position, false);
+        }
+        else 
+        {
+            swimSoundSource.Stop();
+            swimSoundSource.gameObject.SetActive(false);
+            swimSoundSource = null;
+        }
+
         if (hasAuthority)
             return;
 

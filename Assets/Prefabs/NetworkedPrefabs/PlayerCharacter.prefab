@@ -789,6 +789,7 @@ GameObject:
   - component: {fileID: 7912340505395814315}
   - component: {fileID: 6679504345711940837}
   - component: {fileID: 2149615013274733930}
+  - component: {fileID: 8810095529610670933}
   m_Layer: 3
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -868,6 +869,7 @@ MonoBehaviour:
   team: 0
   controller: {fileID: 7495637079963509014}
   animator: {fileID: 4368064711272603126}
+  soundController: {fileID: 8810095529610670933}
   networkTransform: {fileID: 7912340505395814315}
   firePoint: {fileID: 9077345702537557434}
   lookAtPoint: {fileID: 6184638619281015600}
@@ -895,6 +897,7 @@ MonoBehaviour:
     normalSpeed: 10
     stealthSpeed: 20
     stealthClimbSpeed: 20
+    stealthExitSpeed: 5
   networkCharacter: {fileID: 6184638618461802934}
 --- !u!114 &4368064711272603126
 MonoBehaviour:
@@ -925,6 +928,7 @@ MonoBehaviour:
   syncInterval: 0.1
   modelGameObject: {fileID: 1344102552714158389}
   stealthParticleEmitter: {fileID: 8472896993126914622}
+  soundController: {fileID: 8810095529610670933}
 --- !u!114 &7912340505395814315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -984,6 +988,19 @@ MonoBehaviour:
   interpolateScale: 1
   syncScale: 1
   target: {fileID: 6184638619281015600}
+--- !u!114 &8810095529610670933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6184638618461802932}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f2ba254f92ddd4f8b026501108c2af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 6184638618461802928}
 --- !u!1 &6184638618556216453
 GameObject:
   m_ObjectHideFlags: 0

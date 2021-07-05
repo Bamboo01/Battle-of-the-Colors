@@ -31,6 +31,10 @@ public class GameController : NetworkBehaviour
     [SerializeField] TextMeshProUGUI timerText;
 
     [Header("Prefabs")]
+    [SerializeField] string bgmName;
+    [SerializeField] string hypebgmName;
+
+    [Header("Prefabs")]
     [SerializeField] GameObject Team1LivePrefabUI;
     [SerializeField] GameObject Team1DeadPrefabUI;
     [SerializeField] GameObject Team2LivePrefabUI;
@@ -46,16 +50,29 @@ public class GameController : NetworkBehaviour
     [SerializeField] TMP_Text team2Text;
     [SerializeField] Transform endTarget;
     [SerializeField] RectTransform readyUIGameObject;
+    [SerializeField] Image hitmarkerUIGameObject;
     [SerializeField] RectTransform goUIGameObject;
     [SerializeField] RectTransform waitingUIGameObject;
+    [SerializeField] RectTransform lastMinUIGameObject;
 
     [SyncVar] int maxHealth = 1;
 
     public Dictionary<ServerCharacterData.CHARACTER_TEAM, List<Transform>> teamToStartPositionList = new Dictionary<ServerCharacterData.CHARACTER_TEAM, List<Transform>>();
     public Dictionary<int, StrategemProperties> idToStrategem = new Dictionary<int, StrategemProperties>();
 
+    bool isHypeCalled = false;
     bool isGameStarted = false;
     int numLoaded = 0;
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        InitializeServer();
+        
+        EventManager.Instance.Listen(EventChannels.OnServerClientLoadedIntoGame, OnServerClientLoadedIntoGame);
+        EventManager.Instance.Listen(EventChannels.OnServerAllClientsLoadedIntoGame, OnServerAllClientsLoadedIntoGame);
+        EventManager.Instance.Listen(EventChannels.OnClientGameEnd, OnClientGameEnd);
+    }
 
     public override void OnStartClient()
     {
@@ -68,11 +85,11 @@ public class GameController : NetworkBehaviour
         EventManager.Instance.Listen(EventChannels.OnTargetClientPlayerSpawn, OnTargetClientPlayerSpawn);
         EventManager.Instance.Listen(EventChannels.OnClientPlayerSpawn, OnClientPlayerSpawn);
         EventManager.Instance.Listen(EventChannels.OnHealthChange, OnHealthChange);
-        EventManager.Instance.Listen(EventChannels.OnServerGameEnd, OnServerGameEnd);
         EventManager.Instance.Listen(EventChannels.OnClientLoadedIntoGame, OnClientLoadedIntoGame);
-        EventManager.Instance.Listen(EventChannels.OnServerClientLoadedIntoGame, OnServerClientLoadedIntoGame);
-        EventManager.Instance.Listen(EventChannels.OnServerAllClientsLoadedIntoGame, OnServerAllClientsLoadedIntoGame);
         EventManager.Instance.Listen(EventChannels.OnAllClientsLoadedIntoGame, OnAllClientsLoadedIntoGame);
+        EventManager.Instance.Listen(EventChannels.OnClientGameReachedHype, OnClientGameReachedHype);
+        EventManager.Instance.Listen(EventChannels.OnClientGameEnd, OnClientGameEnd);
+        EventManager.Instance.Listen(EventChannels.OnTargetClientHitSomething, OnTargetClientHitSomething);
     }
 
     void InitializeServer()
@@ -108,6 +125,13 @@ public class GameController : NetworkBehaviour
                     timeString = t.ToString(@"ss\:ff");
                 }
                 timerText.text = timeString;
+
+                // TODO: This could honestly be a coroutine, but I'm really lazy, let's do it next time!
+                if (isServer && !isHypeCalled && currentGameTime < 60.0f)
+                {
+                    isHypeCalled = true;
+                    CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnClientGameReachedHype);
+                }
             }
             else if (!gameEnded && isServer)
             {
@@ -115,9 +139,23 @@ public class GameController : NetworkBehaviour
                 gameEnded = true;
                 NetworkPainterManager.Instance.paintCalculator.StartCalculatingPaint();
                 var scores = NetworkPainterManager.Instance.paintCalculator.colorCounterList;
-                CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnServerGameEnd, new SerializablePaintScore(scores[0], scores[1]));
+                CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnClientGameEnd, new SerializablePaintScore(scores[0], scores[1]));
             }
         }
+    }
+
+    void OnTargetClientHitSomething(IEventRequestInfo info)
+    {
+        SoundManager.Instance.PlaySoundByName("Damage");
+        hitmarkerUIGameObject.gameObject.SetActive(true);
+        hitmarkerUIGameObject.DOFade(1.0f, 0.1f).OnComplete(() =>
+        {
+            hitmarkerUIGameObject.DOFade(1.0f, 0.0f);
+            hitmarkerUIGameObject.DOFade(0.0f, 0.4f).OnComplete(() =>
+            {
+                hitmarkerUIGameObject.gameObject.SetActive(false);
+            }).Play();
+        }).Play();
     }
 
     void OnServerAllClientsLoadedIntoGame(IEventRequestInfo info)
@@ -125,6 +163,26 @@ public class GameController : NetworkBehaviour
         // Begin a countdown and send events to client to start counting down
         CSZZNetworkInterface.Instance.SendNetworkEvent(EventChannels.OnAllClientsLoadedIntoGame);
         StartCoroutine(DelayedStartGame(StartTime));
+        isGameStarted = true;
+        initialGameTime = NetworkTime.time;
+    }
+
+    void OnClientGameReachedHype(IEventRequestInfo info)
+    {
+        SoundManager.Instance.StopSoundByName(bgmName);
+        SoundManager.Instance.PlaySoundByName(hypebgmName);
+        lastMinUIGameObject.gameObject.SetActive(true);
+        lastMinUIGameObject.DORotate(new Vector3(0, 0, -340), 1.5f, RotateMode.LocalAxisAdd).OnComplete(
+            () =>
+            {
+                lastMinUIGameObject.DOScale(Vector3.zero, 0.5f).OnComplete(
+                    () => 
+                    { 
+                        lastMinUIGameObject.gameObject.SetActive(false); 
+                    }
+                    ).Play();
+            }
+            ).Play();
     }
 
     void OnAllClientsLoadedIntoGame(IEventRequestInfo info)
@@ -142,6 +200,7 @@ public class GameController : NetworkBehaviour
                     ()=> 
                     {
                         goUIGameObject.DORotate(new Vector3(0, 0, -340), 0.5f, RotateMode.LocalAxisAdd);
+                        SoundManager.Instance.PlaySoundByName("Whistle");
                     }
                     ).OnComplete(() => 
                         {
@@ -152,6 +211,7 @@ public class GameController : NetworkBehaviour
                                 MenuManager.Instance.OpenMenu("StrategemMenu");
                                 isGameStarted = true;
                                 initialGameTime = NetworkTime.time;
+                                SoundManager.Instance.PlaySoundByName(bgmName);
                             }
                             );
                         }
@@ -188,7 +248,7 @@ public class GameController : NetworkBehaviour
         healthFill.fillAmount = ((float)eventRequestInfo.body / (float)maxHealth);
     }
 
-    public void OnServerGameEnd(IEventRequestInfo info)
+    public void OnClientGameEnd(IEventRequestInfo info)
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -200,6 +260,8 @@ public class GameController : NetworkBehaviour
         {
             team1Fill.fillAmount = 1.0f;
             team2Fill.fillAmount = 1.0f;
+            team1Text.text = 0.ToString();
+            team2Text.text = 0.ToString();
         }
         else
         {
@@ -227,6 +289,8 @@ public class GameController : NetworkBehaviour
         }
         CameraManager.Instance.AssignTargets(endTarget, endTarget);
         MenuManager.Instance.OnlyOpenThisMenu("EndGameMenu");
+        SoundManager.Instance.StopAllSounds();
+        SoundManager.Instance.PlaySoundByName("Whistle");
     }
 
     public void OnTargetClientPlayerDeath(IEventRequestInfo info)
@@ -297,7 +361,7 @@ public class GameController : NetworkBehaviour
         {
             networkManager.StopClient();
         }
-        SceneManager.LoadScene("PlaceholderMainMenu");
+        networkManager.ServerChangeScene(networkManager.offlineScene);
     }
 
     public IEnumerator DelayedStartGame(float t)

@@ -67,6 +67,7 @@ public class ObjectPool : MonoBehaviour
         {
             GameObject obj = Instantiate(tagToPool[tag].prefab);
             obj.SetActive(true);
+            obj.transform.SetParent(this.gameObject.transform);
             poolDirectory[tag].Enqueue(obj);
             return obj;
         }

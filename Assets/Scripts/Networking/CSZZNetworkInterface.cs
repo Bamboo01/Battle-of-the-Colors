@@ -38,7 +38,7 @@ namespace CSZZGame.Networking
             if (currentClientPlayer.isDedicatedServer)
             {
                 byte[] data = ms.ToArray();
-                EventManager.Instance.Publish(channel, null, data);
+                EventManager.Instance.Publish(channel, this, data);
                 currentClientPlayer.RaiseEventsToClients(channel, data);
             }
             else
@@ -49,7 +49,16 @@ namespace CSZZGame.Networking
 
         public void SendNetworkEvent(string channel)
         {
-            currentClientPlayer.CmdRaiseEvent(channel, null);
+            if (currentClientPlayer.isDedicatedServer)
+            {
+                EventManager.Instance.Publish(channel, this);
+                currentClientPlayer.RaiseEventsToClients(channel, null);
+            }
+            else
+            {
+                currentClientPlayer.CmdRaiseEvent(channel, null);
+            }
+            
         }
 
         public static T DeserializeEventData<T>(byte[] data = null)

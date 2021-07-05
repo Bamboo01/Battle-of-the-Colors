@@ -16,29 +16,29 @@ public class NetworkBullet : NetworkBehaviour
     public ParticlePainterProperties properties;
     // The ACTUAL color of the particle
     private Color color;
-    // Particles that will be RPC'd (dummy particles)
-    public GameObject paintParticlesPrefab;
     // Particles that will only be spawned on the server
     public GameObject brushParticlesPrefab;
 
 
     // Bullet properties
+    private NetworkConnection shooterConnection;
     private float gravityModifier;
     private Vector3 lastPosition;
     private float distanceTravelled = 0.0f;
-    public float masDistanceTravelled = 300.0f;
+    public float maxDistanceTravelled = 300.0f;
     public float paintingScale = 1.0f;
     private int damage;
     public ServerCharacterData.CHARACTER_TEAM bulletTeam;
 
     [Server]
-    public void ServerSetup(ServerCharacterData.CHARACTER_TEAM team, float speed, float paintscale = 1.0f, float maxDistance = 300.0f, float gravity = 9.8f, int dmg = 1)
+    public void ServerSetup(NetworkConnection conn, ServerCharacterData.CHARACTER_TEAM team, float speed, float paintscale = 1.0f, float maxDistance = 300.0f, float gravity = 9.8f, int dmg = 1)
     {
+        shooterConnection = conn;
         bulletTeam = team;
         color = ServerCharacterData.teamToColor(bulletTeam);
         bulletSpeed = speed;
         gravityModifier = gravity;
-        masDistanceTravelled = maxDistance;
+        maxDistanceTravelled = maxDistance;
         paintingScale = paintscale;
         rb.useGravity = false;
         damage = dmg;
@@ -50,7 +50,7 @@ public class NetworkBullet : NetworkBehaviour
         distanceTravelled += (lastPosition - transform.position).magnitude;
         lastPosition = transform.position;
 
-        if (distanceTravelled > masDistanceTravelled)
+        if (distanceTravelled > maxDistanceTravelled)
         {
             NetworkServer.Destroy(gameObject);
         }
@@ -60,7 +60,6 @@ public class NetworkBullet : NetworkBehaviour
     {
         lastPosition = transform.position;
         rb.velocity = transform.forward * bulletSpeed;
-        rb.AddForce(new Vector3(0, -gravityModifier, 0) * rb.mass);
     }
 
     public override void OnStartClient()
@@ -80,6 +79,14 @@ public class NetworkBullet : NetworkBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        if (isServer && rb)
+        {
+            rb.AddForce(new Vector3(0, -gravityModifier, 0) * rb.mass);
+        }
+    }
+
     [Server]
     void OnCollisionEnter(Collision collision)
     {
@@ -94,7 +101,7 @@ public class NetworkBullet : NetworkBehaviour
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("player"))
         {
-            collision.gameObject.GetComponent<NetworkCharacter>().takeDamage(damage, bulletTeam);
+            collision.gameObject.GetComponent<NetworkCharacter>().takeDamage(shooterConnection, damage, bulletTeam);
             return;
         }
 
@@ -106,12 +113,17 @@ public class NetworkBullet : NetworkBehaviour
         Destroy(brushParticles, 3.0f);
         // Radially Paint
         RadiallyPaint(transform.position, transform.localScale.x);
+
+        if ((NetworkManager.singleton as NetworkRoomManagerScript).isDedicatedServer)
+        {
+            Destroy(gameObject);
+        }
     }
 
     [Server]
     void RadiallyPaint(Vector3 center, float radius)
     {
-        Collider[] hitColliders = Physics.OverlapSphere(center, radius * 4.0f);
+        Collider[] hitColliders = Physics.OverlapSphere(center, radius * 2.5f);
         foreach (var hitCollider in hitColliders)
         {
             Paintable p = hitCollider.GetComponent<Paintable>();
@@ -128,10 +140,17 @@ public class NetworkBullet : NetworkBehaviour
     void SpawnParticlesRPC(Vector3 contactPoint, Vector3 target, Vector3 up, Vector4 color, float scale)
     {
         Debug.Log("Particles spawned");
-        GameObject particlesGameObject = Instantiate(paintParticlesPrefab, contactPoint, transform.rotation);
+
+        GameObject particlesGameObject = ObjectPool.Instance.spawnFromPool("PaintBulletParticles");
+        particlesGameObject.transform.position = contactPoint;
+        particlesGameObject.transform.rotation = transform.rotation;
         particlesGameObject.transform.LookAt(target, up);
         particlesGameObject.GetComponent<BulletPaintParticlesManager>().SetupPaintParticles(color, scale);
-        Destroy(particlesGameObject, 3.0f);
+        particlesGameObject.SetActiveDelayed(false, 3.0f);
+
+
+        AudioSource pointSound = SoundManager.Instance.PlaySoundAtPointByName("Splash" + Random.Range(0, 4).ToString(), contactPoint);
+
         Destroy(gameObject);
     }
 }

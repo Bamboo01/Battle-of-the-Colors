@@ -12,6 +12,8 @@ public class A2ShieldBehaviour : NetworkBehaviour
 
     float spawnTime = 0;
 
+    AudioSource loopSource = null;
+
     [Server]
     void ServerUpdate()
     {
@@ -34,6 +36,24 @@ public class A2ShieldBehaviour : NetworkBehaviour
         {
             Destroy(collider);
         }
+        var a = SoundManager.Instance.PlaySoundAtPointByName("ShieldUp", transform.position);
+        StartCoroutine(playLoop(a.clip.length));
+    }
+
+    void OnDestroy()
+    {
+        if (!isClient)
+        {
+            return;
+        }
+        if (loopSource != null)
+        {
+            loopSource.Stop();
+            loopSource.gameObject.SetActive(false);
+            loopSource = null;
+        }
+        SoundManager.Instance.PlaySoundAtPointByName("ShieldDown", transform.position);
+        StopAllCoroutines();
     }
 
     void Update()
@@ -53,6 +73,20 @@ public class A2ShieldBehaviour : NetworkBehaviour
         {
             Debug.Log("deleto bullet");
             NetworkServer.Destroy(other.gameObject);
+            RPCHitShieldBullet();
         }
+    }
+
+    [ClientRpc]
+    void RPCHitShieldBullet()
+    {
+        SoundManager.Instance.PlaySoundAtPointByName("ShieldHit", transform.position);
+    }
+
+    IEnumerator playLoop(float t)
+    {
+        yield return new WaitForSeconds(t);
+        loopSource = SoundManager.Instance.PlaySoundAtPointByName("ShieldLoop", transform.position, false);
+        yield break;
     }
 }

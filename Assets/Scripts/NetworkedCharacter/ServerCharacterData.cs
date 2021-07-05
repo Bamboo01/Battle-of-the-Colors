@@ -34,7 +34,7 @@ public class ServerCharacterData : MonoBehaviour
 
     void DefaultSetup()
     {
-        WeaponCD = 0.5f;
+        WeaponCD = 0.15f;
         characterTeam = CHARACTER_TEAM.TEAM_1;
     }
 
@@ -57,7 +57,7 @@ public class ServerCharacterData : MonoBehaviour
             strategemCooldowns.Add(strategem.strategemID, strategem.cooldownTime);
         }
         HP = networkManager.maxPlayerHealth;
-        WeaponCD = 0.3f;
+        WeaponCD = 0.15f;
     }
 
     void FixedUpdate()

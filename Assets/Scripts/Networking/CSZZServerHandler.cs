@@ -20,6 +20,7 @@ namespace CSZZGame.Networking
         {
             networkManager = (NetworkRoomManagerScript)NetworkManager.singleton;
             EventManager.Instance.Listen(EventChannels.OnServerGameStarted, OnServerGameStarted);
+            EventManager.Instance.Listen(EventChannels.OnClientGameEnd, OnClientGameEnd);
         }
 
         public void spawnBullet(Transform transform, ServerCharacterData data, float scale = 1.0f)
@@ -30,7 +31,7 @@ namespace CSZZGame.Networking
             bullet.transform.localScale = new Vector3(scale, scale, scale);
             NetworkBullet networkedPaintBullet = bullet.GetComponent<NetworkBullet>();
 
-            networkedPaintBullet.ServerSetup(data.characterTeam, 50.0f, 1.0f, 300.0f, 0.01f);
+            networkedPaintBullet.ServerSetup(clientConnection, data.characterTeam, 80.0f, 1.0f, 300.0f, 9.8f);
             NetworkServer.Spawn(bullet);
         }
 
@@ -103,9 +104,9 @@ namespace CSZZGame.Networking
         }
 
         [Server]
-        public void ServerOnGameEnd(NetworkCharacter playercharacter)
+        public void OnClientGameEnd(IEventRequestInfo info)
         {
-            RevokeAuthority();
+            NetworkServer.Destroy(networkCharacter.gameObject);
         }
 
         [Server]

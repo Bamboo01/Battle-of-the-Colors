@@ -250,7 +250,7 @@ public class SoundManager : Singleton<SoundManager>
     }
     #endregion
 
-    AudioSource PlaySoundAtPointByName(string Name, Vector3 position, bool oneshot = true)
+    public AudioSource PlaySoundAtPointByName(string Name, Vector3 position, bool oneshot = true, float spatialblend = 1.0f)
     {
         int ID;
         if (NameToID.TryGetValue(Name, out ID))
@@ -262,8 +262,14 @@ public class SoundManager : Singleton<SoundManager>
             audioSource.clip = clip.audioclip;
             audioSource.volume = clip.volume;
             audioSource.pitch = clip.pitch;
-            audioSource.loop = oneshot;
+            audioSource.loop = !oneshot;
+            audioSource.spatialBlend = spatialblend;
             audioSource.Play();
+
+            if (oneshot)
+            {
+                audioSource.gameObject.SetActiveDelayed(false, audioSource.clip.length);
+            }
 
             pointAudio.transform.position = position;
             return audioSource;

@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Bamboo.Utility;
 
 public static class GameObjectExtensions
 {
-    public static void SetActiveDelayed(this MonoBehaviour bev, bool a, float t)
+    public static void SetActiveDelayed(this GameObject go, bool a, float t)
     {
-        bev.StartCoroutine(_SetActiveDelayed(t, a, bev.gameObject));
+        CoroutineManager.Instance.StartCoroutine(_SetActiveDelayed(t, a, go));
     }
 
     private static IEnumerator _SetActiveDelayed(float t, bool a, GameObject go)

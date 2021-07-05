@@ -20,8 +20,9 @@ public class NetworkCharacter : NetworkBehaviour
     readonly SyncDictionary<int, float> clientStrategemCooldowns = new SyncDictionary<int, float>();
     readonly SyncDictionary<int, bool> clientStrategemReady = new SyncDictionary<int, bool>();
 
-    [SerializeField] NetworkCharacterController controller;
+    [SerializeField] public NetworkCharacterController controller;
     [SerializeField] NetworkCharacterAnimator animator;
+    [SerializeField] NetworkCharacterSoundController soundController;
     public NetworkTransform networkTransform;
     [SerializeField] Transform firePoint;
     [SerializeField] Transform lookAtPoint;
@@ -40,8 +41,6 @@ public class NetworkCharacter : NetworkBehaviour
         networkManager = (NetworkRoomManagerScript)NetworkManager.singleton;
         SetupStrategems();
         team = serverCharacterData.characterTeam;
-        // Subscribing to callbacks
-        EventManager.Instance.Listen(EventChannels.OnServerGameEnd, OnServerEnd);
     }
 
     public override void OnStartClient()
@@ -57,16 +56,7 @@ public class NetworkCharacter : NetworkBehaviour
         {
             a.material.SetFloat("_CamDistThreshold", 0.0f);
         }
-        
         networkTransform = GetComponent<NetworkTransform>();
-        if (!hasAuthority)
-        {
-            return;
-        }
-        // Setup of various local managers and callbacks related to changes done on the client's character
-        StrategemManager.Instance.SetupUIManager(this, clientStrategemCooldowns);
-        clientStrategemCooldowns.Callback += StrategemManager.Instance.OnStrategemUpdated;
-        clientStrategemReady.Callback += StrategemManager.Instance.OnStrategemReady;
     }
 
     void Update()
@@ -117,11 +107,12 @@ public class NetworkCharacter : NetworkBehaviour
     }
 
     [Server]
-    public void takeDamage(int amount, ServerCharacterData.CHARACTER_TEAM bulletTeam)
+    public void takeDamage(NetworkConnection shooter, int amount, ServerCharacterData.CHARACTER_TEAM bulletTeam)
     {
         if (team != bulletTeam)
         {
             serverCharacterData.playerDamaged(amount);
+            RPCTargetHitTarget(shooter);
         }
         if (serverCharacterData.HP <= 0)
         {
@@ -138,6 +129,7 @@ public class NetworkCharacter : NetworkBehaviour
             serverCharacterData.weaponFired();
             firePoint.rotation = lookAtPoint.rotation;
             server.spawnBullet(firePoint, serverCharacterData);
+            RPCCLientShot(transform.position);
         }
     }
 
@@ -158,9 +150,24 @@ public class NetworkCharacter : NetworkBehaviour
     }
 
     [ClientRpc]
+    public void RPCCLientShot(Vector3 position)
+    {
+        SoundManager.Instance.PlaySoundAtPointByName("Machinegun" + Random.Range(0, 3).ToString(), position);
+    }
+
+    [ClientRpc]
     public void RPCPOnCharacterDead(ServerCharacterData.CHARACTER_TEAM team)
     {
         gameObject.SetActive(false);
+
+        SoundManager.Instance.PlaySoundAtPointByName("Die", transform.position);
+
+        GameObject particlesGameObject = ObjectPool.Instance.spawnFromPool("PaintBulletParticles");
+        particlesGameObject.transform.position = transform.position;
+        particlesGameObject.transform.rotation = transform.rotation;
+        particlesGameObject.GetComponent<BulletPaintParticlesManager>().SetupPaintParticles(ServerCharacterData.teamToColor(team), 3.0f);
+        particlesGameObject.SetActiveDelayed(false, 3.0f);
+
         EventManager.Instance.Publish(EventChannels.OnClientPlayerDeath, this, team);
     }
 
@@ -187,6 +194,12 @@ public class NetworkCharacter : NetworkBehaviour
     }
 
     [TargetRpc]
+    public void RPCTargetHitTarget(NetworkConnection target)
+    {
+        EventManager.Instance.Publish(EventChannels.OnTargetClientHitSomething, this);
+    }
+
+    [TargetRpc]
     public void RPCOnReadyTargettedPlayer()
     {
         controller.enabled = true;
@@ -203,17 +216,16 @@ public class NetworkCharacter : NetworkBehaviour
         RPCToRespawnedPlayer(connectionToClient);
     }
 
-    [Server]
-    void OnServerEnd(IEventRequestInfo info)
-    {
-        server.ServerOnGameEnd(this);
-    }
-
     [TargetRpc]
     public void TargetClientGameStarted(NetworkConnection connection)
     {
         controller.enabled = true;
         animator.enabled = true;
+
+        // Setup of various local managers and callbacks related to changes done on the client's character
+        StrategemManager.Instance.SetupUIManager(this, clientStrategemCooldowns);
+        clientStrategemCooldowns.Callback += StrategemManager.Instance.OnStrategemUpdated;
+        clientStrategemReady.Callback += StrategemManager.Instance.OnStrategemReady;
     }
 
     [ClientRpc]
@@ -223,26 +235,22 @@ public class NetworkCharacter : NetworkBehaviour
         {
             a.material.SetFloat("_CamDistThreshold", 8.0f);
         }
+        soundController.enabled = true;
     }
-
-    //void TeamSet(ServerCharacterData.CHARACTER_TEAM oldteam, ServerCharacterData.CHARACTER_TEAM newteam)
-    //{
-    //    EventManager.Instance.Publish(EventChannels.OnClientPlayerSpawn, this, newteam);
-    //}
 
     #region Debug
     [ContextMenu("Force Kill 1")]
     [Server]
     void forceDieTeam1()
     {
-        takeDamage(1000000, ServerCharacterData.CHARACTER_TEAM.TEAM_2);
+        takeDamage(netIdentity.connectionToClient, 1000000, ServerCharacterData.CHARACTER_TEAM.TEAM_2);
     }
 
     [ContextMenu("Force Kill 2")]
     [Server]
     void forceDieTeam2()
     {
-        takeDamage(1000000, ServerCharacterData.CHARACTER_TEAM.TEAM_1);
+        takeDamage(netIdentity.connectionToClient, 1000000, ServerCharacterData.CHARACTER_TEAM.TEAM_1);
     }
     #endregion
 }

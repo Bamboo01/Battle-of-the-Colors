@@ -14,6 +14,7 @@ namespace CSZZGame.Character
         [Header("Stealth")]
         public float stealthSpeed;
         public float stealthClimbSpeed;
+        public float stealthExitSpeed;
     }
 
     public class PlayerData

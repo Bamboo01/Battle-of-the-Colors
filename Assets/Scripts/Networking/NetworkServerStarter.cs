@@ -18,7 +18,7 @@ public class NetworkServerStarter : MonoBehaviour
     }
 
     [ContextMenu("Force Start Server")]
-    void startServer()
+    public void startServer()
     {
         Application.targetFrameRate = 60;
         Time.fixedDeltaTime = 1 / 60f;
