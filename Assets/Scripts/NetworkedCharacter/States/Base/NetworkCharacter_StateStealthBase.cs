@@ -24,6 +24,9 @@ namespace CSZZGame.Character
         private Texture2D pixelSampler;
         private Sprite blankSprite;
 
+        protected Vector3 jumpOffDir;
+        protected bool isEnteringAnotherStealth;
+
         public FSMState_Character_StealthBase()
         {
             pixelSampler = new Texture2D(1, 1, TextureFormat.ARGB32, false);
@@ -49,6 +52,13 @@ namespace CSZZGame.Character
             playerController.height = originalControllerSettings.height;
             playerController.radius = originalControllerSettings.radius;
             playerController.center = originalControllerSettings.center;
+            if (isEnteringAnotherStealth)
+            {
+                isEnteringAnotherStealth = false;
+                return;
+            }
+            Debug.Log("Wheee");
+            playerData.velocity += jumpOffDir * (Physics.gravity.magnitude) * playerSettings.stealthExitSpeed;
         }
 
         protected enum STEALTH_RESULTFLAG

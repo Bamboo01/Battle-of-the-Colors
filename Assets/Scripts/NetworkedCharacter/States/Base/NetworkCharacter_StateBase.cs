@@ -69,10 +69,18 @@ namespace CSZZGame.Character
 
         protected virtual void ApplyGravity()
         {
+            Vector3 tempVel;
             playerData.velocity += Physics.gravity * Time.deltaTime;
             playerController.Move(playerData.velocity * Time.deltaTime);
             if (playerController.isGrounded)
+            {
                 playerData.velocity = new Vector3(playerData.velocity.x, 0.0f, playerData.velocity.z);
+            }
+
+            // End my life
+            tempVel = playerData.velocity;
+            playerData.velocity *= 0.9f;
+            playerData.velocity.y = tempVel.y;
         }
     }
 }

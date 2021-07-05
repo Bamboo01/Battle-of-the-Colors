@@ -190,6 +190,7 @@ public class NetworkCharacter : NetworkBehaviour
         gameObject.SetActive(true);
         controller.enabled = true;
         animator.enabled = true;
+        controller.OnRespawn();
         EventManager.Instance.Publish(EventChannels.OnTargetClientPlayerSpawn, this);
     }
 

@@ -897,7 +897,7 @@ MonoBehaviour:
     normalSpeed: 10
     stealthSpeed: 20
     stealthClimbSpeed: 20
-    stealthExitSpeed: 5
+    stealthExitSpeed: 1
   networkCharacter: {fileID: 6184638618461802934}
 --- !u!114 &4368064711272603126
 MonoBehaviour:

@@ -10,6 +10,12 @@ namespace CSZZGame.Character
 
         public override FSMSTATE_CHARACTER_TYPE type => FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB;
 
+        public override void OnEnter()
+        {
+            jumpOffDir = Vector3.zero;
+            base.OnEnter();
+        }
+
         public override FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist)
         {
             remainingMovementDist = -1.0f;
@@ -30,18 +36,24 @@ namespace CSZZGame.Character
                 Quaternion rotation = Quaternion.AngleAxis(angleToRotate, surfaceRightVector);
                 Vector3 resultantMovementDir = rotation * desiredMovementDir;
 
+                jumpOffDir = surfaceNormal;
+
                 playerController.Move(resultantMovementDir * desiredMovementDist * playerSettings.stealthClimbSpeed * Time.deltaTime);
 
                 // Test if we are no longer against a wall
                 playerController.Move(-surfaceNormal * 0.1f);
                 if ((playerController.collisionFlags & CollisionFlags.CollidedSides) == 0)
+                {
+                    isEnteringAnotherStealth = true;
                     return FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL;
+                }
                 else
                     return FSMSTATE_CHARACTER_TYPE.NULL;
             }
             else // We have collided with an unclimbable area of the wall
             {
                 //ApplyGravity();
+                isEnteringAnotherStealth = true;
                 return FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL;
             }
         }

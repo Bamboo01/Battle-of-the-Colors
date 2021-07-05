@@ -8,6 +8,12 @@ namespace CSZZGame.Character
     {
         public override FSMSTATE_CHARACTER_TYPE type => FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL;
 
+        public override void OnEnter()
+        {
+            jumpOffDir = Vector3.zero;
+            base.OnEnter();
+        }
+
         public override FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist)
         {
             Vector3 originalPosition = playerController.transform.position;
@@ -26,8 +32,11 @@ namespace CSZZGame.Character
             if ((playerController.collisionFlags & CollisionFlags.CollidedSides) != 0)
             {
                 remainingMovementDist = desiredMovementDist - (playerController.transform.position - originalPosition).magnitude;
+                isEnteringAnotherStealth = true;
                 return FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB;
             }
+
+            jumpOffDir = Vector3.up;
 
             ApplyGravity();
             remainingMovementDist = -1.0f;

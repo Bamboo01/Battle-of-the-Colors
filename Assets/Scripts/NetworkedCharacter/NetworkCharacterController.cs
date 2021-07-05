@@ -182,4 +182,9 @@ public class NetworkCharacterController : MonoBehaviour
                 break;
         }
     }
+
+    public void OnRespawn()
+    {
+        characterStateManager.ChangeState(FSMSTATE_CHARACTER_TYPE.NORMAL);
+    }
 }
