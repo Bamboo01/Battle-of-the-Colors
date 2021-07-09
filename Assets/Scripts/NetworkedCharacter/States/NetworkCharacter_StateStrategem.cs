@@ -9,11 +9,11 @@ namespace CSZZGame.Character
     {
         public override FSMSTATE_CHARACTER_TYPE type => FSMSTATE_CHARACTER_TYPE.STRATEGEM;
 
-        public override void OnEnter()
+        public override void OnEnter(FSMSTATE_CHARACTER_TYPE previousState)
         {
             StrategemManager.Instance.strategemActivation();
         }
-        public override void OnExit()
+        public override void OnExit(FSMSTATE_CHARACTER_TYPE nextState)
         {
             StrategemManager.Instance.strategemDeactivation();
         }

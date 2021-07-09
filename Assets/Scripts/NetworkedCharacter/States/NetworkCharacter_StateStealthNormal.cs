@@ -8,15 +8,30 @@ namespace CSZZGame.Character
     {
         public override FSMSTATE_CHARACTER_TYPE type => FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL;
 
-        public override void OnEnter()
+        public override void OnEnter(FSMSTATE_CHARACTER_TYPE previousState)
         {
             jumpOffDir = Vector3.zero;
-            base.OnEnter();
+            base.OnEnter(previousState);
         }
 
         public override FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist)
         {
             Vector3 originalPosition = playerController.transform.position;
+
+            /// Can't detect if we're next to wall for some reason
+            /// Maybe the collision flags that we are seeing is only the result of the last Move() call from the previous frame
+            // In case we are currently in the air, test if we are currently trying to push against a wall
+            //playerController.Move(desiredMovementDir * 0.1f);
+            //if ((playerController.collisionFlags & CollisionFlags.CollidedSides) != 0)
+            //{
+            //    Debug.Log("climb");
+            //    remainingMovementDist = desiredMovementDist;
+            //    return FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB;
+            //}
+            //else
+            //    playerController.Move(desiredMovementDir * -0.1f);
+
+
             var stealthCheckFlags = CheckValidStealthPosition(cameraTarget.up, out _, 4.3f);
 
             // Move only if we are on a valid paint surface
@@ -32,7 +47,6 @@ namespace CSZZGame.Character
             if ((playerController.collisionFlags & CollisionFlags.CollidedSides) != 0)
             {
                 remainingMovementDist = desiredMovementDist - (playerController.transform.position - originalPosition).magnitude;
-                isEnteringAnotherStealth = true;
                 return FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB;
             }
 

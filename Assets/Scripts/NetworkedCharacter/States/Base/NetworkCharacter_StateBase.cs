@@ -42,6 +42,8 @@ namespace CSZZGame.Character
 
         public PlayerSettings playerSettings { get; set; }
         public PlayerData playerData { get; set; }
+        public void OnEnter(FSMSTATE_CHARACTER_TYPE previousState);
+        public void OnExit(FSMSTATE_CHARACTER_TYPE nextState);
         public FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist);
     }
 
@@ -53,9 +55,8 @@ namespace CSZZGame.Character
         public PlayerData playerData { get; set; }
         protected CharacterController playerController { get => playerData.characterController; }
 
-        public virtual void OnEnter()
-        {
-        }
+        public virtual void OnEnter(FSMSTATE_CHARACTER_TYPE previousState) { }
+        public virtual void OnExit(FSMSTATE_CHARACTER_TYPE nextState) { }
 
         public virtual FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist)
         {
@@ -63,9 +64,6 @@ namespace CSZZGame.Character
             return FSMSTATE_CHARACTER_TYPE.NULL;
         }
 
-        public virtual void OnExit()
-        {
-        }
 
         protected virtual void ApplyGravity()
         {

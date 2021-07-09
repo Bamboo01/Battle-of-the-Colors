@@ -31,7 +31,7 @@ namespace CSZZGame.Refactor
         /// View NetworkCharacter_StateManager.cs for reference
         /// </para>
         /// </summary>
-        protected IFSMState_Base currentState { get; set; }
+        protected IFSMState_Base currentState { get; set; } = null;
 
         protected Key currentStateKey { get; set; }
 
@@ -48,15 +48,12 @@ namespace CSZZGame.Refactor
             SetupAddedState(newState);
             stateDictionary.Add(stateKey, newState);
         }
-
+        // Check if the newly added state object is valid within this state machine
         protected virtual bool CheckStateType(IFSMState_Base state)
         {
             return true;
         }
-
-        protected virtual void SetupAddedState(IFSMState_Base newState)
-        {
-        }
+        protected virtual void SetupAddedState(IFSMState_Base newState) { }
 
         public virtual T AddState<T>(Key stateKey) where T : IFSMState_Base, new()
         {
@@ -67,7 +64,13 @@ namespace CSZZGame.Refactor
 
         public virtual void ChangeState(Key stateKey)
         {
-            if (!stateDictionary.ContainsKey(stateKey))
+            IFSMState_Base nextState;
+
+            try
+            {
+                nextState = stateDictionary[stateKey];
+            }
+            catch (KeyNotFoundException)
             {
                 Debug.LogErrorFormat("State with key \"{0}\" does not exist.", stateKey);
                 return;
@@ -79,14 +82,17 @@ namespace CSZZGame.Refactor
                 if (EqualityComparer<Key>.Default.Equals(currentStateKey, stateKey))
                     return;
 
-                currentState.OnExit();
+                OnStateExit(currentState, nextState);
             }
 
             Debug.Log("Switching states");
+            IFSMState_Base previousState = currentState;
             currentState = stateDictionary[stateKey];
             currentStateKey = stateKey;
 
-            currentState.OnEnter();
+            OnStateEnter(previousState, currentState);
         }
+        protected virtual void OnStateExit(IFSMState_Base currentState, IFSMState_Base nextState) { }
+        protected virtual void OnStateEnter(IFSMState_Base previousState, IFSMState_Base currentState) { }
     }
 }

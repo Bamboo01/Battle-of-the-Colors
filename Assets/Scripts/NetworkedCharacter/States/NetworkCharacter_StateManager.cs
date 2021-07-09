@@ -49,6 +49,20 @@ namespace CSZZGame.Character
 
             EventManager.Instance.Publish(EventChannels.OnOwnCharacterStateChangeEvent, this, currentState);
         }
+        protected override void OnStateEnter(IFSMState_Base previousState, IFSMState_Base currentState)
+        {
+            IFSMState_Character_Base currentStateChar = currentState as IFSMState_Character_Base;
+            IFSMState_Character_Base previousStateChar = previousState as IFSMState_Character_Base;
+
+            currentStateChar.OnEnter(previousStateChar?.type ?? FSMSTATE_CHARACTER_TYPE.NULL);
+        }
+        protected override void OnStateExit(IFSMState_Base currentState, IFSMState_Base nextState)
+        {
+            IFSMState_Character_Base currentStateChar = currentState as IFSMState_Character_Base;
+            IFSMState_Character_Base nextStateChar = nextState as IFSMState_Character_Base;
+
+            currentStateChar.OnExit(nextStateChar.type);
+        }
 
         public void Update(Vector3 desiredMovement)
         {

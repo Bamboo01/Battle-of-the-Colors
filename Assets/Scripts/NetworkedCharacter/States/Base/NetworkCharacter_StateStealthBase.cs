@@ -18,14 +18,13 @@ namespace CSZZGame.Character
         protected NetworkCharacter networkCharacter { get => playerData.networkCharacter; }
         protected Transform cameraTarget { get => playerData.cameraTarget; }
 
-        private CharacterController_Settings originalControllerSettings;
-
         // Sampling of paint
         private Texture2D pixelSampler;
         private Sprite blankSprite;
 
-        protected Vector3 jumpOffDir;
-        protected bool isEnteringAnotherStealth;
+        // Exiting stealth
+        private static CharacterController_Settings originalControllerSettings = new CharacterController_Settings();
+        protected Vector3 jumpOffDir = Vector3.zero;
 
         public FSMState_Character_StealthBase()
         {
@@ -33,8 +32,16 @@ namespace CSZZGame.Character
             blankSprite = Sprite.Create(pixelSampler, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f));
         }
 
-        public override void OnEnter()
+        public override void OnEnter(FSMSTATE_CHARACTER_TYPE previousState)
         {
+            // Only execute if the previous state was not stealth
+            switch (previousState)
+            {
+                case FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB:
+                case FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL:
+                    return;
+            }
+
             originalControllerSettings = new CharacterController_Settings
             {
                 center = playerController.center,
@@ -46,17 +53,20 @@ namespace CSZZGame.Character
             playerController.radius = 0.1f;
             playerController.center = new Vector3(playerController.center.x, 0.05f, playerController.center.z);
         }
-
-        public override void OnExit()
+        public override void OnExit(FSMSTATE_CHARACTER_TYPE nextState)
         {
+            // Only execute if the next state is not stealth
+            switch (nextState)
+            {
+                case FSMSTATE_CHARACTER_TYPE.STEALTH_CLIMB:
+                case FSMSTATE_CHARACTER_TYPE.STEALTH_NORMAL:
+                    return;
+            }
+
             playerController.height = originalControllerSettings.height;
             playerController.radius = originalControllerSettings.radius;
             playerController.center = originalControllerSettings.center;
-            if (isEnteringAnotherStealth)
-            {
-                isEnteringAnotherStealth = false;
-                return;
-            }
+
             Debug.Log("Wheee");
             if (playerData.velocity.y <= 0)
                 playerData.velocity += jumpOffDir * (Physics.gravity.magnitude) * playerSettings.stealthExitSpeed;
