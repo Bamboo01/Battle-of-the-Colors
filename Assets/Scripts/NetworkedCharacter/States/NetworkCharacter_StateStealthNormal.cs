@@ -17,7 +17,7 @@ namespace CSZZGame.Character
         public override FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist)
         {
             Vector3 originalPosition = playerController.transform.position;
-            var stealthCheckFlags = CheckValidStealthPosition(cameraTarget.up, out _);
+            var stealthCheckFlags = CheckValidStealthPosition(cameraTarget.up, out _, 4.3f);
 
             // Move only if we are on a valid paint surface
             if ((stealthCheckFlags & STEALTH_RESULTFLAG.VALID) != 0 && (stealthCheckFlags & STEALTH_RESULTFLAG.NO_HIT) == 0)

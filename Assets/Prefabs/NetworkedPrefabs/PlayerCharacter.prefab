@@ -895,6 +895,7 @@ MonoBehaviour:
   controller: {fileID: 6184638618461802928}
   playerSettings:
     normalSpeed: 10
+    gravityMod: 2.5
     stealthSpeed: 20
     stealthClimbSpeed: 20
     stealthExitSpeed: 1

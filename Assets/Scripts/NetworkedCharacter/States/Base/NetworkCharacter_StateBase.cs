@@ -10,7 +10,7 @@ namespace CSZZGame.Character
     public struct PlayerSettings
     {
         public float normalSpeed;
-
+        public float gravityMod;
         [Header("Stealth")]
         public float stealthSpeed;
         public float stealthClimbSpeed;
@@ -70,7 +70,7 @@ namespace CSZZGame.Character
         protected virtual void ApplyGravity()
         {
             Vector3 tempVel;
-            playerData.velocity += Physics.gravity * Time.deltaTime;
+            playerData.velocity += Physics.gravity * Time.deltaTime * playerSettings.gravityMod;
             playerController.Move(playerData.velocity * Time.deltaTime);
             if (playerController.isGrounded)
             {

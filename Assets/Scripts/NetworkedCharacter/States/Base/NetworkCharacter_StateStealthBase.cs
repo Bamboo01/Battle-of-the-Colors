@@ -58,7 +58,8 @@ namespace CSZZGame.Character
                 return;
             }
             Debug.Log("Wheee");
-            playerData.velocity += jumpOffDir * (Physics.gravity.magnitude) * playerSettings.stealthExitSpeed;
+            if (playerData.velocity.y <= 0)
+                playerData.velocity += jumpOffDir * (Physics.gravity.magnitude) * playerSettings.stealthExitSpeed;
         }
 
         protected enum STEALTH_RESULTFLAG
@@ -66,11 +67,10 @@ namespace CSZZGame.Character
             VALID       = 1 << 0,
             NO_HIT      = 1 << 1
         }
-        protected STEALTH_RESULTFLAG CheckValidStealthPosition(Vector3 up, out Vector3 surfaceNormal)
+        protected STEALTH_RESULTFLAG CheckValidStealthPosition(Vector3 up, out Vector3 surfaceNormal, float rayDist = 2.0f)
         {
             // Get the edge of the collider closest to the floor
             Vector3 position = playerController.transform.position - Vector3.Project(playerController.center, up);
-            float rayDist = 2.0f;
             int nonPlayerLayerMask = ~(1 << 3);
 
             RaycastHit raycastHit;
