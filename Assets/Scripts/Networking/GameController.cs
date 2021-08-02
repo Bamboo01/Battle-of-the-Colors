@@ -15,12 +15,15 @@ using DG.Tweening;
 
 public class GameController : NetworkBehaviour
 {
+    public static ServerCharacterData.CHARACTER_TEAM thisClientTeam;
+
     [SerializeField] double MatchDuration = 300;
     NetworkRoomManagerScript networkManager;
     double initialGameTime = 0;
     double currentGameTime = 0;
     bool gameEnded;
     float StartTime = 2.0f;
+
 
     //I AM CODING THIS AT 4AM
     Queue<GameObject> team1LiveContainer = new Queue<GameObject>();

@@ -107,6 +107,17 @@ public class NetworkCharacter : NetworkBehaviour
     }
 
     [Server]
+    public void ResetStrategems()
+    {
+        foreach (var a in serverCharacterData.strategemCooldowns)
+        {
+            clientStrategemCooldowns[a.Key] = a.Value;
+            clientStrategemReady[a.Key] = false;
+        }
+    }
+
+
+    [Server]
     public void takeDamage(NetworkConnection shooter, int amount, ServerCharacterData.CHARACTER_TEAM bulletTeam)
     {
         if (team != bulletTeam)
@@ -190,7 +201,6 @@ public class NetworkCharacter : NetworkBehaviour
         gameObject.SetActive(true);
         controller.enabled = true;
         animator.enabled = true;
-        controller.OnRespawn();
         EventManager.Instance.Publish(EventChannels.OnTargetClientPlayerSpawn, this);
     }
 
@@ -211,6 +221,7 @@ public class NetworkCharacter : NetworkBehaviour
     public void RespawnPlayerOnServer()
     {
         Debug.Log("Server preparing to respawn");
+        ResetStrategems();
         gameObject.SetActive(true);
         serverCharacterData.Respawn();
         RPCOnRespawnPlayer(team);
@@ -220,6 +231,15 @@ public class NetworkCharacter : NetworkBehaviour
     [TargetRpc]
     public void TargetClientGameStarted(NetworkConnection connection)
     {
+        if (team == GameController.thisClientTeam)
+        {
+            foreach (var r in playerRenderers)
+            {
+                var teammateOutliner = r.gameObject.GetComponent<Outline>();
+                //teammateOutliner.enabled = false;
+            }
+        }
+
         controller.enabled = true;
         animator.enabled = true;
 
@@ -232,6 +252,16 @@ public class NetworkCharacter : NetworkBehaviour
     [ClientRpc]
     public void RPCGameStarted()
     {
+        if (team == GameController.thisClientTeam)
+        {
+            foreach(var r in playerRenderers)
+            {
+                var teammateOutliner = r.gameObject.GetComponent<Outline>();
+                teammateOutliner.OutlineColor = ServerCharacterData.teamToColor(team);
+                teammateOutliner.enabled = true;
+            }
+        }
+
         foreach (var a in playerRenderers)
         {
             a.material.SetFloat("_CamDistThreshold", 8.0f);

@@ -55,6 +55,7 @@ namespace CSZZGame.Character
 
         public virtual void OnEnter()
         {
+
         }
 
         public virtual FSMSTATE_CHARACTER_TYPE OnUpdate(Vector3 desiredMovementDir, float desiredMovementDist, out float remainingMovementDist)

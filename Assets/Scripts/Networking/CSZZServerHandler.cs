@@ -114,6 +114,7 @@ namespace CSZZGame.Networking
         {
             // Assign authority at end of the countdown!
             AssignAuthority();
+            networkCharacter.ResetStrategems();
             networkCharacter.RPCGameStarted();
             networkCharacter.TargetClientGameStarted(clientConnection);
         }

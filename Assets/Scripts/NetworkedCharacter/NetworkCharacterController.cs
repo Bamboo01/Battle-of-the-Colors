@@ -185,6 +185,7 @@ public class NetworkCharacterController : MonoBehaviour
 
     public void OnRespawn()
     {
+        // man I hate this LOL
         characterStateManager.ChangeState(FSMSTATE_CHARACTER_TYPE.NORMAL);
     }
 }

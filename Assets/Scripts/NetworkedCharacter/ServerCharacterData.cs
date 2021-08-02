@@ -8,15 +8,15 @@ public class ServerCharacterData : MonoBehaviour
 {
     public enum CHARACTER_TEAM
     {
-        TEAM_1,
+        TEAM_1 = 0,
         TEAM_2,
         NUM_TEAMS
     }
 
     public static readonly Dictionary<CHARACTER_TEAM, Color> _teamToColor = new Dictionary<CHARACTER_TEAM, Color>()
     {
-        { CHARACTER_TEAM.TEAM_1, new Color(1.0f, 0.8f, 0.1f ) },
-        { CHARACTER_TEAM.TEAM_2, new Color(0.2f, 1.0f, 0.2f ) }
+        { CHARACTER_TEAM.TEAM_1, new Color(1.0f, 0.8f, 0.1f , 1.0f) },
+        { CHARACTER_TEAM.TEAM_2, new Color(0.2f, 1.0f, 0.2f , 1.0f) }
     };
 
     NetworkRoomManagerScript networkManager;

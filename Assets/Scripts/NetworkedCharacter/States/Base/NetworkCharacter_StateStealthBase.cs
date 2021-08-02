@@ -41,8 +41,8 @@ namespace CSZZGame.Character
                 height = playerController.height,
                 radius = playerController.radius
             };
-
-            playerController.height = 0.1f;
+            
+            playerController.height = 0.15f;
             playerController.radius = 0.1f;
             playerController.center = new Vector3(playerController.center.x, 0.05f, playerController.center.z);
         }
