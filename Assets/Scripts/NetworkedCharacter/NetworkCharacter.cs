@@ -231,15 +231,11 @@ public class NetworkCharacter : NetworkBehaviour
     [TargetRpc]
     public void TargetClientGameStarted(NetworkConnection connection)
     {
-        if (team == GameController.thisClientTeam)
+        foreach (var r in playerRenderers)
         {
-            foreach (var r in playerRenderers)
-            {
-                var teammateOutliner = r.gameObject.GetComponent<Outline>();
-                //teammateOutliner.enabled = false;
-            }
+            var teammateOutliner = r.gameObject.GetComponent<Outline>();
+            teammateOutliner.enabled = false;
         }
-
         controller.enabled = true;
         animator.enabled = true;
 
@@ -252,7 +248,7 @@ public class NetworkCharacter : NetworkBehaviour
     [ClientRpc]
     public void RPCGameStarted()
     {
-        if (team == GameController.thisClientTeam)
+        if (team == (GameController.localRoomPlayer.team ? ServerCharacterData.CHARACTER_TEAM.TEAM_2 : ServerCharacterData.CHARACTER_TEAM.TEAM_1))
         {
             foreach(var r in playerRenderers)
             {

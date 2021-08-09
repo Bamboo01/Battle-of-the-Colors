@@ -15,7 +15,7 @@ using DG.Tweening;
 
 public class GameController : NetworkBehaviour
 {
-    public static ServerCharacterData.CHARACTER_TEAM thisClientTeam;
+    public static NetworkRoomPlayerScript localRoomPlayer;
 
     [SerializeField] double MatchDuration = 300;
     NetworkRoomManagerScript networkManager;
@@ -279,7 +279,7 @@ public class GameController : NetworkBehaviour
                 team1Text.text = paintScore.team1Score.ToString();
             }
 
-            if (paintScore.team1Score == 0)
+            if (paintScore.team2Score == 0)
             {
                 team2Fill.fillAmount = 0.0f;
                 team2Text.text = paintScore.team2Score.ToString();

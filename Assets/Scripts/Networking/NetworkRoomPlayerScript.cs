@@ -40,10 +40,6 @@ namespace CSZZGame.Networking
         /// <param name="newTeamState">New Ready State</param>
         public virtual void TeamStateChanged(bool oldTeamState, bool newTeamState)
         {
-            if (!hasAuthority)
-            {
-                GameController.thisClientTeam = newTeamState ?  ServerCharacterData.CHARACTER_TEAM.TEAM_2 : ServerCharacterData.CHARACTER_TEAM.TEAM_1;
-            }
             RPCSwapTeam(newTeamState);
         }
         /// <param name="newID">New Ready State</param>
@@ -69,10 +65,10 @@ namespace CSZZGame.Networking
         public override void OnStartLocalPlayer()
         {
             base.OnStartLocalPlayer();
-            GameController.thisClientTeam = ServerCharacterData.CHARACTER_TEAM.TEAM_1;
             NetworkRoomManagerScript room = NetworkManager.singleton as NetworkRoomManagerScript;
             if (room)
             {
+                GameController.localRoomPlayer = this;
                 room.ReadyButton.onClick.AddListener(() => ReadyButtonClick());
                 room.SwitchTeamButton.onClick.AddListener(() => TeamButtonClick());
             }
@@ -133,6 +129,7 @@ namespace CSZZGame.Networking
         public void TeamButtonClick()
         {
             CmdChangeTeamState(!team);
+            // lazy
         }
 
         //void DrawPlayerReadyState()
